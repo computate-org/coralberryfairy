@@ -5,6 +5,8 @@
 
 # The name of this application. 
 SITE_NAME: coralberryfairy
+# The site namespace in OpenShift. 
+SITE_NAMESPACE: "coralberryfairy"
 # The source code directory for the project. 
 SITE_SRC: "{{ lookup('env', 'HOME') }}/.local/src/{{ SITE_NAME }}"
 # The vars.yaml filename to load when running in development. 
@@ -160,12 +162,14 @@ SITE_STATIC_REPO: "git@github.com:{{ GITHUB_ORG }}/{{ SITE_STATIC_NAME }}.git"
 STATIC_BASE_URL: "{{ SITE_BASE_URL }}/static"
 # The path to the static files. 
 STATIC_PATH: "{{ (SITE_SRC + '/../' + SITE_STATIC_NAME) | realpath }}"
+# The site logo relative URI
+SITE_LOGO_URI: "/svg/computate-keys.svg"
 # The path to the template files. 
 TEMPLATE_PATH: "{{ SITE_SRC }}/src/main/resources/templates"
 # An optional FontAwesome Pro Kit for additional FontAwesome icons. 
 FONTAWESOME_KIT: 
 # Site default theme, light or dark. 
-SITE_THEME: light
+SITE_THEME: dark
 
 ######################
 # Developer defaults #
@@ -264,7 +268,7 @@ DATABASE_PORT: 30432
 DATABASE_USERNAME: "{{ SITE_SHORT_NAME }}"
 # The PostgreSQL database password of the site. 
 # oc get -n smartvillage secret/postgres-pguser-smartvillage -o 'jsonpath={.data.password}' | base64 -d && echo
-DATABASE_PASSWORD: "{{ query('kubernetes.core.k8s', kind='Secret', resource_name=('postgres-pguser-' + DATABASE_USERNAME), namespace='postgres')[0].data.password | b64decode }}"
+DATABASE_PASSWORD: "{{ query('kubernetes.core.k8s', kind='Secret', resource_name=('postgres-pguser-' + DATABASE_USERNAME), namespace=SITE_NAMESPACE)[0].data.password | b64decode }}"
 # The PostgreSQL database name of the site. 
 DATABASE_DATABASE: "{{ SITE_SHORT_NAME }}"
 
@@ -286,6 +290,10 @@ AUTH_REALM: "{{ DOMAIN_NAME | upper }}"
 AUTH_CLIENT: "{{ SITE_SHORT_NAME }}"
 # The Auth secret. 
 AUTH_SECRET: 
+# The Auth admin username. 
+AUTH_ADMIN_USERNAME: admin
+# The Auth admin password. 
+AUTH_ADMIN_PASSWORD: "{{ query('kubernetes.core.k8s', kind='Secret', resource_name='keycloak-initial-admin', namespace='keycloak')[0].data['admin-password'] | b64decode }}"
 # The Auth URL. 
 AUTH_URL: "https://{{ AUTH_HOST_NAME }}"
 # The Auth URL to retrieve tokens. 
@@ -342,7 +350,7 @@ DEFAULT_MAP_ZOOM: "17"
 ##############
 
 # Enable Kafka message integration. 
-ENABLE_KAFKA: true
+ENABLE_KAFKA: false
 # The namespace in OpenShift where Kafka will run. 
 KAFKA_NAMESPACE: kafka
 # The Kafka SSL KeyStore secret name. 
