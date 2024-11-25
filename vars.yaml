@@ -97,6 +97,8 @@ SUFFIX_SRC_GEN_JAVA: /src/gen/java
 RELATIVE_PATHS_TO_WATCH: "src/main/java/{{ SITE_JAVA_PACKAGE | replace('.', '/') }}"
 # The default source code directory for the computate application which helps generate and translate most the code. 
 COMPUTATE_SRC: "{{ (SITE_SRC + '/../computate') | realpath }}"
+# The default source code directory for the computate-base application. 
+COMPUTATE_BASE_SRC: "{{ (SITE_SRC + '/../computate-base') | realpath }}"
 # The default source code directory for the computate-search application. 
 COMPUTATE_SEARCH_SRC: "{{ (SITE_SRC + '/../computate-search') | realpath }}"
 # The default source code directory for the computate-vertx application. 
@@ -160,16 +162,21 @@ SITE_STATIC_NAME: "{{ SITE_NAME }}-static"
 SITE_STATIC_REPO: "git@github.com:{{ GITHUB_ORG }}/{{ SITE_STATIC_NAME }}.git"
 # The base URL to the static files. 
 STATIC_BASE_URL: "{{ SITE_BASE_URL }}/static"
+# Site default theme, light or dark. 
+SITE_THEME: light
 # The path to the static files. 
 STATIC_PATH: "{{ (SITE_SRC + '/../' + SITE_STATIC_NAME) | realpath }}"
 # The site logo relative URI
-SITE_LOGO_URI: "/svg/computate-keys.svg"
+SITE_LOGO_URI: "/logo/coralberry-fairy-{{ SITE_THEME }}-v1.svg"
 # The path to the template files. 
 TEMPLATE_PATH: "{{ SITE_SRC }}/src/main/resources/templates"
 # An optional FontAwesome Pro Kit for additional FontAwesome icons. 
-FONTAWESOME_KIT: 
-# Site default theme, light or dark. 
-SITE_THEME: dark
+FONTAWESOME_KIT: "{{ query('kubernetes.core.k8s', kind='Secret', resource_name='font-awesome', namespace=SITE_NAMESPACE)[0].data['FONTAWESOME_KIT'] | b64decode }}"
+# An optional link element to either a Shoelace web components stylesheet or a Web Awesome Backer web components stylesheet. 
+WEB_COMPONENTS_CSS: "{{ query('kubernetes.core.k8s', kind='Secret', resource_name='font-awesome', namespace=SITE_NAMESPACE)[0].data['WEB_COMPONENTS_CSS'] | b64decode }}"
+# An optional link element to either a Shoelace web components JavaScript or a Web Awesome Backer web components JavaScript. 
+WEB_COMPONENTS_JS: "{{ query('kubernetes.core.k8s', kind='Secret', resource_name='font-awesome', namespace=SITE_NAMESPACE)[0].data['WEB_COMPONENTS_JS'] | b64decode }}"
+
 
 ######################
 # Developer defaults #
@@ -200,7 +207,7 @@ SITE_POWERED_BY_NAME: Google Kubernetes Engine
 # The URL of the cloud provider where the public site is deployed. 
 SITE_POWERED_BY_URL: https://cloud.google.com/kubernetes-engine
 # The static path to the logo of the cloud provider where the public site is deployed. 
-SITE_POWERED_BY_IMAGE_URI: /svg/google-gke.svg
+SITE_POWERED_BY_IMAGE_URI: /logo/google-gke.svg
 
 ######################
 # Zookeeper defaults #

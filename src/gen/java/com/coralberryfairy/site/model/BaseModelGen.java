@@ -70,7 +70,7 @@ import org.computate.search.response.solr.SolrResponse;
  * Whenever this Java class is modified or touched, the watch service installed as described in the README, indexes all the information about this Java class in a local Apache Solr Search Engine. 
  * If you are running the service, you can see the indexed data about this Java Class here: 
  * </p>
- * <p><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel">Find the class BaseModel in Solr. </a></p>
+ * <p><a href="https://solr.apps-crc.testing/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel">Find the class BaseModel in Solr. </a></p>
  * <p>
  * The extended class ending with "Gen" did not exist at first, but was automatically created by the same watch service based on the data retrieved from the local Apache Server search engine. 
  * The extended class contains many generated fields, getters, setters, initialization code, and helper methods to help build a website and API fast, reactive, and scalable. 
@@ -134,15 +134,15 @@ import org.computate.search.response.solr.SolrResponse;
  * <h2>AName.enUS: null</h2>
  * <p>
  * Delete the class BaseModel in Solr: 
- * curl -k 'https://solr.apps-crc.testing:443/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
+ * curl -k 'https://solr.apps-crc.testing/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
  * </p>
  * <p>
  * Delete  the package com.coralberryfairy.site.model in Solr: 
- * curl -k 'https://solr.apps-crc.testing:443/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:com.coralberryfairy.site.model&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
+ * curl -k 'https://solr.apps-crc.testing/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomEnsemble_enUS_indexed_string:com.coralberryfairy.site.model&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
  * </p>
  * <p>
  * Delete  the project coralberryfairy in Solr: 
- * curl -k 'https://solr.apps-crc.testing:443/solr/computate/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:coralberryfairy&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
+ * curl -k 'https://solr.apps-crc.testing/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;siteNom_indexed_string:coralberryfairy&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
  * </p>
  * Generated: true
  **/
@@ -166,7 +166,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity siteRequest_
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:siteRequest_">Find the entity siteRequest_ in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -208,7 +208,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity pk
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:pk">Find the entity pk in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -267,7 +267,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity inheritPk
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:inheritPk">Find the entity inheritPk in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:inheritPk">Find the entity inheritPk in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -326,7 +326,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity created
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:created">Find the entity created in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:created">Find the entity created in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -406,7 +406,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity modified
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:modified">Find the entity modified in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:modified">Find the entity modified in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -479,7 +479,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity archived
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:archived">Find the entity archived in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:archived">Find the entity archived in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -526,67 +526,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		return archived;
 	}
 
-	/////////////
-	// deleted //
-	/////////////
-
-
-	/**	 The entity deleted
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected Boolean deleted;
-
-	/**	<br> The entity deleted
-	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:deleted">Find the entity deleted in Solr</a>
-	 * <br>
-	 * @param w is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _deleted(Wrap<Boolean> w);
-
-	public Boolean getDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(Boolean deleted) {
-		this.deleted = deleted;
-	}
-	@JsonIgnore
-	public void setDeleted(String o) {
-		this.deleted = BaseModel.staticSetDeleted(siteRequest_, o);
-	}
-	public static Boolean staticSetDeleted(SiteRequest siteRequest_, String o) {
-		return Boolean.parseBoolean(o);
-	}
-	protected BaseModel deletedInit() {
-		Wrap<Boolean> deletedWrap = new Wrap<Boolean>().var("deleted");
-		if(deleted == null) {
-			_deleted(deletedWrap);
-			Optional.ofNullable(deletedWrap.getO()).ifPresent(o -> {
-				setDeleted(o);
-			});
-		}
-		return (BaseModel)this;
-	}
-
-	public static Boolean staticSearchDeleted(SiteRequest siteRequest_, Boolean o) {
-		return o;
-	}
-
-	public static String staticSearchStrDeleted(SiteRequest siteRequest_, Boolean o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSearchFqDeleted(SiteRequest siteRequest_, String o) {
-		return BaseModel.staticSearchDeleted(siteRequest_, BaseModel.staticSetDeleted(siteRequest_, o)).toString();
-	}
-
-	public Boolean sqlDeleted() {
-		return deleted;
-	}
-
 	////////////////////////
 	// classCanonicalName //
 	////////////////////////
@@ -601,7 +540,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity classCanonicalName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:classCanonicalName">Find the entity classCanonicalName in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:classCanonicalName">Find the entity classCanonicalName in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -653,7 +592,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity classSimpleName
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:classSimpleName">Find the entity classSimpleName in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:classSimpleName">Find the entity classSimpleName in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -706,7 +645,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity classCanonicalNames
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:classCanonicalNames">Find the entity classCanonicalNames in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:classCanonicalNames">Find the entity classCanonicalNames in Solr</a>
 	 * <br>
 	 * @param l is the entity already constructed. 
 	 **/
@@ -779,7 +718,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity sessionId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:sessionId">Find the entity sessionId in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:sessionId">Find the entity sessionId in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -836,7 +775,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity userKey
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:userKey">Find the entity userKey in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:userKey">Find the entity userKey in Solr</a>
 	 * <br>
 	 * @param c is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -900,7 +839,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity saves
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:saves">Find the entity saves in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:saves">Find the entity saves in Solr</a>
 	 * <br>
 	 * @param l is the entity already constructed. 
 	 **/
@@ -973,7 +912,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity objectIcon
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:objectIcon">Find the entity objectIcon in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:objectIcon">Find the entity objectIcon in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1025,7 +964,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity objectTitle
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:objectTitle">Find the entity objectTitle in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:objectTitle">Find the entity objectTitle in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1077,7 +1016,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity objectId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:objectId">Find the entity objectId in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:objectId">Find the entity objectId in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1129,7 +1068,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity objectSuggest
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:objectSuggest">Find the entity objectSuggest in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:objectSuggest">Find the entity objectSuggest in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1182,7 +1121,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity objectText
 	 *  It is constructed before being initialized with the constructor by default. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:objectText">Find the entity objectText in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:objectText">Find the entity objectText in Solr</a>
 	 * <br>
 	 * @param l is the entity already constructed. 
 	 **/
@@ -1255,7 +1194,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity pageUrlId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:pageUrlId">Find the entity pageUrlId in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:pageUrlId">Find the entity pageUrlId in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1307,7 +1246,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity pageUrlPk
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:pageUrlPk">Find the entity pageUrlPk in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:pageUrlPk">Find the entity pageUrlPk in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1359,7 +1298,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity pageUrlApi
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:pageUrlApi">Find the entity pageUrlApi in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:pageUrlApi">Find the entity pageUrlApi in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1411,7 +1350,7 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	/**	<br> The entity id
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing:443/solr/computate/select?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:id">Find the entity id in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.BaseModel&fq=entiteVar_enUS_indexed_string:id">Find the entity id in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
@@ -1480,7 +1419,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 				createdInit();
 				modifiedInit();
 				archivedInit();
-				deletedInit();
 				classCanonicalNameInit();
 				classSimpleNameInit();
 				classCanonicalNamesInit();
@@ -1560,8 +1498,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 				return oBaseModel.modified;
 			case "archived":
 				return oBaseModel.archived;
-			case "deleted":
-				return oBaseModel.deleted;
 			case "classCanonicalName":
 				return oBaseModel.classCanonicalName;
 			case "classSimpleName":
@@ -1641,8 +1577,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSetModified(siteRequest_, o);
 		case "archived":
 			return BaseModel.staticSetArchived(siteRequest_, o);
-		case "deleted":
-			return BaseModel.staticSetDeleted(siteRequest_, o);
 		case "classCanonicalName":
 			return BaseModel.staticSetClassCanonicalName(siteRequest_, o);
 		case "classSimpleName":
@@ -1697,8 +1631,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSearchModified(siteRequest_, (ZonedDateTime)o);
 		case "archived":
 			return BaseModel.staticSearchArchived(siteRequest_, (Boolean)o);
-		case "deleted":
-			return BaseModel.staticSearchDeleted(siteRequest_, (Boolean)o);
 		case "classCanonicalName":
 			return BaseModel.staticSearchClassCanonicalName(siteRequest_, (String)o);
 		case "classSimpleName":
@@ -1753,8 +1685,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSearchStrModified(siteRequest_, (String)o);
 		case "archived":
 			return BaseModel.staticSearchStrArchived(siteRequest_, (Boolean)o);
-		case "deleted":
-			return BaseModel.staticSearchStrDeleted(siteRequest_, (Boolean)o);
 		case "classCanonicalName":
 			return BaseModel.staticSearchStrClassCanonicalName(siteRequest_, (String)o);
 		case "classSimpleName":
@@ -1809,8 +1739,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return BaseModel.staticSearchFqModified(siteRequest_, o);
 		case "archived":
 			return BaseModel.staticSearchFqArchived(siteRequest_, o);
-		case "deleted":
-			return BaseModel.staticSearchFqDeleted(siteRequest_, o);
 		case "classCanonicalName":
 			return BaseModel.staticSearchFqClassCanonicalName(siteRequest_, o);
 		case "classSimpleName":
@@ -1889,14 +1817,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 				}
 				saves.add("archived");
 				return val;
-			} else if("deleted".equals(varLower)) {
-				if(val instanceof Boolean) {
-					setDeleted((Boolean)val);
-				} else {
-					setDeleted(val == null ? null : val.toString());
-				}
-				saves.add("deleted");
-				return val;
 			} else if("sessionid".equals(varLower)) {
 				if(val instanceof String) {
 					setSessionId((String)val);
@@ -1953,12 +1873,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 				Boolean archived = (Boolean)doc.get("archived_docvalues_boolean");
 				if(archived != null)
 					oBaseModel.setArchived(archived);
-			}
-
-			if(saves.contains("deleted")) {
-				Boolean deleted = (Boolean)doc.get("deleted_docvalues_boolean");
-				if(deleted != null)
-					oBaseModel.setDeleted(deleted);
 			}
 
 			if(saves.contains("classCanonicalName")) {
@@ -2059,9 +1973,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		if(archived != null) {
 			doc.put("archived_docvalues_boolean", archived);
 		}
-		if(deleted != null) {
-			doc.put("deleted_docvalues_boolean", deleted);
-		}
 		if(classCanonicalName != null) {
 			doc.put("classCanonicalName_docvalues_string", classCanonicalName);
 		}
@@ -2133,8 +2044,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 				return "modified_docvalues_date";
 			case "archived":
 				return "archived_docvalues_boolean";
-			case "deleted":
-				return "deleted_docvalues_boolean";
 			case "classCanonicalName":
 				return "classCanonicalName_docvalues_string";
 			case "classSimpleName":
@@ -2176,8 +2085,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 				return "modified_docvalues_date";
 			case "archived":
 				return "archived_docvalues_boolean";
-			case "deleted":
-				return "deleted_docvalues_boolean";
 			case "classCanonicalName":
 				return "classCanonicalName_docvalues_string";
 			case "classSimpleName":
@@ -2225,8 +2132,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 				return "modified";
 			case "archived_docvalues_boolean":
 				return "archived";
-			case "deleted_docvalues_boolean":
-				return "deleted";
 			case "classCanonicalName_docvalues_string":
 				return "classCanonicalName";
 			case "classSimpleName_docvalues_string":
@@ -2298,7 +2203,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		oBaseModel.setCreated(Optional.ofNullable(doc.get("created_docvalues_date")).map(v -> v.toString()).orElse(null));
 		oBaseModel.setModified(Optional.ofNullable(doc.get("modified_docvalues_date")).map(v -> v.toString()).orElse(null));
 		oBaseModel.setArchived(Optional.ofNullable(doc.get("archived_docvalues_boolean")).map(v -> v.toString()).orElse(null));
-		oBaseModel.setDeleted(Optional.ofNullable(doc.get("deleted_docvalues_boolean")).map(v -> v.toString()).orElse(null));
 		oBaseModel.setClassCanonicalName(Optional.ofNullable(doc.get("classCanonicalName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oBaseModel.setClassSimpleName(Optional.ofNullable(doc.get("classSimpleName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		Optional.ofNullable((List<?>)doc.get("classCanonicalNames_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
@@ -2342,8 +2246,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 				apiRequest.addVars("modified");
 			if(!Objects.equals(archived, original.getArchived()))
 				apiRequest.addVars("archived");
-			if(!Objects.equals(deleted, original.getDeleted()))
-				apiRequest.addVars("deleted");
 			if(!Objects.equals(classCanonicalName, original.getClassCanonicalName()))
 				apiRequest.addVars("classCanonicalName");
 			if(!Objects.equals(classSimpleName, original.getClassSimpleName()))
@@ -2388,7 +2290,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		sb.append(Optional.ofNullable(created).map(v -> "created: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(modified).map(v -> "modified: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(archived).map(v -> "archived: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(deleted).map(v -> "deleted: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(classCanonicalName).map(v -> "classCanonicalName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(classSimpleName).map(v -> "classSimpleName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(classCanonicalNames).map(v -> "classCanonicalNames: " + v + "\n").orElse(""));
@@ -2414,7 +2315,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	public static final String VAR_created = "created";
 	public static final String VAR_modified = "modified";
 	public static final String VAR_archived = "archived";
-	public static final String VAR_deleted = "deleted";
 	public static final String VAR_classCanonicalName = "classCanonicalName";
 	public static final String VAR_classSimpleName = "classSimpleName";
 	public static final String VAR_classCanonicalNames = "classCanonicalNames";
@@ -2448,7 +2348,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		vars.add(VAR_created);
 		vars.add(VAR_modified);
 		vars.add(VAR_archived);
-		vars.add(VAR_deleted);
 		vars.add(VAR_classSimpleName);
 		return vars;
 	}
@@ -2469,7 +2368,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_created = "created";
 	public static final String DISPLAY_NAME_modified = "modified";
 	public static final String DISPLAY_NAME_archived = "archive";
-	public static final String DISPLAY_NAME_deleted = "delete";
 	public static final String DISPLAY_NAME_classCanonicalName = "";
 	public static final String DISPLAY_NAME_classSimpleName = "object type";
 	public static final String DISPLAY_NAME_classCanonicalNames = "";
@@ -2503,8 +2401,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return DISPLAY_NAME_modified;
 		case VAR_archived:
 			return DISPLAY_NAME_archived;
-		case VAR_deleted:
-			return DISPLAY_NAME_deleted;
 		case VAR_classCanonicalName:
 			return DISPLAY_NAME_classCanonicalName;
 		case VAR_classSimpleName:
@@ -2554,8 +2450,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return "A modified timestamp for this record in the database";
 		case VAR_archived:
 			return "For archiving this record";
-		case VAR_deleted:
-			return "For deleting this record";
 		case VAR_classCanonicalName:
 			return "the canonical name of this Java class";
 		case VAR_classSimpleName:
@@ -2605,8 +2499,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return "ZonedDateTime";
 		case VAR_archived:
 			return "Boolean";
-		case VAR_deleted:
-			return "Boolean";
 		case VAR_classCanonicalName:
 			return "String";
 		case VAR_classSimpleName:
@@ -2644,10 +2536,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 
 	public static Integer htmColumnBaseModel(String var) {
 		switch(var) {
-		case VAR_created:
-			return 1;
-		case VAR_objectTitle:
-			return 2;
 			default:
 				return null;
 		}
@@ -2662,8 +2550,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 		case VAR_modified:
 			return 1;
 		case VAR_archived:
-			return 2;
-		case VAR_deleted:
 			return 2;
 		case VAR_objectId:
 			return 1;
@@ -2682,8 +2568,6 @@ public abstract class BaseModelGen<DEV> extends Object {
 			return 4;
 		case VAR_archived:
 			return 1;
-		case VAR_deleted:
-			return 2;
 		case VAR_objectId:
 			return 2;
 			default:

@@ -1,3 +1,5 @@
 target/**
 .flattened-pom.xml
 .vscode
+bin/generate.sh
+bin/generatenow.sh

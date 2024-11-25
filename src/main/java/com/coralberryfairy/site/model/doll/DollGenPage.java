@@ -1,15 +1,8 @@
-package com.coralberryfairy.site.result;
+package com.coralberryfairy.site.model.doll;
 
-import com.coralberryfairy.site.result.BaseResult;
-import com.coralberryfairy.site.request.SiteRequest;
-import java.lang.String;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import java.lang.Boolean;
-import java.util.List;
-import java.lang.Long;
 import com.coralberryfairy.site.page.PageLayout;
+import com.coralberryfairy.site.result.BaseResultPage;
+import com.coralberryfairy.site.request.SiteRequest;
 import com.coralberryfairy.site.user.SiteUser;
 import java.io.IOException;
 import io.vertx.core.http.HttpServerRequest;
@@ -19,9 +12,12 @@ import org.computate.search.wrap.Wrap;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Locale;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.api.service.ServiceRequest;
 import io.vertx.core.json.JsonArray;
@@ -29,6 +25,7 @@ import java.net.URLDecoder;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
@@ -50,37 +47,37 @@ import java.time.ZoneId;
  * Translate: false
  * Generated: true
  **/
-public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
+public class DollGenPage extends DollGenPageGen<BaseResultPage> {
 
   /**
    * {@inheritDoc}
    * Ignore: true
    **/
-  protected void _searchListBaseResult_(Wrap<SearchList<BaseResult>> w) {
+  protected void _searchListDoll_(Wrap<SearchList<Doll>> w) {
   }
 
   @Override
   protected void _pageResponse(Wrap<String> w) {
-    if(searchListBaseResult_ != null)
-      w.o(JsonObject.mapFrom(searchListBaseResult_.getResponse()).toString());
+    if(searchListDoll_ != null)
+      w.o(JsonObject.mapFrom(searchListDoll_.getResponse()).toString());
   }
 
   @Override
   protected void _stats(Wrap<SolrResponse.Stats> w) {
-    w.o(searchListBaseResult_.getResponse().getStats());
+    w.o(searchListDoll_.getResponse().getStats());
   }
 
   @Override
   protected void _facetCounts(Wrap<SolrResponse.FacetCounts> w) {
-    w.o(searchListBaseResult_.getResponse().getFacetCounts());
+    w.o(searchListDoll_.getResponse().getFacetCounts());
   }
 
   @Override
   protected void _pagination(JsonObject pagination) {
     JsonArray pages = new JsonArray();
-    Long start = searchListBaseResult_.getStart().longValue();
-    Long rows = searchListBaseResult_.getRows().longValue();
-    Long foundNum = searchListBaseResult_.getResponse().getResponse().getNumFound().longValue();
+    Long start = searchListDoll_.getStart().longValue();
+    Long rows = searchListDoll_.getRows().longValue();
+    Long foundNum = searchListDoll_.getResponse().getResponse().getNumFound().longValue();
     Long startNum = start + 1L;
     Long endNum = start + rows;
     Long floorMod = (rows == 0L ? 0L : Math.floorMod(foundNum, rows));
@@ -122,12 +119,12 @@ public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
 
   @Override
   protected void _varsQ(JsonObject vars) {
-    BaseResult.varsQForClass().forEach(var -> {
+    Doll.varsQForClass().forEach(var -> {
       JsonObject json = new JsonObject();
       json.put("var", var);
-      json.put("displayName", Optional.ofNullable(BaseResult.displayNameBaseResult(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-      json.put("classSimpleName", Optional.ofNullable(BaseResult.classSimpleNameBaseResult(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-      json.put("val", Optional.ofNullable(searchListBaseResult_.getRequest().getQuery()).filter(fq -> fq.startsWith(BaseResult.varIndexedBaseResult(var) + ":")).map(s -> SearchTool.unescapeQueryChars(StringUtils.substringAfter(s, ":"))).orElse(null));
+      json.put("displayName", Optional.ofNullable(Doll.displayNameDoll(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+      json.put("classSimpleName", Optional.ofNullable(Doll.classSimpleNameDoll(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+      json.put("val", Optional.ofNullable(searchListDoll_.getRequest().getQuery()).filter(fq -> fq.startsWith(Doll.varIndexedDoll(var) + ":")).map(s -> SearchTool.unescapeQueryChars(StringUtils.substringAfter(s, ":"))).orElse(null));
       vars.put(var, json);
     });
   }
@@ -135,17 +132,17 @@ public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
   @Override
   protected void _varsFq(JsonObject vars) {
     Map<String, SolrResponse.FacetField> facetFields = Optional.ofNullable(facetCounts).map(c -> c.getFacetFields()).map(f -> f.getFacets()).orElse(new HashMap<String,SolrResponse.FacetField>());
-    BaseResult.varsFqForClass().forEach(var -> {
-      String varIndexed = BaseResult.varIndexedBaseResult(var);
-      String varStored = BaseResult.varStoredBaseResult(var);
+    Doll.varsFqForClass().forEach(var -> {
+      String varIndexed = Doll.varIndexedDoll(var);
+      String varStored = Doll.varStoredDoll(var);
       JsonObject json = new JsonObject();
       json.put("var", var);
       json.put("varStored", varStored);
       json.put("varIndexed", varIndexed);
       String type = StringUtils.substringAfterLast(varIndexed, "_");
-      json.put("displayName", Optional.ofNullable(BaseResult.displayNameBaseResult(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-      json.put("classSimpleName", Optional.ofNullable(BaseResult.classSimpleNameBaseResult(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-      json.put("val", searchListBaseResult_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(BaseResult.varIndexedBaseResult(var) + ":")).findFirst().map(s -> SearchTool.unescapeQueryChars(StringUtils.substringAfter(s, ":"))).orElse(null));
+      json.put("displayName", Optional.ofNullable(Doll.displayNameDoll(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+      json.put("classSimpleName", Optional.ofNullable(Doll.classSimpleNameDoll(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+      json.put("val", searchListDoll_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(Doll.varIndexedDoll(var) + ":")).findFirst().map(s -> SearchTool.unescapeQueryChars(StringUtils.substringAfter(s, ":"))).orElse(null));
       Optional.ofNullable(stats).map(s -> s.get(varIndexed)).ifPresent(stat -> {
         json.put("stats", JsonObject.mapFrom(stat));
       });
@@ -207,13 +204,13 @@ public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
 
   @Override
   protected void _varsRange(JsonObject vars) {
-    BaseResult.varsRangeForClass().forEach(var -> {
-      String varIndexed = BaseResult.varIndexedBaseResult(var);
+    Doll.varsRangeForClass().forEach(var -> {
+      String varIndexed = Doll.varIndexedDoll(var);
       JsonObject json = new JsonObject();
       json.put("var", var);
-      json.put("displayName", Optional.ofNullable(BaseResult.displayNameBaseResult(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-      json.put("classSimpleName", Optional.ofNullable(BaseResult.classSimpleNameBaseResult(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-      json.put("val", searchListBaseResult_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(BaseResult.varIndexedBaseResult(var) + ":")).findFirst().map(s -> SearchTool.unescapeQueryChars(StringUtils.substringAfter(s, ":"))).orElse(null));
+      json.put("displayName", Optional.ofNullable(Doll.displayNameDoll(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+      json.put("classSimpleName", Optional.ofNullable(Doll.classSimpleNameDoll(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
+      json.put("val", searchListDoll_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(Doll.varIndexedDoll(var) + ":")).findFirst().map(s -> SearchTool.unescapeQueryChars(StringUtils.substringAfter(s, ":"))).orElse(null));
       vars.put(var, json);
     });
   }
@@ -224,7 +221,7 @@ public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
     JsonObject params = serviceRequest.getParams();
 
     JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-    Long num = searchListBaseResult_.getResponse().getResponse().getNumFound().longValue();
+    Long num = searchListDoll_.getResponse().getResponse().getNumFound().longValue();
     String q = "*:*";
     String q1 = "objectText";
     String q2 = "";
@@ -252,28 +249,28 @@ public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
     }
     query.put("q", q);
 
-    Long rows1 = Optional.ofNullable(searchListBaseResult_).map(l -> l.getRows()).orElse(10L);
-    Long start1 = Optional.ofNullable(searchListBaseResult_).map(l -> l.getStart()).orElse(1L);
+    Long rows1 = Optional.ofNullable(searchListDoll_).map(l -> l.getRows()).orElse(10L);
+    Long start1 = Optional.ofNullable(searchListDoll_).map(l -> l.getStart()).orElse(1L);
     Long start2 = start1 - rows1;
     Long start3 = start1 + rows1;
     Long rows2 = rows1 / 2;
     Long rows3 = rows1 * 2;
     start2 = start2 < 0 ? 0 : start2;
     JsonObject fqs = new JsonObject();
-    for(String fq : Optional.ofNullable(searchListBaseResult_).map(l -> l.getFilterQueries()).orElse(Arrays.asList())) {
+    for(String fq : Optional.ofNullable(searchListDoll_).map(l -> l.getFilterQueries()).orElse(Arrays.asList())) {
       if(!StringUtils.contains(fq, "(")) {
-        String fq1 = BaseResult.searchVarBaseResult(StringUtils.substringBefore(fq, ":"));
+        String fq1 = Doll.searchVarDoll(StringUtils.substringBefore(fq, ":"));
         String fq2 = StringUtils.substringAfter(fq, ":");
         if(!StringUtils.startsWithAny(fq, "classCanonicalNames_", "archived_", "sessionId", "userKeys"))
-          fqs.put(fq1, new JsonObject().put("var", fq1).put("val", fq2).put("displayName", BaseResult.displayNameForClass(fq1)));
+          fqs.put(fq1, new JsonObject().put("var", fq1).put("val", fq2).put("displayName", Doll.displayNameForClass(fq1)));
         }
       }
     query.put("fq", fqs);
 
     JsonArray sorts = new JsonArray();
-    for(String sort : Optional.ofNullable(searchListBaseResult_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
-      String sort1 = BaseResult.searchVarBaseResult(StringUtils.substringBefore(sort, " "));
-      sorts.add(new JsonObject().put("var", sort1).put("order", StringUtils.substringAfter(sort, " ")).put("displayName", BaseResult.displayNameForClass(sort1)));
+    for(String sort : Optional.ofNullable(searchListDoll_).map(l -> l.getSorts()).orElse(Arrays.asList())) {
+      String sort1 = Doll.searchVarDoll(StringUtils.substringBefore(sort, " "));
+      sorts.add(new JsonObject().put("var", sort1).put("order", StringUtils.substringAfter(sort, " ")).put("displayName", Doll.displayNameForClass(sort1)));
     }
     query.put("sort", sorts);
   }
@@ -307,31 +304,31 @@ public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
   @Override
   protected void _rows(Wrap<Long> w) {
     if(serviceRequest.getParams().getJsonObject("query").getString("rows", null) != null)
-      w.o(searchListBaseResult_.getRows());
+      w.o(searchListDoll_.getRows());
   }
 
   @Override
   protected void _start(Wrap<Long> w) {
     if(serviceRequest.getParams().getJsonObject("query").getString("start", null) != null)
-      w.o(searchListBaseResult_.getStart());
+      w.o(searchListDoll_.getStart());
   }
 
   @Override
   protected void _rangeGap(Wrap<String> w) {
     if(serviceRequest.getParams().getJsonObject("query").getString("facet.range.gap", null) != null)
-      w.o(Optional.ofNullable(searchListBaseResult_.getFacetRangeGap()).orElse(null));
+      w.o(Optional.ofNullable(searchListDoll_.getFacetRangeGap()).orElse(null));
   }
 
   @Override
   protected void _rangeEnd(Wrap<ZonedDateTime> w) {
     if(serviceRequest.getParams().getJsonObject("query").getString("facet.range.end", null) != null)
-      w.o(Optional.ofNullable(searchListBaseResult_.getFacetRangeEnd()).map(s -> TimeTool.parseZonedDateTime(defaultTimeZone, s)).orElse(null));
+      w.o(Optional.ofNullable(searchListDoll_.getFacetRangeEnd()).map(s -> TimeTool.parseZonedDateTime(defaultTimeZone, s)).orElse(null));
   }
 
   @Override
   protected void _rangeStart(Wrap<ZonedDateTime> w) {
     if(serviceRequest.getParams().getJsonObject("query").getString("facet.range.start", null) != null)
-      w.o(Optional.ofNullable(searchListBaseResult_.getFacetRangeStart()).map(s -> TimeTool.parseZonedDateTime(defaultTimeZone, s)).orElse(null));
+      w.o(Optional.ofNullable(searchListDoll_.getFacetRangeStart()).map(s -> TimeTool.parseZonedDateTime(defaultTimeZone, s)).orElse(null));
   }
 
   @Override
@@ -351,27 +348,27 @@ public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
 
   @Override
   protected void _defaultRangeVar(Wrap<String> w) {
-    w.o(Optional.ofNullable(searchListBaseResult_.getFacetRanges()).orElse(Optional.ofNullable(defaultRangeStats).map(s -> Arrays.asList(s.getString("defaultRangeVar"))).orElse(Arrays.asList())).stream().findFirst().map(v -> { if(v.contains("}")) return StringUtils.substringBefore(StringUtils.substringAfterLast(v, "}"), "_"); else return BaseResult.searchVarBaseResult(v); }).orElse("created"));
+    w.o(Optional.ofNullable(searchListDoll_.getFacetRanges()).orElse(Optional.ofNullable(defaultRangeStats).map(s -> Arrays.asList(s.getString("defaultRangeVar"))).orElse(Arrays.asList())).stream().findFirst().map(v -> { if(v.contains("}")) return StringUtils.substringBefore(StringUtils.substringAfterLast(v, "}"), "_"); else return Doll.searchVarDoll(v); }).orElse("created"));
   }
 
   @Override
   protected void _defaultFacetSort(Wrap<String> w) {
-    w.o(Optional.ofNullable(searchListBaseResult_.getFacetSort()).orElse("index"));
+    w.o(Optional.ofNullable(searchListDoll_.getFacetSort()).orElse("index"));
   }
 
   @Override
   protected void _defaultFacetLimit(Wrap<Integer> w) {
-    w.o(Optional.ofNullable(searchListBaseResult_.getFacetLimit()).orElse(1));
+    w.o(Optional.ofNullable(searchListDoll_.getFacetLimit()).orElse(1));
   }
 
   @Override
   protected void _defaultFacetMinCount(Wrap<Integer> w) {
-    w.o(Optional.ofNullable(searchListBaseResult_.getFacetMinCount()).orElse(1));
+    w.o(Optional.ofNullable(searchListDoll_.getFacetMinCount()).orElse(1));
   }
 
   @Override
   protected void _defaultPivotMinCount(Wrap<Integer> w) {
-    w.o(Optional.ofNullable(searchListBaseResult_.getFacetPivotMinCount()).orElse(0));
+    w.o(Optional.ofNullable(searchListDoll_.getFacetPivotMinCount()).orElse(0));
   }
 
   @Override
@@ -393,14 +390,14 @@ public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
 
   @Override
   protected void _defaultFieldListVars(List<String> l) {
-    Optional.ofNullable(searchListBaseResult_.getFields()).orElse(Arrays.asList()).forEach(varStored -> {
+    Optional.ofNullable(searchListDoll_.getFields()).orElse(Arrays.asList()).forEach(varStored -> {
       String varStored2 = varStored;
       if(StringUtils.contains(varStored2, "}"))
         varStored2 = StringUtils.substringAfterLast(varStored2, "}");
       String[] parts = varStored2.split(",");
       for(String part : parts) {
         if(StringUtils.isNotBlank(part)) {
-          String var = BaseResult.searchVarBaseResult(part);
+          String var = Doll.searchVarDoll(part);
           if(StringUtils.isNotBlank(var))
             l.add(var);
         }
@@ -410,14 +407,14 @@ public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
 
   @Override
   protected void _defaultStatsVars(List<String> l) {
-    Optional.ofNullable(searchListBaseResult_.getStatsFields()).orElse(Arrays.asList()).forEach(varIndexed -> {
+    Optional.ofNullable(searchListDoll_.getStatsFields()).orElse(Arrays.asList()).forEach(varIndexed -> {
       String varIndexed2 = varIndexed;
       if(StringUtils.contains(varIndexed2, "}"))
         varIndexed2 = StringUtils.substringAfterLast(varIndexed2, "}");
       String[] parts = varIndexed2.split(",");
       for(String part : parts) {
         if(StringUtils.isNotBlank(part)) {
-          String var = BaseResult.searchVarBaseResult(part);
+          String var = Doll.searchVarDoll(part);
           if(StringUtils.isNotBlank(var))
             l.add(var);
         }
@@ -427,14 +424,14 @@ public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
 
   @Override
   protected void _defaultPivotVars(List<String> l) {
-    Optional.ofNullable(searchListBaseResult_.getFacetPivots()).orElse(Arrays.asList()).forEach(facetPivot -> {
+    Optional.ofNullable(searchListDoll_.getFacetPivots()).orElse(Arrays.asList()).forEach(facetPivot -> {
       String facetPivot2 = facetPivot;
       if(StringUtils.contains(facetPivot2, "}"))
         facetPivot2 = StringUtils.substringAfterLast(facetPivot2, "}");
       String[] parts = facetPivot2.split(",");
       for(String part : parts) {
         if(StringUtils.isNotBlank(part)) {
-          String var = BaseResult.searchVarBaseResult(part);
+          String var = Doll.searchVarDoll(part);
           if(StringUtils.isNotBlank(var))
             l.add(var);
         }
@@ -445,22 +442,22 @@ public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
   /**
    * {@inheritDoc}
    **/
-  protected void _listBaseResult(JsonArray l) {
-    Optional.ofNullable(searchListBaseResult_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
+  protected void _listDoll(JsonArray l) {
+    Optional.ofNullable(searchListDoll_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
   }
 
-  protected void _baseResultCount(Wrap<Integer> w) {
-    w.o(searchListBaseResult_ == null ? 0 : searchListBaseResult_.size());
+  protected void _dollCount(Wrap<Integer> w) {
+    w.o(searchListDoll_ == null ? 0 : searchListDoll_.size());
   }
 
-  protected void _baseResult_(Wrap<BaseResult> w) {
-    if(baseResultCount == 1 && Optional.ofNullable(siteRequest_.getServiceRequest().getParams().getJsonObject("path")).map(o -> o.getString("id")).orElse(null) != null)
-      w.o(searchListBaseResult_.get(0));
+  protected void _doll_(Wrap<Doll> w) {
+    if(dollCount == 1 && Optional.ofNullable(siteRequest_.getServiceRequest().getParams().getJsonObject("path")).map(o -> o.getString("id")).orElse(null) != null)
+      w.o(searchListDoll_.get(0));
   }
 
   protected void _id(Wrap<String> w) {
-    if(baseResult_ != null)
-      w.o(baseResult_.getId());
+    if(doll_ != null)
+      w.o(doll_.getId());
   }
 
   @Override
@@ -470,27 +467,29 @@ public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
 
   @Override
   protected void _classSimpleName(Wrap<String> w) {
-    w.o("BaseResult");
+    w.o("Doll");
   }
 
   @Override
   protected void _pageTitle(Wrap<String> c) {
-    if(baseResult_ != null && baseResult_.getObjectTitle() != null)
-      c.o(baseResult_.getObjectTitle());
-    else if(baseResult_ != null)
-      c.o("");
-    else if(searchListBaseResult_ == null || baseResultCount == 0)
-      c.o("");
+    if(doll_ != null && doll_.getObjectTitle() != null)
+      c.o(doll_.getObjectTitle());
+    else if(doll_ != null)
+      c.o("dolls");
+    else if(searchListDoll_ == null || dollCount == 0)
+      c.o("no doll found");
+    else
+      c.o("dolls");
   }
 
   @Override
   protected void _pageUri(Wrap<String> c) {
-    c.o("");
+    c.o("/edit/doll");
   }
 
   @Override
   protected void _apiUri(Wrap<String> c) {
-    c.o("");
+    c.o("/api/product/doll");
   }
 
   @Override
@@ -500,11 +499,20 @@ public class BaseResultGenPage extends BaseResultGenPageGen<PageLayout> {
 
   @Override
   protected void _pageDescription(Wrap<String> c) {
-      c.o("A reusable base class for all non-model search classes");
+      c.o("See the available dolls");
   }
 
   @Override
   protected void _pageImageUri(Wrap<String> c) {
-      c.o("/png-999.png");
+      c.o("/png/edit/doll-999.png");
+  }
+
+  @Override
+  protected void _classIcon(Wrap<String> c) {
+      c.o("<i class=\"fa-solid fa-reel\"></i>");
+  }
+
+  protected void _pageUriDoll(Wrap<String> c) {
+      c.o("/edit/doll");
   }
 }

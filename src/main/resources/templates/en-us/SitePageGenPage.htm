@@ -2,7 +2,7 @@
 
 {%- block htmTitleBaseResultPage %}
 {%- block htmTitleSitePagePage %}
-    <title>{% if searchListSitePage_ is defined %}{% if sitePageCount == int1 %}{% if id is defined %}article{% else %}article{% endif %}{% else %}no article found{% endif %}{% else %}articles{% endif %}</title>
+    <title>{% if searchListSitePage_ is defined %}{% if sitePageCount == 1 %}{% if id is defined %}article{% else %}article{% endif %}{% else %}no article found{% endif %}{% else %}articles{% endif %}</title>
 {%- endblock htmTitleSitePagePage %}
 {%- endblock htmTitleBaseResultPage %}
 
@@ -22,9 +22,7 @@
 {{ super() }}
 {%- block htmScriptsSitePagePage %}
     <script src="{{staticBaseUrl}}/js/enUS/SitePagePage.js"></script>
-    {% if id is defined %}
     <script type="module" src="{{staticBaseUrl}}/js/enUS/SitePagePageModule.js"></script>
-    {% endif %}
 {%- endblock htmScriptsSitePagePage %}
 {%- endblock htmScriptsBaseResultPage %}
 
@@ -147,13 +145,14 @@
 {%- block websocketBaseResultPage %}
 {%- block websocketSitePagePage %}
         window.eventBus = new EventBus('/eventbus');
+        window.eventBus.enableReconnect(true);
         websocketSitePage(websocketSitePageInner);
 {%- endblock websocketSitePagePage %}
 {%- endblock websocketBaseResultPage %}
 
 {%- block htmUrlSitePagePage %}{{pageUri}}?q={{query.q}}&amp;rows={% if rows is defined %}{{rows}}{% else %}{{pagination.rows}}{% endif %}&amp;rows={% if start is defined %}{{start}}{% else %}{{pagination.start}}{% endif %}{% for item query.fq %}{% if fq == item %}{% else %}&fq={{fq}}:{{val}}{% endif %}{% endfor %}{% for item in query.sort %}{% if sort == item %}{% else %}&sort={{var}} {{order}}{% endif %}{% endfor %}{%- endblock htmUrlSitePagePage %}
 
-{%- macro htmButton_patchSitePage() %}<sl-button onclick="document.querySelector('#patchSitePageDialog').show(); "><i slot="prefix" class="fas fa-edit "></i>Modify</sl-button>{%- endmacro %}
+{%- macro htmButton_patchSitePage() %}<sl-button id="htmButton_patchSitePage" data-id="{{ id }}"><i slot="prefix" class="fas fa-edit "></i>Modify</sl-button>{%- endmacro %}
 
 {%- macro htmFormButton_patchSitePage() %}
             <sl-button slot="footer" type="submit" variant="primary"
@@ -163,112 +162,106 @@
 
 {%- macro htmForm_patchSitePage() %}
         <sl-dialog id="patchSitePageDialog" label="Modify article">
-          <form id="htmForm_patchSitePage">
-              <div stuff="-1--1">
+          <form id="htmForm_patchSitePage" class="round-first-and-last-row-x-large ">
+            <sl-details class="HtmRow" id="primary-key-id-created-modified-archive-details">
+              <div slot="summary">
+                <span>primary key, ID, created, modified, archive details</span>
+              </div>
+              <div class="grid-with-subgrid-2col ">
 
               {%- if "PATCH" in scopes %}
-                {{ htmCreatedSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmCreatedSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmCreatedSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmCreatedSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmCreatedSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmCreatedSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmModifiedSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmModifiedSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmModifiedSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmModifiedSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmModifiedSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmModifiedSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmObjectIdSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmObjectIdSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmObjectIdSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmObjectIdSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmObjectIdSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmObjectIdSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
               </div>
-              <div stuff="-1--1">
+              <div class="grid-with-subgrid-2col ">
 
               {%- if "PATCH" in scopes %}
-                {{ htmArchivedSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmArchivedSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmArchivedSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmArchivedSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmArchivedSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=false) }}
-                {%- endif %}
-              {%- endif %}
-
-              {%- if "PATCH" in scopes %}
-                {{ htmDeletedSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=true, roleForReadBool=true) }}
-              {%- else %}
-                {%- if "GET" in scopes %}
-                  {{ htmDeletedSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=true) }}
-                {%- else %}
-                  {{ htmDeletedSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmArchivedSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
               </div>
-              <div stuff="-1--1">
+              <div class="grid-with-subgrid-2col ">
 
               {%- if "PATCH" in scopes %}
-                {{ htmPageIdSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmPageIdSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmPageIdSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmPageIdSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmPageIdSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmPageIdSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmUriSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmUriSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmUriSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmUriSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmUriSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmUriSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmUrlSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmUrlSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmUrlSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmUrlSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmUrlSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmUrlSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmAuthorSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmAuthorSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmAuthorSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmAuthorSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmAuthorSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmAuthorSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
               </div>
-              <div stuff="-1--1">
+              <div class="grid-with-subgrid-2col ">
 
               {%- if "PATCH" in scopes %}
-                {{ htmPageImageUriSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmPageImageUriSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmPageImageUriSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmPageImageUriSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmPageImageUriSitePagePage(classApiMethodMethod='PATCH', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmPageImageUriSitePagePage(classApiMethodMethod='PATCH', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
               </div>
@@ -278,7 +271,7 @@
         </sl-dialog>
 {%- endmacro %}
 
-{%- macro htmButton_postSitePage() %}<sl-button onclick="document.querySelector('#postSitePageDialog').show(); "><i slot="prefix" class="fas fa-file-plus "></i>Create</sl-button>{%- endmacro %}
+{%- macro htmButton_postSitePage() %}<sl-button id="htmButton_postSitePage" data-id="{{ id }}"><i slot="prefix" class="fas fa-file-plus "></i>Create</sl-button>{%- endmacro %}
 
 {%- macro htmFormButton_postSitePage() %}
             <sl-button slot="footer" type="submit" variant="primary"
@@ -288,113 +281,107 @@
 
 {%- macro htmForm_postSitePage() %}
         <sl-dialog id="postSitePageDialog" label="Create an article">
-          <form id="htmForm_postSitePage">
+          <form id="htmForm_postSitePage" class="round-first-and-last-row-x-large ">
             <div class="">You can override any default values below: </div>
-              <div stuff="-1--1">
+            <sl-details class="HtmRow" id="primary-key-id-created-modified-archive-details">
+              <div slot="summary">
+                <span>primary key, ID, created, modified, archive details</span>
+              </div>
+              <div class="grid-with-subgrid-2col ">
 
               {%- if "PATCH" in scopes %}
-                {{ htmCreatedSitePagePage(classApiMethodMethod='POST', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmCreatedSitePagePage(classApiMethodMethod='POST', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmCreatedSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmCreatedSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmCreatedSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmCreatedSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmModifiedSitePagePage(classApiMethodMethod='POST', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmModifiedSitePagePage(classApiMethodMethod='POST', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmModifiedSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmModifiedSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmModifiedSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmModifiedSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmObjectIdSitePagePage(classApiMethodMethod='POST', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmObjectIdSitePagePage(classApiMethodMethod='POST', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmObjectIdSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmObjectIdSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmObjectIdSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmObjectIdSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
               </div>
-              <div stuff="-1--1">
+              <div class="grid-with-subgrid-2col ">
 
               {%- if "PATCH" in scopes %}
-                {{ htmArchivedSitePagePage(classApiMethodMethod='POST', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmArchivedSitePagePage(classApiMethodMethod='POST', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmArchivedSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmArchivedSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmArchivedSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=false) }}
-                {%- endif %}
-              {%- endif %}
-
-              {%- if "PATCH" in scopes %}
-                {{ htmDeletedSitePagePage(classApiMethodMethod='POST', roleForWriteBool=true, roleForReadBool=true) }}
-              {%- else %}
-                {%- if "GET" in scopes %}
-                  {{ htmDeletedSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=true) }}
-                {%- else %}
-                  {{ htmDeletedSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmArchivedSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
               </div>
-              <div stuff="-1--1">
+              <div class="grid-with-subgrid-2col ">
 
               {%- if "PATCH" in scopes %}
-                {{ htmPageIdSitePagePage(classApiMethodMethod='POST', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmPageIdSitePagePage(classApiMethodMethod='POST', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmPageIdSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmPageIdSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmPageIdSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmPageIdSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmUriSitePagePage(classApiMethodMethod='POST', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmUriSitePagePage(classApiMethodMethod='POST', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmUriSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmUriSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmUriSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmUriSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmUrlSitePagePage(classApiMethodMethod='POST', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmUrlSitePagePage(classApiMethodMethod='POST', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmUrlSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmUrlSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmUrlSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmUrlSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmAuthorSitePagePage(classApiMethodMethod='POST', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmAuthorSitePagePage(classApiMethodMethod='POST', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmAuthorSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmAuthorSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmAuthorSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmAuthorSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
               </div>
-              <div stuff="-1--1">
+              <div class="grid-with-subgrid-2col ">
 
               {%- if "PATCH" in scopes %}
-                {{ htmPageImageUriSitePagePage(classApiMethodMethod='POST', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmPageImageUriSitePagePage(classApiMethodMethod='POST', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmPageImageUriSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmPageImageUriSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmPageImageUriSitePagePage(classApiMethodMethod='POST', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmPageImageUriSitePagePage(classApiMethodMethod='POST', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
               </div>
@@ -404,7 +391,7 @@
         </sl-dialog>
 {%- endmacro %}
 
-{%- macro htmButton_putimportSitePage() %}<sl-button onclick="document.querySelector('#putimportSitePageDialog').show(); "><i slot="prefix" class="fas fa-file-import "></i>Import</sl-button>{%- endmacro %}
+{%- macro htmButton_putimportSitePage() %}<sl-button id="htmButton_putimportSitePage" data-id="{{ id }}"><i slot="prefix" class="fas fa-file-import "></i>Import</sl-button>{%- endmacro %}
 
 {%- macro htmFormButton_putimportSitePage() %}
             <sl-button slot="footer" type="submit" variant="primary"
@@ -414,7 +401,7 @@
 
 {%- macro htmForm_putimportSitePage() %}
         <sl-dialog id="putimportSitePageDialog" label="Import articles">
-          <form id="htmForm_putimportSitePage">
+          <form id="htmForm_putimportSitePage" class="round-first-and-last-row-x-large ">
             <div>
               <sl-textarea
                   class="PUTImport_searchList "
@@ -438,112 +425,106 @@
 
 {%- macro htmForm_searchpageSitePage() %}
         <div id="searchpageSitePageDialog" label="Search articles">
-          <div id="htmForm_searchpageSitePage">
-              <div stuff="-1--1">
+          <div id="htmForm_searchpageSitePage" class="round-first-and-last-row-x-large ">
+            <sl-details class="HtmRow" id="primary-key-id-created-modified-archive-details">
+              <div slot="summary">
+                <span>primary key, ID, created, modified, archive details</span>
+              </div>
+              <div class="grid-with-subgrid-2col ">
 
               {%- if "PATCH" in scopes %}
-                {{ htmCreatedSitePagePage(classApiMethodMethod='Page', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmCreatedSitePagePage(classApiMethodMethod='Page', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmCreatedSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmCreatedSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmCreatedSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmCreatedSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmModifiedSitePagePage(classApiMethodMethod='Page', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmModifiedSitePagePage(classApiMethodMethod='Page', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmModifiedSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmModifiedSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmModifiedSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmModifiedSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmObjectIdSitePagePage(classApiMethodMethod='Page', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmObjectIdSitePagePage(classApiMethodMethod='Page', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmObjectIdSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmObjectIdSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmObjectIdSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmObjectIdSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
               </div>
-              <div stuff="-1--1">
+              <div class="grid-with-subgrid-2col ">
 
               {%- if "PATCH" in scopes %}
-                {{ htmArchivedSitePagePage(classApiMethodMethod='Page', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmArchivedSitePagePage(classApiMethodMethod='Page', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmArchivedSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmArchivedSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmArchivedSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=false) }}
-                {%- endif %}
-              {%- endif %}
-
-              {%- if "PATCH" in scopes %}
-                {{ htmDeletedSitePagePage(classApiMethodMethod='Page', roleForWriteBool=true, roleForReadBool=true) }}
-              {%- else %}
-                {%- if "GET" in scopes %}
-                  {{ htmDeletedSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=true) }}
-                {%- else %}
-                  {{ htmDeletedSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmArchivedSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
               </div>
-              <div stuff="-1--1">
+              <div class="grid-with-subgrid-2col ">
 
               {%- if "PATCH" in scopes %}
-                {{ htmPageIdSitePagePage(classApiMethodMethod='Page', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmPageIdSitePagePage(classApiMethodMethod='Page', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmPageIdSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmPageIdSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmPageIdSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmPageIdSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmUriSitePagePage(classApiMethodMethod='Page', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmUriSitePagePage(classApiMethodMethod='Page', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmUriSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmUriSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmUriSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmUriSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmUrlSitePagePage(classApiMethodMethod='Page', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmUrlSitePagePage(classApiMethodMethod='Page', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmUrlSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmUrlSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmUrlSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmUrlSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
 
               {%- if "PATCH" in scopes %}
-                {{ htmAuthorSitePagePage(classApiMethodMethod='Page', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmAuthorSitePagePage(classApiMethodMethod='Page', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmAuthorSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmAuthorSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmAuthorSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmAuthorSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
               </div>
-              <div stuff="-1--1">
+              <div class="grid-with-subgrid-2col ">
 
               {%- if "PATCH" in scopes %}
-                {{ htmPageImageUriSitePagePage(classApiMethodMethod='Page', roleForWriteBool=true, roleForReadBool=true) }}
+                {{ htmPageImageUriSitePagePage(classApiMethodMethod='Page', authForWriteBool=true, authForReadBool=true) }}
               {%- else %}
                 {%- if "GET" in scopes %}
-                  {{ htmPageImageUriSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=true) }}
+                  {{ htmPageImageUriSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=true) }}
                 {%- else %}
-                  {{ htmPageImageUriSitePagePage(classApiMethodMethod='Page', roleForWriteBool=false, roleForReadBool=false) }}
+                  {{ htmPageImageUriSitePagePage(classApiMethodMethod='Page', authForWriteBool=false, authForReadBool=false) }}
                 {%- endif %}
               {%- endif %}
               </div>
@@ -565,107 +546,11 @@
             {{ htmFormsSitePagePage() }}
             <sl-divider></sl-divider>
             {{ htmPaginationButtonsSitePagePage() }}
-            <div class="grid-mode-details">
-            <div>
-                <i class="fa-duotone fa-solid fa-newspaper"></i>
-              <sl-dropdown>
-                <sl-button slot="trigger" caret>ID</sl-button>
-                <sl-menu>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                    sort by ID ascending
-                  </sl-menu-item>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-z-a"></i>
-                    sort by ID descending
-                  </sl-menu-item>
-                </sl-menu>
-              </sl-dropdown>
-              <sl-dropdown>
-                <sl-button slot="trigger" caret>title</sl-button>
-                <sl-menu>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                    sort by title ascending
-                  </sl-menu-item>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-z-a"></i>
-                    sort by title descending
-                  </sl-menu-item>
-                </sl-menu>
-              </sl-dropdown>
-              <sl-dropdown>
-                <sl-button slot="trigger" caret>ID</sl-button>
-                <sl-menu>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                    sort by ID ascending
-                  </sl-menu-item>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-z-a"></i>
-                    sort by ID descending
-                  </sl-menu-item>
-                </sl-menu>
-              </sl-dropdown>
-              <sl-dropdown>
-                <sl-button slot="trigger" caret>created</sl-button>
-                <sl-menu>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                    sort by created ascending
-                  </sl-menu-item>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-z-a"></i>
-                    sort by created descending
-                  </sl-menu-item>
-                </sl-menu>
-              </sl-dropdown>
-              <sl-dropdown>
-                <sl-button slot="trigger" caret></sl-button>
-                <sl-menu>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                    sort by null ascending
-                  </sl-menu-item>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-z-a"></i>
-                    sort by null descending
-                  </sl-menu-item>
-                </sl-menu>
-              </sl-dropdown>
-              <sl-dropdown>
-                <sl-button slot="trigger" caret></sl-button>
-                <sl-menu>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                    sort by null ascending
-                  </sl-menu-item>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-z-a"></i>
-                    sort by null descending
-                  </sl-menu-item>
-                </sl-menu>
-              </sl-dropdown>
-              <sl-dropdown>
-                <sl-button slot="trigger" caret></sl-button>
-                <sl-menu>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                    sort by null ascending
-                  </sl-menu-item>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-z-a"></i>
-                    sort by null descending
-                  </sl-menu-item>
-                </sl-menu>
-              </sl-dropdown>
-              </div>
-            </div>
-            <div class="grid-mode-details" id="site-results-grid">
+            <div class="grid-mode-details border-radius-x-large" id="site-results-grid">
               {% for item in listSitePage%}
               <a href="{{ item.pageUrlPk }}">
-                <i class="fa-duotone fa-solid fa-newspaper"></i>
-                <div>{{ item.objectId }}</div>
+                <div>                  <i class="fa-duotone fa-solid fa-newspaper"></i>
+{{ item.objectId }}</div>
                 <div>{{ item.title }}</div>
                 <div>{{ item.objectId }}</div>
                 <div><sl-format-date weekday="short" month="short" day="numeric" year="numeric" hour="numeric" minute="numeric" second="numeric" time-zone-name="short" date="{{ formatZonedDateTime(item.created, "yyyy-MM-dd'T'HH:mm:ss.SSSX", defaultLocaleId, "UTC") }}"></sl-format-date></div>
@@ -712,23 +597,6 @@
 {%- macro htmPaginationButtonsSitePagePage() %}
             <div id="htmPaginationButtons">
               <sl-button-group>
-                <sl-tooltip placement="top" content="Show the results as details" pill>
-                  <sl-button pill id="grid-toggle-details">
-                    <i class="fa-solid fa-list"></i>
-                  </sl-button>
-                </sl-tooltip>
-                <sl-tooltip placement="top" content="Show the results as a list">
-                  <sl-button id="grid-toggle-list">
-                    <i class="fa-solid fa-bars"></i>
-                  </sl-button>
-                </sl-tooltip>
-                <sl-tooltip placement="top" content="Show the results as cards" pill>
-                  <sl-button pill id="grid-toggle-card">
-                    <i class="fa-solid fa-grid"></i>
-                  </sl-button>
-                </sl-tooltip>
-              </sl-button-group>
-              <sl-button-group>
                 <sl-tooltip placement="top" content="Show the previous results">
                   <sl-button pill{% if pagination.pagePrevious is defined %} href="{{pageUri}}?start={{pagination.pagePrevious.start}}&amp;rows={{pagination.rows}}"{% else %} disabled{% endif %}>
                     <i slot="prefix" class="fas fa-arrow-square-left "></i>
@@ -750,7 +618,7 @@
                   </sl-button>
                 </sl-tooltip>
               </sl-button-group>
-              <div>{{ pagination.startNum }} –— {{ pagination.endNum }} of {{ pagination.foundNum }}</div>
+            <div>{{ pagination.startNum }} – {{ pagination.endNum }} of {{ pagination.foundNum }}</div>
             </div>
 {%- endmacro htmPaginationButtonsSitePagePage() %}
 {%- macro htmFormsSitePagePage() %}
@@ -758,15 +626,16 @@
     {% if "PATCH" in scopes %}
             <sl-divider></sl-divider>
             <div id="htmButtonGroup">
-{% if sitePageCount == 1 %}<sl-button id="refreshThisSitePageGenPage" onclick="patch{{classSimpleName}}Vals( [ {name: 'fq', value: 'id:{{id}}' } ], {}, this, function() { addGlow(document.querySelector('#refreshThisSitePageGenPage')); }, function() { addError(document.querySelector('#refreshThisSitePageGenPage')); }); return false; "><i slot="prefix" class="fas fa-sync-alt "></i>refresh</sl-button>{% endif %}{% if sitePageCount > 0 %}<sl-button id="refreshAllSitePageGenPage{{id}}" onclick="patch{{classSimpleName}}Vals([], {}, this, function() { addGlow(document.querySelector('#refreshAllSitePageGenPage{{id}}')); }, function() { addError(document.querySelector('#refreshAllSitePageGenPage{{id}}')); }); "><i slot="prefix" class="fa-kit fa-solid-arrows-rotate-rotate"></i>Refresh all </sl-button>{% endif %}{% endif %}{% endif %}{%- if AUTH_SCOPE_SUPER_ADMIN in scopes %}{%- if sitePageCount > 0 %}{{ htmButton_patchSitePage() }}{%- endif %}{%- endif %}{% if AUTH_SCOPE_ADMIN in scopes %}{%- if sitePageCount == int1 %}{%- if id is defined %}{%- else %}{{ htmButton_postSitePage() }}{%- endif %}{%- else %}{{ htmButton_postSitePage() }}{%- endif %}{%- endif %}{%- if AUTH_SCOPE_SUPER_ADMIN in scopes %}{{ htmButton_putimportSitePage() }}{%- endif %}            </div>
+{% if sitePageCount == 1 %}<sl-button id="refreshThisSitePageGenPage" onclick="patch{{classSimpleName}}Vals( [ {name: 'fq', value: 'id:{{id}}' } ], {}, this, function() { addGlow(document.querySelector('#refreshThisSitePageGenPage')); }, function() { addError(document.querySelector('#refreshThisSitePageGenPage')); }); return false; "><i slot="prefix" class="fas fa-sync-alt "></i>refresh</sl-button>{% endif %}{% if sitePageCount > 0 %}<sl-button id="refreshAllSitePageGenPage{{id}}" onclick="patch{{classSimpleName}}Vals([], {}, this, function() { addGlow(document.querySelector('#refreshAllSitePageGenPage{{id}}')); }, function() { addError(document.querySelector('#refreshAllSitePageGenPage{{id}}')); }); "><i slot="prefix" class="fa-kit fa-solid-arrows-rotate-rotate"></i>Refresh all </sl-button>{% endif %}{% endif %}{% endif %}{%- if AUTH_SCOPE_SUPER_ADMIN in scopes %}{%- if sitePageCount > 0 %}{{ htmButton_patchSitePage() }}{%- endif %}{%- endif %}{% if AUTH_SCOPE_ADMIN in scopes %}{%- if sitePageCount == 1 %}{%- if id is defined %}{{ htmButton_postSitePage() }}{%- else %}{{ htmButton_postSitePage() }}{%- endif %}{%- else %}{{ htmButton_postSitePage() }}{%- endif %}{%- endif %}{%- if AUTH_SCOPE_SUPER_ADMIN in scopes %}{{ htmButton_putimportSitePage() }}{%- endif %}            </div>
   {%- if AUTH_SCOPE_SUPER_ADMIN in scopes %}
     {%- if sitePageCount > 0 %}
         {{ htmForm_patchSitePage() }}
     {%- endif %}
   {%- endif %}
   {% if AUTH_SCOPE_ADMIN in scopes %}
-    {%- if sitePageCount == int1 %}
+    {%- if sitePageCount == 1 %}
       {%- if id is defined %}
+        {{ htmForm_postSitePage() }}
       {%- else %}
         {{ htmForm_postSitePage() }}
       {%- endif %}
@@ -847,19 +716,21 @@
                 {% for key, value in varsFq.items() %}
                   <div class="">
                     <label for="fqSitePage_{{ key }}">{{ value.displayName }}<sup> ({{ value.classSimpleName }})</sup></label>
-                    <div class="display-flex ">
-                      <sl-button id="buttonFacetSitePage_{{ key }}" onclick="facetFieldChange('SitePage', this); " title="see values " data-var="{{ value.var }}" data-clear="{% if value.facetField is defined %}true{% else %}false{% endif %}"><i class="fas fa-list "></i></sl-button>
+                    <div class="flex ">
+                      <sl-button id="buttonFacetSitePage_{{ key }}" title="see values " data-var="{{ value.var }}" data-clear="{% if value.facetField is defined %}true{% else %}false{% endif %}"><i class="fas fa-list "></i></sl-button>
                       <sl-input id="fqSitePage_{{ key }}" placeholder="{{ value.displayName }}" class="" onchange="fqChange('SitePage', value); " data-var="{{ value.var }}" autocomplete="off=" value="{{ value.val }}"></sl-input>
                     </div>
                   </div>
                   <div>
-                    <div class="pageSearchVal " id="pageSearchVal-fqSitePage_{{ key }}">{% if val is defined %}fq={{ value.var }}:{{ value.val | urlencode() }}{% endif %}</div>
+                    <div class="pageSearchVal " id="pageSearchVal-fqSitePage_{{ key }}">{% if value.val is defined %}fq={{ value.var }}:{{ value.val | urlencode() }}{% endif %}</div>
                     <div class="pageSearchVal " id="pageSearchVal-buttonFacetSitePage_{{ key }}">{% if value.facetField.var is defined %}facet.field={{ value.facetField.var }}{% endif %}</div>
-                    <ol class="pageFacetField pageFacetFieldSitePage_{{ key }} " id="pageFacetFieldSitePage_{{ key }}">
+                    <div class="pageFacetField pageFacetFieldSitePage_{{ key }} " id="pageFacetFieldSitePage_{{ key }}">
 {% for facetFieldKey, facetFieldValue in value.facetField.counts.items() %}
-                      <li class="cursor-pointer " data-class="SitePage" data-var="{{ value.facetField.var }}" data-val="{{ facetFieldKey }}" onclick="fqReplace('SitePage', facetFieldValue); ">{{ facetFieldKey }}: {{ facetFieldValue }}</li>
+                      <sl-tooltip content="{{ facetFieldValue | e }} article total with {{ value.facetField.var | e }} &quot;{{ facetFieldKey | e }}&quot;">
+                        <div class="cursor-pointer " data-class="SitePage" data-var="{{ value.facetField.var }}" data-val="{{ facetFieldKey }}" onclick="fqReplace('SitePage', this); ">{{ facetFieldValue }}: {{ facetFieldKey }}</div>
+                      </sl-tooltip>
 {% endfor %}
-                    </ol>
+                    </div>
                   </div>
                 {% endfor %}
               </div>
@@ -947,7 +818,7 @@
               </div>
               {% for key, value in varsFq.items() %}
               <div>
-                <sl-checkbox name="pageFacetPivot" class="pageFacetPivot " id="pageFacetPivotSitePage_{{ key }}" value="{{ value.var }}"{% if pivot is defined %} checked="checked"{% endif %} onclick="facetPivotChange('SitePage', value); ">{{ value.displayName }}</sl-checkbox>
+                <sl-checkbox name="pageFacetPivot" class="pageFacetPivot " id="pageFacetPivotSitePage_{{ key }}" value="{{ value.var }}"{% if pivot is defined %} checked="checked"{% endif %}>{{ value.displayName }}</sl-checkbox>
               </div>
               {% endfor %}
               {%- endblock htmBodyPivotSitePagePage %}
@@ -1045,12 +916,8 @@
           {%- endblock htmBodySidebarSitePagePage %}
         </div>
 
-        {%- block htmBodyGraphLocationSitePagePage %}
-        <div id="htmBodyGraphLocationSitePagePage" class="htmBodyGraphLocation "></div>
-        {%- endblock htmBodyGraphLocationSitePagePage %}
-
         {%- block htmBodyGraphSitePagePage %}
-        <div id="htmBodyGraphBaseResultPage" class="htmBodyGraph "></div>
+        <div id="htmBodyGraphSitePagePage" class="htmBodyGraph "></div>
         {%- endblock htmBodyGraphSitePagePage %}
         <div class="pageContent ">
           <div id="site-calendar-box">
@@ -1118,7 +985,6 @@
         {{ htmForm_searchpageSitePage() }}
   {% endif %}
         {%- endblock htmFormSitePagePage %}
-        </div>
       {%- endblock htmBodyMiddleSitePagePage %}
       {%- endblock htmBodyMiddleBaseResultPage %}
 
@@ -1171,9 +1037,9 @@
         </div>
 {%- endblock htmSuggestedSitePagePage %}
 
-{%- macro inputCreatedSitePagePage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputCreatedSitePagePage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_created">
+                <form class="subgrid-2col " id="PageForm_created">
   {%- endif %}
                   <sl-input
                       type="text"
@@ -1185,7 +1051,7 @@
                       placeholder="MM/dd/yyyy h:mm a '['VV']'"
                       data-timeformat="MM/dd/yyyy h:mm a '['VV']'"
                       id="{{classApiMethodMethod}}_created"
-                      value="{%- if sitePage_.created is defined %}{{ formatZonedDateTime(sitePage_.created, "MM/dd/yyyy h:mm a '['VV']'", defaultLocaleId, defaultZoneId) }}{%- endif %}"
+                      value="{%- if sitePage_.created is defined %}{{ formatZonedDateTime(sitePage_.created, "MM/dd/yyyy h:mm a '['VV']'", defaultLocaleId, defaultZoneId) | e }}{%- endif %}"
   {%- if 'Page' == classApiMethodMethod %}
   {%- endif %}
                       data-id="{{ id }}"
@@ -1194,16 +1060,15 @@
   {%- if 'Page' == classApiMethodMethod %}
                 </form>
   {%- endif %}
-                <span class="varSitePage{{id}}Created varSitePageCreated ">{{sitePage_.created}}</span>
 {%- endmacro %}
 
-{%- macro htmCreatedSitePagePage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputCreatedSitePagePage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmCreatedSitePagePage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputCreatedSitePagePage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputModifiedSitePagePage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputModifiedSitePagePage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_modified">
+                <form class="subgrid-2col " id="PageForm_modified">
   {%- endif %}
                   <sl-input
                       type="text"
@@ -1215,7 +1080,7 @@
                       placeholder="MM/dd/yyyy h:mm a '['VV']'"
                       data-timeformat="MM/dd/yyyy h:mm a '['VV']'"
                       id="{{classApiMethodMethod}}_modified"
-                      value="{%- if sitePage_.modified is defined %}{{ formatZonedDateTime(sitePage_.modified, "MM/dd/yyyy h:mm a '['VV']'", defaultLocaleId, defaultZoneId) }}{%- endif %}"
+                      value="{%- if sitePage_.modified is defined %}{{ formatZonedDateTime(sitePage_.modified, "MM/dd/yyyy h:mm a '['VV']'", defaultLocaleId, defaultZoneId) | e }}{%- endif %}"
   {%- if 'Page' == classApiMethodMethod %}
   {%- endif %}
                       data-id="{{ id }}"
@@ -1224,19 +1089,18 @@
   {%- if 'Page' == classApiMethodMethod %}
                 </form>
   {%- endif %}
-                <span class="varSitePage{{id}}Modified varSitePageModified ">{{sitePage_.modified}}</span>
 {%- endmacro %}
 
-{%- macro htmModifiedSitePagePage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputModifiedSitePagePage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmModifiedSitePagePage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputModifiedSitePagePage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputObjectIdSitePagePage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputObjectIdSitePagePage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_objectId">
+                <form class="subgrid-2col " id="PageForm_objectId">
   {%- endif %}
                   <sl-input
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
+                      {% if authForWriteBool == true %}clearable{% else %}readonly{% endif %}
                       placeholder="ID"
                       label="ID"
                       help-text="
@@ -1256,23 +1120,22 @@ A URL friendly unique ID for this object"
     {%- endif %}
   {%- endif %}
   {%- if "Page" == classApiMethodMethod %}
-                      value="{{sitePage_.objectId}}"
+                      value="{{sitePage_.objectId | e }}"
   {%- endif %}
                       ></sl-input>
 
   {%- if 'Page' == classApiMethodMethod %}
                 </form>
   {%- endif %}
-                <span class="varSitePage{{id}}ObjectId varSitePageObjectId ">{{sitePage_.objectId}}</span>
 {%- endmacro %}
 
-{%- macro htmObjectIdSitePagePage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputObjectIdSitePagePage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmObjectIdSitePagePage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputObjectIdSitePagePage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputArchivedSitePagePage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputArchivedSitePagePage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_archived">
+                <form class="subgrid-2col " id="PageForm_archived">
   {%- endif %}
   {%- if 'Page' == classApiMethodMethod %}
                   <sl-button
@@ -1283,7 +1146,7 @@ A URL friendly unique ID for this object"
                       class="label-on-left {{classApiMethodMethod}}_archived classSitePage inputSitePage{{id}}Archived "
                       name="setArchived"
                       data-id="{{ id }}"
-                      data-val="{{ sitePage_.archived }}"
+                      data-val="{{ sitePage_.archived | e }}"
                       >archived</sl-button>
   {%- else %}
   {%- if 'Page' == classApiMethodMethod %}
@@ -1294,7 +1157,7 @@ A URL friendly unique ID for this object"
                   <sl-select
                       id="{{classApiMethodMethod}}_archived"
   {%- endif %}
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
+                      {% if authForWriteBool == true %}clearable{% else %}readonly{% endif %}
                       placeholder="archived"
                       label="archived"
                       help-text="For archiving this record"
@@ -1327,83 +1190,18 @@ A URL friendly unique ID for this object"
   {%- if 'Page' == classApiMethodMethod %}
                 </form>
   {%- endif %}
-                <span class="varSitePage{{id}}Archived varSitePageArchived ">{{sitePage_.archived}}</span>
 {%- endmacro %}
 
-{%- macro htmArchivedSitePagePage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputArchivedSitePagePage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmArchivedSitePagePage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputArchivedSitePagePage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputDeletedSitePagePage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputPageIdSitePagePage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_deleted">
-  {%- endif %}
-  {%- if 'Page' == classApiMethodMethod %}
-                  <sl-button
-                      id="{{classApiMethodMethod}}_deleted"
-                      placeholder="deleted"
-                      label="deleted"
-                      help-text="For deleting this record"
-                      class="label-on-left {{classApiMethodMethod}}_deleted classSitePage inputSitePage{{id}}Deleted "
-                      name="setDeleted"
-                      data-id="{{ id }}"
-                      data-val="{{ sitePage_.deleted }}"
-                      >deleted</sl-button>
-  {%- else %}
-  {%- if 'Page' == classApiMethodMethod %}
-                  <sl-checkbox
-                      id="{{classApiMethodMethod}}_deleted"
-                      value="true"
-  {%- else %}
-                  <sl-select
-                      id="{{classApiMethodMethod}}_deleted"
-  {%- endif %}
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
-                      placeholder="deleted"
-                      label="deleted"
-                      help-text="For deleting this record"
-  {%- if 'Page' == classApiMethodMethod %}
-                      class="label-on-left {{classApiMethodMethod}}_deleted classSitePage inputSitePage{{id}}Deleted "
-                      name="setDeleted"
-  {%- else %}
-    {%- if 'Page' == classApiMethodMethod %}
-                      class="label-on-left {{classApiMethodMethod}}_deleted classSitePage inputSitePage{{id}}Deleted "
-                      name="setDeleted"
-    {%- else %}
-                      class="label-on-left {{classApiMethodMethod}}_deleted setDeleted valueDeleted classSitePage inputSitePage{{id}}Deleted "
-                      name="setDeleted"
-    {%- endif %}
-  {%- endif %}
-  {%- if 'Page' == classApiMethodMethod %}
-    {%- if sitePage_.deleted == true %}
-                      checked
-    {%- endif %}
-                      data-id="{{ id }}"
-                      >deleted</sl-checkbox>
-  {%- else %}
-                      >
-                    <sl-option value="" selected="selected"></sl-option>
-                    <sl-option value="true">true</sl-option>
-                    <sl-option value="false">false</sl-option>
-                  </sl-select>
-  {%- endif %}
-  {%- endif %}
-  {%- if 'Page' == classApiMethodMethod %}
-                </form>
-  {%- endif %}
-                <span class="varSitePage{{id}}Deleted varSitePageDeleted ">{{sitePage_.deleted}}</span>
-{%- endmacro %}
-
-{%- macro htmDeletedSitePagePage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputDeletedSitePagePage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
-{%- endmacro %}
-
-{%- macro inputPageIdSitePagePage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
-  {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_pageId">
+                <form class="subgrid-2col " id="PageForm_pageId">
   {%- endif %}
                   <sl-input
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
+                      {% if authForWriteBool == true %}clearable{% else %}readonly{% endif %}
                       placeholder="Page ID"
                       label="Page ID"
                       help-text="
@@ -1423,26 +1221,25 @@ The ID for this page. "
     {%- endif %}
   {%- endif %}
   {%- if "Page" == classApiMethodMethod %}
-                      value="{{sitePage_.pageId}}"
+                      value="{{sitePage_.pageId | e }}"
   {%- endif %}
                       ></sl-input>
 
   {%- if 'Page' == classApiMethodMethod %}
                 </form>
   {%- endif %}
-                <span class="varSitePage{{id}}PageId varSitePagePageId ">{{sitePage_.pageId}}</span>
 {%- endmacro %}
 
-{%- macro htmPageIdSitePagePage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputPageIdSitePagePage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmPageIdSitePagePage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputPageIdSitePagePage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputUriSitePagePage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputUriSitePagePage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_uri">
+                <form class="subgrid-2col " id="PageForm_uri">
   {%- endif %}
                   <sl-input
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
+                      {% if authForWriteBool == true %}clearable{% else %}readonly{% endif %}
                       placeholder="URI"
                       label="URI"
                       help-text="
@@ -1462,26 +1259,25 @@ The relative URI for this page. "
     {%- endif %}
   {%- endif %}
   {%- if "Page" == classApiMethodMethod %}
-                      value="{{sitePage_.uri}}"
+                      value="{{sitePage_.uri | e }}"
   {%- endif %}
                       ></sl-input>
 
   {%- if 'Page' == classApiMethodMethod %}
                 </form>
   {%- endif %}
-                <span class="varSitePage{{id}}Uri varSitePageUri ">{{sitePage_.uri}}</span>
 {%- endmacro %}
 
-{%- macro htmUriSitePagePage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputUriSitePagePage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmUriSitePagePage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputUriSitePagePage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputUrlSitePagePage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputUrlSitePagePage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_url">
+                <form class="subgrid-2col " id="PageForm_url">
   {%- endif %}
                   <sl-input
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
+                      {% if authForWriteBool == true %}clearable{% else %}readonly{% endif %}
                       placeholder="URL"
                       label="URL"
                       help-text="
@@ -1501,26 +1297,25 @@ The URL for this page. "
     {%- endif %}
   {%- endif %}
   {%- if "Page" == classApiMethodMethod %}
-                      value="{{sitePage_.url}}"
+                      value="{{sitePage_.url | e }}"
   {%- endif %}
                       ></sl-input>
 
   {%- if 'Page' == classApiMethodMethod %}
                 </form>
   {%- endif %}
-                <span class="varSitePage{{id}}Url varSitePageUrl ">{{sitePage_.url}}</span>
 {%- endmacro %}
 
-{%- macro htmUrlSitePagePage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputUrlSitePagePage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmUrlSitePagePage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputUrlSitePagePage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputAuthorSitePagePage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputAuthorSitePagePage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_author">
+                <form class="subgrid-2col " id="PageForm_author">
   {%- endif %}
                   <sl-input
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
+                      {% if authForWriteBool == true %}clearable{% else %}readonly{% endif %}
                       placeholder="author"
                       label="author"
                       help-text="
@@ -1540,26 +1335,25 @@ The author"
     {%- endif %}
   {%- endif %}
   {%- if "Page" == classApiMethodMethod %}
-                      value="{{sitePage_.author}}"
+                      value="{{sitePage_.author | e }}"
   {%- endif %}
                       ></sl-input>
 
   {%- if 'Page' == classApiMethodMethod %}
                 </form>
   {%- endif %}
-                <span class="varSitePage{{id}}Author varSitePageAuthor ">{{sitePage_.author}}</span>
 {%- endmacro %}
 
-{%- macro htmAuthorSitePagePage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputAuthorSitePagePage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmAuthorSitePagePage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputAuthorSitePagePage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputPageImageUriSitePagePage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputPageImageUriSitePagePage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_pageImageUri">
+                <form class="subgrid-2col " id="PageForm_pageImageUri">
   {%- endif %}
                   <sl-input
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
+                      {% if authForWriteBool == true %}clearable{% else %}readonly{% endif %}
                       placeholder="imageUri"
                       label="imageUri"
                       help-text="
@@ -1579,16 +1373,15 @@ The page image URI"
     {%- endif %}
   {%- endif %}
   {%- if "Page" == classApiMethodMethod %}
-                      value="{{sitePage_.pageImageUri}}"
+                      value="{{sitePage_.pageImageUri | e }}"
   {%- endif %}
                       ></sl-input>
 
   {%- if 'Page' == classApiMethodMethod %}
                 </form>
   {%- endif %}
-                <span class="varSitePage{{id}}PageImageUri varSitePagePageImageUri ">{{sitePage_.pageImageUri}}</span>
 {%- endmacro %}
 
-{%- macro htmPageImageUriSitePagePage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputPageImageUriSitePagePage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmPageImageUriSitePagePage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputPageImageUriSitePagePage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}

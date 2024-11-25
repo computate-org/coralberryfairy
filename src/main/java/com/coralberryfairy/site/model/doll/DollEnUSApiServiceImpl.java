@@ -1,4 +1,4 @@
-package com.coralberryfairy.site.user;
+package com.coralberryfairy.site.model.doll;
 
 import io.vertx.ext.auth.authorization.AuthorizationProvider;
 import io.vertx.ext.auth.oauth2.OAuth2Auth;
@@ -17,9 +17,9 @@ import com.hubspot.jinjava.Jinjava;
 /**
  * Translate: false
  **/
-public class SiteUserEnUSApiServiceImpl extends SiteUserEnUSGenApiServiceImpl {
+public class DollEnUSApiServiceImpl extends DollEnUSGenApiServiceImpl {
 
-	public SiteUserEnUSApiServiceImpl(Vertx vertx, JsonObject config, WorkerExecutor workerExecutor, ComputateOAuth2AuthHandlerImpl oauth2AuthHandler, PgPool pgPool, KafkaProducer<String, String> kafkaProducer, MqttClient mqttClient, AmqpSender amqpSender, RabbitMQClient rabbitmqClient, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider, Jinjava jinjava) {
+	public DollEnUSApiServiceImpl(Vertx vertx, JsonObject config, WorkerExecutor workerExecutor, ComputateOAuth2AuthHandlerImpl oauth2AuthHandler, PgPool pgPool, KafkaProducer<String, String> kafkaProducer, MqttClient mqttClient, AmqpSender amqpSender, RabbitMQClient rabbitmqClient, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider, Jinjava jinjava) {
 		super(vertx, config, workerExecutor, oauth2AuthHandler, pgPool, kafkaProducer, mqttClient, amqpSender, rabbitmqClient, webClient, oauth2AuthenticationProvider, authorizationProvider, jinjava);
 	}
 }

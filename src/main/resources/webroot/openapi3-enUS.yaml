@@ -3,6 +3,707 @@ info:
   title: "Coralberry Fairy"
   version: 3.0.0
 paths:
+  /api/doll:
+    get:
+      operationId: searchDoll
+      x-vertx-event-bus: coralberryfairy-enUS-Doll
+      description: >+
+      summary: >+
+      tags:
+        - product
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: 'The query parameter defines a query using standard query syntax. This parameter is mandatory.'
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: 'The filter query parameter defines a query that can be used to restrict the superset of documents that can be returned, without influencing score. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: var
+          description: 'The var parameters are additional optional variables and values to pass into the application. '
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: fl
+          description: 'The field list parameter limits the information included in a query response to a specified list of fields. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: 'The sort parameter arranges search results in either ascending (asc) or descending (desc) order. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: 'The start parameter specifies an offset into a query result set and instructs Solr to begin displaying results from this offset. '
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: 'The rows parameter specifies the maximum number of documents from the complete result set that Solr should return to the client at one time. '
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: facet
+          description: 'The facet parameter enables facet counts in the query response. '
+          required: false
+          schema:
+            type: boolean
+        - in: query
+          name: facet.range.start
+          description: 'The facet.range.start parameter specifies the lower bound of the ranges. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: 'The facet.range.end specifies the upper bound of the ranges. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: 'The span of each range expressed as a value to be added to the lower bound. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: 'The facet.pivot parameter defines the fields to use for the pivot. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: 'The facet.range parameter defines the field for which Solr should create range facets. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: 'The facet.field parameter identifies a field that should be treated as a facet. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: d
+          description: 'The radial distance, usually in kilometers. '
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+        - in: query
+          name: pt
+          description: 'he center point using the format lat,lon if latitude & longitude. Otherwise, x,y for PointType or x y for RPT field types. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sfield
+          description: 'A spatial indexed field. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: score
+          description: '(Advanced option; not supported by LatLonType (deprecated) or PointType) If the query is used in a scoring context (e.g., as the main query in q), this local parameter determines what scores will be produced. Valid values are: none, kilometers, miles, degrees, distance, recipDistance, overlapRatio, area, area2D'
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: distanceUnits
+          description: 'This is used to specify the units for distance measurements used throughout the use of this field. This can be degrees, kilometers or miles. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: stats
+          description: 'The Stats component returns simple statistics for numeric, string, and date fields within the document set. '
+          required: false
+          schema:
+            type: boolean
+        - in: query
+          name: stats.field
+          description: 'Specifies a field for which statistics should be generated. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchDollResponse'
+    patch:
+      operationId: patchDoll
+      x-vertx-event-bus: coralberryfairy-enUS-Doll
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - product
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: 'The query parameter defines a query using standard query syntax. This parameter is mandatory.'
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: 'The filter query parameter defines a query that can be used to restrict the superset of documents that can be returned, without influencing score. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: var
+          description: 'The var parameters are additional optional variables and values to pass into the application. '
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PATCHDollRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PATCHDollResponse'
+    post:
+      operationId: postDoll
+      x-vertx-event-bus: coralberryfairy-enUS-Doll
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - product
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/POSTDollRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/POSTDollResponse'
+  /api/doll-import:
+    put:
+      operationId: putimportDoll
+      x-vertx-event-bus: coralberryfairy-enUS-Doll
+      security:
+        - openIdConnect:
+          - profile
+      description: >+
+      summary: >+
+      tags:
+        - product
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: 'The query parameter defines a query using standard query syntax. This parameter is mandatory.'
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: 'The filter query parameter defines a query that can be used to restrict the superset of documents that can be returned, without influencing score. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: var
+          description: 'The var parameters are additional optional variables and values to pass into the application. '
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+      requestBody:
+        description: >+
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PUTImportDollRequest'
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PUTImportDollResponse'
+  /api/doll/{id}:
+    get:
+      operationId: getDoll
+      x-vertx-event-bus: coralberryfairy-enUS-Doll
+      description: >+
+      summary: >+
+      tags:
+        - product
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: >+
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/GETDollResponse'
+  /edit/doll/{id}:
+    get:
+      operationId: searchpageDollId
+      x-vertx-event-bus: coralberryfairy-enUS-Doll
+      description: >+
+      summary: >+
+      tags:
+        - product
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: >+
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: 'The query parameter defines a query using standard query syntax. This parameter is mandatory.'
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: 'The filter query parameter defines a query that can be used to restrict the superset of documents that can be returned, without influencing score. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: var
+          description: 'The var parameters are additional optional variables and values to pass into the application. '
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: fl
+          description: 'The field list parameter limits the information included in a query response to a specified list of fields. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: 'The sort parameter arranges search results in either ascending (asc) or descending (desc) order. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: 'The start parameter specifies an offset into a query result set and instructs Solr to begin displaying results from this offset. '
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: 'The rows parameter specifies the maximum number of documents from the complete result set that Solr should return to the client at one time. '
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: facet
+          description: 'The facet parameter enables facet counts in the query response. '
+          required: false
+          schema:
+            type: boolean
+        - in: query
+          name: facet.range.start
+          description: 'The facet.range.start parameter specifies the lower bound of the ranges. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: 'The facet.range.end specifies the upper bound of the ranges. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: 'The span of each range expressed as a value to be added to the lower bound. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: 'The facet.pivot parameter defines the fields to use for the pivot. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: 'The facet.range parameter defines the field for which Solr should create range facets. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: 'The facet.field parameter identifies a field that should be treated as a facet. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: d
+          description: 'The radial distance, usually in kilometers. '
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+        - in: query
+          name: pt
+          description: 'he center point using the format lat,lon if latitude & longitude. Otherwise, x,y for PointType or x y for RPT field types. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sfield
+          description: 'A spatial indexed field. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: score
+          description: '(Advanced option; not supported by LatLonType (deprecated) or PointType) If the query is used in a scoring context (e.g., as the main query in q), this local parameter determines what scores will be produced. Valid values are: none, kilometers, miles, degrees, distance, recipDistance, overlapRatio, area, area2D'
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: distanceUnits
+          description: 'This is used to specify the units for distance measurements used throughout the use of this field. This can be degrees, kilometers or miles. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: stats
+          description: 'The Stats component returns simple statistics for numeric, string, and date fields within the document set. '
+          required: false
+          schema:
+            type: boolean
+        - in: query
+          name: stats.field
+          description: 'Specifies a field for which statistics should be generated. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageDollResponse'
+  /edit/doll:
+    get:
+      operationId: searchpageDoll
+      x-vertx-event-bus: coralberryfairy-enUS-Doll
+      description: >+
+      summary: >+
+      tags:
+        - product
+      parameters:
+        - name: vertx-web.session
+          in: cookie
+          schema:
+            type: string
+        - name: sessionIdBefore
+          in: cookie
+          schema:
+            type: string
+        - in: query
+          name: q
+          description: 'The query parameter defines a query using standard query syntax. This parameter is mandatory.'
+          required: false
+          schema:
+            type: string
+            default: '*:*'
+        - in: query
+          name: fq
+          description: 'The filter query parameter defines a query that can be used to restrict the superset of documents that can be returned, without influencing score. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: var
+          description: 'The var parameters are additional optional variables and values to pass into the application. '
+          required: false
+          schema:
+            type: array
+            items:
+                type: string
+        - in: query
+          name: fl
+          description: 'The field list parameter limits the information included in a query response to a specified list of fields. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: 'The sort parameter arranges search results in either ascending (asc) or descending (desc) order. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: start
+          description: 'The start parameter specifies an offset into a query result set and instructs Solr to begin displaying results from this offset. '
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - in: query
+          name: rows
+          description: 'The rows parameter specifies the maximum number of documents from the complete result set that Solr should return to the client at one time. '
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+        - in: query
+          name: facet
+          description: 'The facet parameter enables facet counts in the query response. '
+          required: false
+          schema:
+            type: boolean
+        - in: query
+          name: facet.range.start
+          description: 'The facet.range.start parameter specifies the lower bound of the ranges. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.end
+          description: 'The facet.range.end specifies the upper bound of the ranges. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range.gap
+          description: 'The span of each range expressed as a value to be added to the lower bound. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.pivot
+          description: 'The facet.pivot parameter defines the fields to use for the pivot. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.range
+          description: 'The facet.range parameter defines the field for which Solr should create range facets. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: facet.field
+          description: 'The facet.field parameter identifies a field that should be treated as a facet. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: d
+          description: 'The radial distance, usually in kilometers. '
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+        - in: query
+          name: pt
+          description: 'he center point using the format lat,lon if latitude & longitude. Otherwise, x,y for PointType or x y for RPT field types. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sfield
+          description: 'A spatial indexed field. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: score
+          description: '(Advanced option; not supported by LatLonType (deprecated) or PointType) If the query is used in a scoring context (e.g., as the main query in q), this local parameter determines what scores will be produced. Valid values are: none, kilometers, miles, degrees, distance, recipDistance, overlapRatio, area, area2D'
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: distanceUnits
+          description: 'This is used to specify the units for distance measurements used throughout the use of this field. This can be degrees, kilometers or miles. '
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: stats
+          description: 'The Stats component returns simple statistics for numeric, string, and date fields within the document set. '
+          required: false
+          schema:
+            type: boolean
+        - in: query
+          name: stats.field
+          description: 'Specifies a field for which statistics should be generated. '
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: >+
+          content:
+            text/html; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SearchPageDollResponse'
   /api/page:
     get:
       operationId: searchSitePage
@@ -182,9 +883,6 @@ paths:
     patch:
       operationId: patchSitePage
       x-vertx-event-bus: coralberryfairy-enUS-SitePage
-      security:
-        - openIdConnect:
-          - profile
       description: >+
       summary: >+
       tags:
@@ -238,9 +936,6 @@ paths:
     post:
       operationId: postSitePage
       x-vertx-event-bus: coralberryfairy-enUS-SitePage
-      security:
-        - openIdConnect:
-          - profile
       description: >+
       summary: >+
       tags:
@@ -263,9 +958,6 @@ paths:
     put:
       operationId: putimportSitePage
       x-vertx-event-bus: coralberryfairy-enUS-SitePage
-      security:
-        - openIdConnect:
-          - profile
       description: >+
       summary: >+
       tags:
@@ -708,9 +1400,6 @@ paths:
     get:
       operationId: searchSiteUser
       x-vertx-event-bus: coralberryfairy-enUS-SiteUser
-      security:
-        - openIdConnect:
-          - profile
       description: >+
       summary: >+
       tags:
@@ -1015,9 +1704,6 @@ paths:
     get:
       operationId: searchpageSiteUserId
       x-vertx-event-bus: coralberryfairy-enUS-SiteUser
-      security:
-        - openIdConnect:
-          - profile
       description: >+
       summary: >+
       tags:
@@ -1200,9 +1886,6 @@ paths:
     get:
       operationId: searchpageSiteUser
       x-vertx-event-bus: coralberryfairy-enUS-SiteUser
-      security:
-        - openIdConnect:
-          - profile
       description: >+
       summary: >+
       tags:
@@ -1407,6 +2090,51 @@ components:
       type: openIdConnect
       openIdConnectUrl: https://keycloak.apps-crc.testing/realms/CORALBERRYFAIRY.COM/.well-known/openid-configuration
   requestBodies:
+    SearchDollResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchDollResponse'
+    PATCHDollRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PATCHDollRequest'
+    PATCHDollResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/PATCHDollResponse'
+    POSTDollRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/POSTDollRequest'
+    POSTDollResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/POSTDollResponse'
+    PUTImportDollRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PUTImportDollRequest'
+    PUTImportDollResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/PUTImportDollResponse'
+    GETDollResponse:
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/GETDollResponse'
+    SearchPageDollResponse:
+      content:
+        text/html; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/SearchPageDollResponse'
     SearchSitePageResponse:
       content:
         application/json; charset=utf-8:
@@ -1493,6 +2221,528 @@ components:
           schema:
             $ref: '#/components/schemas/SearchPageSiteUserResponse'
   schemas:
+    SearchDollResponse:
+      allOf:
+        - type: object
+          properties:
+            startNum:
+              type: integer
+              minimum: 0
+            foundNum:
+              type: integer
+              minimum: 0
+            returnedNum:
+              type: integer
+              minimum: 0
+            list:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  price:
+                    type: string
+                  pageId:
+                    type: string
+                  resourceUri:
+                    type: string
+                  templateUri:
+                    type: string
+                  emailTemplate:
+                    type: string
+                  uri:
+                    type: string
+                  url:
+                    type: string
+                  storeUrl:
+                    type: string
+                  instagramUrl:
+                    type: string
+                  title:
+                    type: string
+                  productNum:
+                    type: string
+                  imageUri:
+                    type: string
+                  objectTitle:
+                    type: string
+                  objectId:
+                    type: string
+                  id:
+                    type: string
+                  pageUrlId:
+                    type: string
+    PATCHDollRequest:
+      allOf:
+        - type: object
+          properties:
+            setName:
+              type: string
+              nullable: true
+            removeName:
+              type: string
+            removeAllName:
+              type: string
+            setDescription:
+              type: string
+              nullable: true
+            removeDescription:
+              type: string
+            removeAllDescription:
+              type: string
+            setPrice:
+              type: string
+              nullable: true
+            removePrice:
+              type: string
+            removeAllPrice:
+              type: string
+            setPageId:
+              type: string
+              nullable: true
+            removePageId:
+              type: string
+            removeAllPageId:
+              type: string
+            setResourceUri:
+              type: string
+              nullable: true
+            removeResourceUri:
+              type: string
+            removeAllResourceUri:
+              type: string
+            setTemplateUri:
+              type: string
+              nullable: true
+            removeTemplateUri:
+              type: string
+            removeAllTemplateUri:
+              type: string
+            setEmailTemplate:
+              type: string
+              nullable: true
+            removeEmailTemplate:
+              type: string
+            removeAllEmailTemplate:
+              type: string
+            setUri:
+              type: string
+              nullable: true
+            removeUri:
+              type: string
+            removeAllUri:
+              type: string
+            setUrl:
+              type: string
+              nullable: true
+            removeUrl:
+              type: string
+            removeAllUrl:
+              type: string
+            setStoreUrl:
+              type: string
+              nullable: true
+            removeStoreUrl:
+              type: string
+            removeAllStoreUrl:
+              type: string
+            setInstagramUrl:
+              type: string
+              nullable: true
+            removeInstagramUrl:
+              type: string
+            removeAllInstagramUrl:
+              type: string
+            setTitle:
+              type: string
+              nullable: true
+            removeTitle:
+              type: string
+            removeAllTitle:
+              type: string
+            setProductNum:
+              type: string
+              nullable: true
+            removeProductNum:
+              type: string
+            removeAllProductNum:
+              type: string
+            setImageUri:
+              type: string
+              nullable: true
+            removeImageUri:
+              type: string
+            removeAllImageUri:
+              type: string
+            setObjectTitle:
+              type: string
+              nullable: true
+            removeObjectTitle:
+              type: string
+            removeAllObjectTitle:
+              type: string
+            setObjectId:
+              type: string
+              nullable: true
+            removeObjectId:
+              type: string
+            removeAllObjectId:
+              type: string
+            setId:
+              type: string
+              nullable: true
+            removeId:
+              type: string
+            removeAllId:
+              type: string
+            setPageUrlId:
+              type: string
+              nullable: true
+            removePageUrlId:
+              type: string
+            removeAllPageUrlId:
+              type: string
+    PATCHDollResponse:
+      allOf:
+        - type: object
+          properties:
+            setName:
+              type: string
+              nullable: true
+            removeName:
+              type: string
+            removeAllName:
+              type: string
+            setDescription:
+              type: string
+              nullable: true
+            removeDescription:
+              type: string
+            removeAllDescription:
+              type: string
+            setPrice:
+              type: string
+              nullable: true
+            removePrice:
+              type: string
+            removeAllPrice:
+              type: string
+            setPageId:
+              type: string
+              nullable: true
+            removePageId:
+              type: string
+            removeAllPageId:
+              type: string
+            setResourceUri:
+              type: string
+              nullable: true
+            removeResourceUri:
+              type: string
+            removeAllResourceUri:
+              type: string
+            setTemplateUri:
+              type: string
+              nullable: true
+            removeTemplateUri:
+              type: string
+            removeAllTemplateUri:
+              type: string
+            setEmailTemplate:
+              type: string
+              nullable: true
+            removeEmailTemplate:
+              type: string
+            removeAllEmailTemplate:
+              type: string
+            setUri:
+              type: string
+              nullable: true
+            removeUri:
+              type: string
+            removeAllUri:
+              type: string
+            setUrl:
+              type: string
+              nullable: true
+            removeUrl:
+              type: string
+            removeAllUrl:
+              type: string
+            setStoreUrl:
+              type: string
+              nullable: true
+            removeStoreUrl:
+              type: string
+            removeAllStoreUrl:
+              type: string
+            setInstagramUrl:
+              type: string
+              nullable: true
+            removeInstagramUrl:
+              type: string
+            removeAllInstagramUrl:
+              type: string
+            setTitle:
+              type: string
+              nullable: true
+            removeTitle:
+              type: string
+            removeAllTitle:
+              type: string
+            setProductNum:
+              type: string
+              nullable: true
+            removeProductNum:
+              type: string
+            removeAllProductNum:
+              type: string
+            setImageUri:
+              type: string
+              nullable: true
+            removeImageUri:
+              type: string
+            removeAllImageUri:
+              type: string
+            setObjectTitle:
+              type: string
+              nullable: true
+            removeObjectTitle:
+              type: string
+            removeAllObjectTitle:
+              type: string
+            setObjectId:
+              type: string
+              nullable: true
+            removeObjectId:
+              type: string
+            removeAllObjectId:
+              type: string
+            setId:
+              type: string
+              nullable: true
+            removeId:
+              type: string
+            removeAllId:
+              type: string
+            setPageUrlId:
+              type: string
+              nullable: true
+            removePageUrlId:
+              type: string
+            removeAllPageUrlId:
+              type: string
+    POSTDollRequest:
+      allOf:
+        - type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            price:
+              type: string
+            pageId:
+              type: string
+            resourceUri:
+              type: string
+            templateUri:
+              type: string
+            emailTemplate:
+              type: string
+            uri:
+              type: string
+            url:
+              type: string
+            storeUrl:
+              type: string
+            instagramUrl:
+              type: string
+            title:
+              type: string
+            productNum:
+              type: string
+            imageUri:
+              type: string
+            objectTitle:
+              type: string
+            objectId:
+              type: string
+            id:
+              type: string
+            pageUrlId:
+              type: string
+    POSTDollResponse:
+      allOf:
+        - type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            price:
+              type: string
+            pageId:
+              type: string
+            resourceUri:
+              type: string
+            templateUri:
+              type: string
+            emailTemplate:
+              type: string
+            uri:
+              type: string
+            url:
+              type: string
+            storeUrl:
+              type: string
+            instagramUrl:
+              type: string
+            title:
+              type: string
+            productNum:
+              type: string
+            imageUri:
+              type: string
+            objectTitle:
+              type: string
+            objectId:
+              type: string
+            id:
+              type: string
+            pageUrlId:
+              type: string
+    PUTImportDollRequest:
+      allOf:
+        - type: object
+          properties:
+            list:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  price:
+                    type: string
+                  pageId:
+                    type: string
+                  resourceUri:
+                    type: string
+                  templateUri:
+                    type: string
+                  emailTemplate:
+                    type: string
+                  uri:
+                    type: string
+                  url:
+                    type: string
+                  storeUrl:
+                    type: string
+                  instagramUrl:
+                    type: string
+                  title:
+                    type: string
+                  productNum:
+                    type: string
+                  imageUri:
+                    type: string
+                  objectTitle:
+                    type: string
+                  objectId:
+                    type: string
+                  id:
+                    type: string
+                  pageUrlId:
+                    type: string
+    PUTImportDollResponse:
+      allOf:
+        - type: object
+          properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  price:
+                    type: string
+                  pageId:
+                    type: string
+                  resourceUri:
+                    type: string
+                  templateUri:
+                    type: string
+                  emailTemplate:
+                    type: string
+                  uri:
+                    type: string
+                  url:
+                    type: string
+                  storeUrl:
+                    type: string
+                  instagramUrl:
+                    type: string
+                  title:
+                    type: string
+                  productNum:
+                    type: string
+                  imageUri:
+                    type: string
+                  objectTitle:
+                    type: string
+                  objectId:
+                    type: string
+                  id:
+                    type: string
+                  pageUrlId:
+                    type: string
+    GETDollResponse:
+      allOf:
+        - type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            price:
+              type: string
+            pageId:
+              type: string
+            resourceUri:
+              type: string
+            templateUri:
+              type: string
+            emailTemplate:
+              type: string
+            uri:
+              type: string
+            url:
+              type: string
+            storeUrl:
+              type: string
+            instagramUrl:
+              type: string
+            title:
+              type: string
+            productNum:
+              type: string
+            imageUri:
+              type: string
+            objectTitle:
+              type: string
+            objectId:
+              type: string
+            id:
+              type: string
+            pageUrlId:
+              type: string
+    SearchPageDollResponse:
+      allOf:
+        - type: string
     SearchSitePageResponse:
       allOf:
         - type: object

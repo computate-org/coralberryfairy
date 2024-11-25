@@ -2,7 +2,7 @@
 
 {%- block htmTitlePageLayout %}
 {%- block htmTitleBaseModelPage %}
-    <title>{% if searchListBaseModel_ is defined %}{% if baseModelCount == int1 %}{% if id is defined %}{% else %}{% endif %}{% else %}{% endif %}{% else %}{% endif %}</title>
+    <title>{% if searchListBaseModel_ is defined %}{% if baseModelCount == 1 %}{% if id is defined %}{% else %}{% endif %}{% else %}{% endif %}{% else %}{% endif %}</title>
 {%- endblock htmTitleBaseModelPage %}
 {%- endblock htmTitlePageLayout %}
 
@@ -103,6 +103,7 @@
 {%- block websocketPageLayout %}
 {%- block websocketBaseModelPage %}
         window.eventBus = new EventBus('/eventbus');
+        window.eventBus.enableReconnect(true);
         websocketBaseModel(websocketBaseModelInner);
 {%- endblock websocketBaseModelPage %}
 {%- endblock websocketPageLayout %}
@@ -122,79 +123,21 @@
             {{ htmFormsBaseModelPage() }}
             <sl-divider></sl-divider>
             {{ htmPaginationButtonsBaseModelPage() }}
-            <div class="grid-mode-details">
-            <div>
-                
-              <sl-dropdown>
-                <sl-button slot="trigger" caret>created</sl-button>
-                <sl-menu>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                    sort by created ascending
-                  </sl-menu-item>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-z-a"></i>
-                    sort by created descending
-                  </sl-menu-item>
-                </sl-menu>
-              </sl-dropdown>
-              <sl-dropdown>
-                <sl-button slot="trigger" caret></sl-button>
-                <sl-menu>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                    sort by null ascending
-                  </sl-menu-item>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-z-a"></i>
-                    sort by null descending
-                  </sl-menu-item>
-                </sl-menu>
-              </sl-dropdown>
-              </div>
-            </div>
-            <div class="grid-mode-details" id="site-results-grid">
+            <div class="grid-mode-details border-radius-x-large" id="site-results-grid">
               {% for item in listBaseModel%}
               <a href="{{ item.pageUrlPk }}">
-                
-                <div><sl-format-date weekday="short" month="short" day="numeric" year="numeric" hour="numeric" minute="numeric" second="numeric" time-zone-name="short" date="{{ formatZonedDateTime(item.created, "yyyy-MM-dd'T'HH:mm:ss.SSSX", defaultLocaleId, "UTC") }}"></sl-format-date></div>
-                <div>{{ item.objectTitle }}</div>
               </a>
               {% endfor %}
-                      {% if getColumnCreated is defined %}
-                        <div>
-                        </div>
-                      {% endif %}
-                      {% if getColumnObjectTitle is defined %}
-                        <div>
-                        </div>
-                      {% endif %}
             </div>
             {%- endmacro htmBodyAllBaseModelPage() %}
 {%- macro htmSearchButtonsBaseModelPage() %}
         <div id="htmSearchButtons">
-<sl-button onclick="document.querySelector('#siteSidebarToggleSearch').show(); "><i slot="prefix" class="fad fa-magnifying-glass hover-box-shadow "></i> Search</sl-button><sl-button onclick="document.querySelector('#siteSidebarToggleFilters').show(); "><i slot="prefix" class="fad fa-filters hover-box-shadow "></i> Filters</sl-button><sl-button onclick="document.querySelector('#siteSidebarToggleRange').show(); "><i slot="prefix" class="fad fa-calendar-range hover-box-shadow "></i> Range</sl-button><sl-button onclick="document.querySelector('#siteSidebarTogglePivot').show(); "><i slot="prefix" class="fad fa-table-pivot hover-box-shadow "></i> Pivot</sl-button><sl-button onclick="document.querySelector('#siteSidebarToggleFieldList').show(); "><i slot="prefix" class="fad fa-list-ul hover-box-shadow "></i> FieldList</sl-button><sl-button onclick="document.querySelector('#siteSidebarToggleStats').show(); "><i slot="prefix" class="fad fa-chart-candlestick hover-box-shadow "></i> Stats</sl-button><sl-button onclick="document.querySelector('#siteSidebarToggleApi').show(); " href="{{ apiUri }}{% if pk is defined %}/{{ pk }}{% else %}{% if id is defined %}/{{ id }}{% else %}{{ queryStr }}{% endif %}{% endif %}"><i slot="prefix" class="fad fa-brackets-curly hover-box-shadow "></i> Api</sl-button>        </div>
+          <sl-button onclick="document.querySelector('#siteSidebarToggleSearch').show(); "><i slot="prefix" class="fad fa-magnifying-glass hover-box-shadow "></i> Search</sl-button><sl-button onclick="document.querySelector('#siteSidebarToggleFilters').show(); "><i slot="prefix" class="fad fa-filters hover-box-shadow "></i> Filters</sl-button><sl-button onclick="document.querySelector('#siteSidebarToggleRange').show(); "><i slot="prefix" class="fad fa-calendar-range hover-box-shadow "></i> Range</sl-button><sl-button onclick="document.querySelector('#siteSidebarTogglePivot').show(); "><i slot="prefix" class="fad fa-table-pivot hover-box-shadow "></i> Pivot</sl-button><sl-button onclick="document.querySelector('#siteSidebarToggleFieldList').show(); "><i slot="prefix" class="fad fa-list-ul hover-box-shadow "></i> FieldList</sl-button><sl-button onclick="document.querySelector('#siteSidebarToggleStats').show(); "><i slot="prefix" class="fad fa-chart-candlestick hover-box-shadow "></i> Stats</sl-button><sl-button onclick="document.querySelector('#siteSidebarToggleApi').show(); " href="{{ apiUri }}{% if pk is defined %}/{{ pk }}{% else %}{% if id is defined %}/{{ id }}{% else %}{{ queryStr }}{% endif %}{% endif %}"><i slot="prefix" class="fad fa-brackets-curly hover-box-shadow "></i> Api</sl-button>
+        </div>
 {%- endmacro htmSearchButtonsBaseModelPage() %}
 
 {%- macro htmPaginationButtonsBaseModelPage() %}
             <div id="htmPaginationButtons">
-              <sl-button-group>
-                <sl-tooltip placement="top" content="Show the results as details" pill>
-                  <sl-button pill id="grid-toggle-details">
-                    <i class="fa-solid fa-list"></i>
-                  </sl-button>
-                </sl-tooltip>
-                <sl-tooltip placement="top" content="Show the results as a list">
-                  <sl-button id="grid-toggle-list">
-                    <i class="fa-solid fa-bars"></i>
-                  </sl-button>
-                </sl-tooltip>
-                <sl-tooltip placement="top" content="Show the results as cards" pill>
-                  <sl-button pill id="grid-toggle-card">
-                    <i class="fa-solid fa-grid"></i>
-                  </sl-button>
-                </sl-tooltip>
-              </sl-button-group>
               <sl-button-group>
                 <sl-tooltip placement="top" content="Show the previous results">
                   <sl-button pill{% if pagination.pagePrevious is defined %} href="{{pageUri}}?start={{pagination.pagePrevious.start}}&amp;rows={{pagination.rows}}"{% else %} disabled{% endif %}>
@@ -217,7 +160,7 @@
                   </sl-button>
                 </sl-tooltip>
               </sl-button-group>
-              <div>{{ pagination.startNum }} –— {{ pagination.endNum }} of {{ pagination.foundNum }}</div>
+            <div>{{ pagination.startNum }} – {{ pagination.endNum }} of {{ pagination.foundNum }}</div>
             </div>
 {%- endmacro htmPaginationButtonsBaseModelPage() %}
 {%- macro htmFormsBaseModelPage() %}
@@ -297,18 +240,20 @@
                   <div class="">
                     <label for="fqBaseModel_{{ key }}">{{ value.displayName }}<sup> ({{ value.classSimpleName }})</sup></label>
                     <div class="display-flex ">
-                      <sl-button id="buttonFacetBaseModel_{{ key }}" onclick="facetFieldChange('BaseModel', this); " title="see values " data-var="{{ value.var }}" data-clear="{% if value.facetField is defined %}true{% else %}false{% endif %}"><i class="fas fa-list "></i></sl-button>
+                      <sl-button id="buttonFacetBaseModel_{{ key }}" title="see values " data-var="{{ value.var }}" data-clear="{% if value.facetField is defined %}true{% else %}false{% endif %}"><i class="fas fa-list "></i></sl-button>
                       <sl-input id="fqBaseModel_{{ key }}" placeholder="{{ value.displayName }}" class="" onchange="fqChange('BaseModel', value); " data-var="{{ value.var }}" autocomplete="off=" value="{{ value.val }}"></sl-input>
                     </div>
                   </div>
                   <div>
-                    <div class="pageSearchVal " id="pageSearchVal-fqBaseModel_{{ key }}">{% if val is defined %}fq={{ value.var }}:{{ value.val | urlencode() }}{% endif %}</div>
+                    <div class="pageSearchVal " id="pageSearchVal-fqBaseModel_{{ key }}">{% if value.val is defined %}fq={{ value.var }}:{{ value.val | urlencode() }}{% endif %}</div>
                     <div class="pageSearchVal " id="pageSearchVal-buttonFacetBaseModel_{{ key }}">{% if value.facetField.var is defined %}facet.field={{ value.facetField.var }}{% endif %}</div>
-                    <ol class="pageFacetField pageFacetFieldBaseModel_{{ key }} " id="pageFacetFieldBaseModel_{{ key }}">
+                    <div class="pageFacetField pageFacetFieldBaseModel_{{ key }} " id="pageFacetFieldBaseModel_{{ key }}">
 {% for facetFieldKey, facetFieldValue in value.facetField.counts.items() %}
-                      <li class="cursor-pointer " data-class="BaseModel" data-var="{{ value.facetField.var }}" data-val="{{ facetFieldKey }}" onclick="fqReplace('BaseModel', facetFieldValue); ">{{ facetFieldKey }}: {{ facetFieldValue }}</li>
+                      <sl-tooltip content="{{ facetFieldValue | e }} null total with {{ value.facetField.var | e }} &quot;{{ facetFieldKey | e }}&quot;">
+                        <div class="cursor-pointer " data-class="BaseModel" data-var="{{ value.facetField.var }}" data-val="{{ facetFieldKey }}" onclick="fqReplace('BaseModel', this); ">{{ facetFieldValue }}: {{ facetFieldKey }}</div>
+                      </sl-tooltip>
 {% endfor %}
-                    </ol>
+                    </div>
                   </div>
                 {% endfor %}
               </div>
@@ -396,7 +341,7 @@
               </div>
               {% for key, value in varsFq.items() %}
               <div>
-                <sl-checkbox name="pageFacetPivot" class="pageFacetPivot " id="pageFacetPivotBaseModel_{{ key }}" value="{{ value.var }}"{% if pivot is defined %} checked="checked"{% endif %} onclick="facetPivotChange('BaseModel', value); ">{{ value.displayName }}</sl-checkbox>
+                <sl-checkbox name="pageFacetPivot" class="pageFacetPivot " id="pageFacetPivotBaseModel_{{ key }}" value="{{ value.var }}"{% if pivot is defined %} checked="checked"{% endif %}>{{ value.displayName }}</sl-checkbox>
               </div>
               {% endfor %}
               {%- endblock htmBodyPivotBaseModelPage %}
@@ -494,12 +439,8 @@
           {%- endblock htmBodySidebarBaseModelPage %}
         </div>
 
-        {%- block htmBodyGraphLocationBaseModelPage %}
-        <div id="htmBodyGraphLocationBaseModelPage" class="htmBodyGraphLocation "></div>
-        {%- endblock htmBodyGraphLocationBaseModelPage %}
-
         {%- block htmBodyGraphBaseModelPage %}
-        <div id="htmBodyGraphPageLayout" class="htmBodyGraph "></div>
+        <div id="htmBodyGraphBaseModelPage" class="htmBodyGraph "></div>
         {%- endblock htmBodyGraphBaseModelPage %}
         <div class="pageContent ">
           <div id="site-calendar-box">
@@ -567,7 +508,6 @@
         {{ htmForm_searchpageBaseModel() }}
   {% endif %}
         {%- endblock htmFormBaseModelPage %}
-        </div>
       {%- endblock htmBodyMiddleBaseModelPage %}
       {%- endblock htmBodyMiddlePageLayout %}
 
@@ -619,9 +559,9 @@
         </div>
 {%- endblock htmSuggestedBaseModelPage %}
 
-{%- macro inputPkBaseModelPage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputPkBaseModelPage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_pk">
+                <form class="subgrid-2col " id="PageForm_pk">
   {%- endif %}
                   <sl-input
                       readonly
@@ -644,7 +584,7 @@ The primary key of this object in the database"
     {%- endif %}
   {%- endif %}
   {%- if "Page" == classApiMethodMethod %}
-                      value="{{baseModel_.pk}}"
+                      value="{{baseModel_.pk | e }}"
   {%- endif %}
                       ></sl-input>
 
@@ -653,16 +593,16 @@ The primary key of this object in the database"
   {%- endif %}
 {%- endmacro %}
 
-{%- macro htmPkBaseModelPage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputPkBaseModelPage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmPkBaseModelPage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputPkBaseModelPage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputObjectIdBaseModelPage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputObjectIdBaseModelPage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_objectId">
+                <form class="subgrid-2col " id="PageForm_objectId">
   {%- endif %}
                   <sl-input
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
+                      {% if authForWriteBool == true %}clearable{% else %}readonly{% endif %}
                       placeholder="ID"
                       label="ID"
                       help-text="
@@ -682,7 +622,7 @@ A URL friendly unique ID for this object"
     {%- endif %}
   {%- endif %}
   {%- if "Page" == classApiMethodMethod %}
-                      value="{{baseModel_.objectId}}"
+                      value="{{baseModel_.objectId | e }}"
   {%- endif %}
                       ></sl-input>
 
@@ -691,13 +631,13 @@ A URL friendly unique ID for this object"
   {%- endif %}
 {%- endmacro %}
 
-{%- macro htmObjectIdBaseModelPage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputObjectIdBaseModelPage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmObjectIdBaseModelPage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputObjectIdBaseModelPage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputCreatedBaseModelPage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputCreatedBaseModelPage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_created">
+                <form class="subgrid-2col " id="PageForm_created">
   {%- endif %}
                   <sl-input
                       type="text"
@@ -709,7 +649,7 @@ A URL friendly unique ID for this object"
                       placeholder="MM/dd/yyyy h:mm a '['VV']'"
                       data-timeformat="MM/dd/yyyy h:mm a '['VV']'"
                       id="{{classApiMethodMethod}}_created"
-                      value="{%- if baseModel_.created is defined %}{{ formatZonedDateTime(baseModel_.created, "MM/dd/yyyy h:mm a '['VV']'", defaultLocaleId, defaultZoneId) }}{%- endif %}"
+                      value="{%- if baseModel_.created is defined %}{{ formatZonedDateTime(baseModel_.created, "MM/dd/yyyy h:mm a '['VV']'", defaultLocaleId, defaultZoneId) | e }}{%- endif %}"
   {%- if 'Page' == classApiMethodMethod %}
   {%- endif %}
                       data-pk="{{ pk }}"
@@ -720,13 +660,13 @@ A URL friendly unique ID for this object"
   {%- endif %}
 {%- endmacro %}
 
-{%- macro htmCreatedBaseModelPage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputCreatedBaseModelPage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmCreatedBaseModelPage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputCreatedBaseModelPage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputModifiedBaseModelPage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputModifiedBaseModelPage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_modified">
+                <form class="subgrid-2col " id="PageForm_modified">
   {%- endif %}
                   <sl-input
                       type="text"
@@ -738,7 +678,7 @@ A URL friendly unique ID for this object"
                       placeholder="MM/dd/yyyy h:mm a '['VV']'"
                       data-timeformat="MM/dd/yyyy h:mm a '['VV']'"
                       id="{{classApiMethodMethod}}_modified"
-                      value="{%- if baseModel_.modified is defined %}{{ formatZonedDateTime(baseModel_.modified, "MM/dd/yyyy h:mm a '['VV']'", defaultLocaleId, defaultZoneId) }}{%- endif %}"
+                      value="{%- if baseModel_.modified is defined %}{{ formatZonedDateTime(baseModel_.modified, "MM/dd/yyyy h:mm a '['VV']'", defaultLocaleId, defaultZoneId) | e }}{%- endif %}"
   {%- if 'Page' == classApiMethodMethod %}
   {%- endif %}
                       data-pk="{{ pk }}"
@@ -749,13 +689,13 @@ A URL friendly unique ID for this object"
   {%- endif %}
 {%- endmacro %}
 
-{%- macro htmModifiedBaseModelPage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputModifiedBaseModelPage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmModifiedBaseModelPage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputModifiedBaseModelPage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputArchivedBaseModelPage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputArchivedBaseModelPage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_archived">
+                <form class="subgrid-2col " id="PageForm_archived">
   {%- endif %}
   {%- if 'Page' == classApiMethodMethod %}
                   <sl-button
@@ -766,7 +706,7 @@ A URL friendly unique ID for this object"
                       class="label-on-left {{classApiMethodMethod}}_archived classBaseModel inputBaseModel{{pk}}Archived "
                       name="setArchived"
                       data-pk="{{ pk }}"
-                      data-val="{{ baseModel_.archived }}"
+                      data-val="{{ baseModel_.archived | e }}"
                       >archive</sl-button>
   {%- else %}
   {%- if 'Page' == classApiMethodMethod %}
@@ -777,7 +717,7 @@ A URL friendly unique ID for this object"
                   <sl-select
                       id="{{classApiMethodMethod}}_archived"
   {%- endif %}
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
+                      {% if authForWriteBool == true %}clearable{% else %}readonly{% endif %}
                       placeholder="archive"
                       label="archive"
                       help-text="For archiving this record"
@@ -812,69 +752,6 @@ A URL friendly unique ID for this object"
   {%- endif %}
 {%- endmacro %}
 
-{%- macro htmArchivedBaseModelPage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputArchivedBaseModelPage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
-{%- endmacro %}
-
-{%- macro inputDeletedBaseModelPage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
-  {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_deleted">
-  {%- endif %}
-  {%- if 'Page' == classApiMethodMethod %}
-                  <sl-button
-                      id="{{classApiMethodMethod}}_deleted"
-                      placeholder="delete"
-                      label="delete"
-                      help-text="For deleting this record"
-                      class="label-on-left {{classApiMethodMethod}}_deleted classBaseModel inputBaseModel{{pk}}Deleted "
-                      name="setDeleted"
-                      data-pk="{{ pk }}"
-                      data-val="{{ baseModel_.deleted }}"
-                      >delete</sl-button>
-  {%- else %}
-  {%- if 'Page' == classApiMethodMethod %}
-                  <sl-checkbox
-                      id="{{classApiMethodMethod}}_deleted"
-                      value="true"
-  {%- else %}
-                  <sl-select
-                      id="{{classApiMethodMethod}}_deleted"
-  {%- endif %}
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
-                      placeholder="delete"
-                      label="delete"
-                      help-text="For deleting this record"
-  {%- if 'Page' == classApiMethodMethod %}
-                      class="label-on-left {{classApiMethodMethod}}_deleted classBaseModel inputBaseModel{{pk}}Deleted "
-                      name="setDeleted"
-  {%- else %}
-    {%- if 'Page' == classApiMethodMethod %}
-                      class="label-on-left {{classApiMethodMethod}}_deleted classBaseModel inputBaseModel{{pk}}Deleted "
-                      name="setDeleted"
-    {%- else %}
-                      class="label-on-left {{classApiMethodMethod}}_deleted setDeleted valueDeleted classBaseModel inputBaseModel{{pk}}Deleted "
-                      name="setDeleted"
-    {%- endif %}
-  {%- endif %}
-  {%- if 'Page' == classApiMethodMethod %}
-    {%- if baseModel_.deleted == true %}
-                      checked
-    {%- endif %}
-                      data-pk="{{ pk }}"
-                      >delete</sl-checkbox>
-  {%- else %}
-                      >
-                    <sl-option value="" selected="selected"></sl-option>
-                    <sl-option value="true">true</sl-option>
-                    <sl-option value="false">false</sl-option>
-                  </sl-select>
-  {%- endif %}
-  {%- endif %}
-  {%- if 'Page' == classApiMethodMethod %}
-                </form>
-  {%- endif %}
-{%- endmacro %}
-
-{%- macro htmDeletedBaseModelPage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputDeletedBaseModelPage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmArchivedBaseModelPage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputArchivedBaseModelPage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}

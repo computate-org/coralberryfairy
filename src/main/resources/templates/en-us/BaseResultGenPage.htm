@@ -2,7 +2,7 @@
 
 {%- block htmTitlePageLayout %}
 {%- block htmTitleBaseResultPage %}
-    <title>{% if searchListBaseResult_ is defined %}{% if baseResultCount == int1 %}{% if id is defined %}{% else %}{% endif %}{% else %}{% endif %}{% else %}{% endif %}</title>
+    <title>{% if searchListBaseResult_ is defined %}{% if baseResultCount == 1 %}{% if id is defined %}{% else %}{% endif %}{% else %}{% endif %}{% else %}{% endif %}</title>
 {%- endblock htmTitleBaseResultPage %}
 {%- endblock htmTitlePageLayout %}
 
@@ -103,6 +103,7 @@
 {%- block websocketPageLayout %}
 {%- block websocketBaseResultPage %}
         window.eventBus = new EventBus('/eventbus');
+        window.eventBus.enableReconnect(true);
         websocketBaseResult(websocketBaseResultInner);
 {%- endblock websocketBaseResultPage %}
 {%- endblock websocketPageLayout %}
@@ -122,71 +123,11 @@
             {{ htmFormsBaseResultPage() }}
             <sl-divider></sl-divider>
             {{ htmPaginationButtonsBaseResultPage() }}
-            <div class="grid-mode-details">
-            <div>
-                
-              <sl-dropdown>
-                <sl-button slot="trigger" caret>ID</sl-button>
-                <sl-menu>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                    sort by ID ascending
-                  </sl-menu-item>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-z-a"></i>
-                    sort by ID descending
-                  </sl-menu-item>
-                </sl-menu>
-              </sl-dropdown>
-              <sl-dropdown>
-                <sl-button slot="trigger" caret>created</sl-button>
-                <sl-menu>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                    sort by created ascending
-                  </sl-menu-item>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-z-a"></i>
-                    sort by created descending
-                  </sl-menu-item>
-                </sl-menu>
-              </sl-dropdown>
-              <sl-dropdown>
-                <sl-button slot="trigger" caret></sl-button>
-                <sl-menu>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-a-z"></i>
-                    sort by null ascending
-                  </sl-menu-item>
-                  <sl-menu-item>
-                    <i class="fa-solid fa-arrow-down-z-a"></i>
-                    sort by null descending
-                  </sl-menu-item>
-                </sl-menu>
-              </sl-dropdown>
-              </div>
-            </div>
-            <div class="grid-mode-details" id="site-results-grid">
+            <div class="grid-mode-details border-radius-x-large" id="site-results-grid">
               {% for item in listBaseResult%}
               <a href="{{ item.pageUrlPk }}">
-                
-                <div>{{ item.objectId }}</div>
-                <div><sl-format-date weekday="short" month="short" day="numeric" year="numeric" hour="numeric" minute="numeric" second="numeric" time-zone-name="short" date="{{ formatZonedDateTime(item.created, "yyyy-MM-dd'T'HH:mm:ss.SSSX", defaultLocaleId, "UTC") }}"></sl-format-date></div>
-                <div>{{ item.objectTitle }}</div>
               </a>
               {% endfor %}
-                      {% if getColumnObjectId is defined %}
-                        <div>
-                        </div>
-                      {% endif %}
-                      {% if getColumnCreated is defined %}
-                        <div>
-                        </div>
-                      {% endif %}
-                      {% if getColumnObjectTitle is defined %}
-                        <div>
-                        </div>
-                      {% endif %}
             </div>
             {%- endmacro htmBodyAllBaseResultPage() %}
 {%- macro htmSearchButtonsBaseResultPage() %}
@@ -196,23 +137,6 @@
 
 {%- macro htmPaginationButtonsBaseResultPage() %}
             <div id="htmPaginationButtons">
-              <sl-button-group>
-                <sl-tooltip placement="top" content="Show the results as details" pill>
-                  <sl-button pill id="grid-toggle-details">
-                    <i class="fa-solid fa-list"></i>
-                  </sl-button>
-                </sl-tooltip>
-                <sl-tooltip placement="top" content="Show the results as a list">
-                  <sl-button id="grid-toggle-list">
-                    <i class="fa-solid fa-bars"></i>
-                  </sl-button>
-                </sl-tooltip>
-                <sl-tooltip placement="top" content="Show the results as cards" pill>
-                  <sl-button pill id="grid-toggle-card">
-                    <i class="fa-solid fa-grid"></i>
-                  </sl-button>
-                </sl-tooltip>
-              </sl-button-group>
               <sl-button-group>
                 <sl-tooltip placement="top" content="Show the previous results">
                   <sl-button pill{% if pagination.pagePrevious is defined %} href="{{pageUri}}?start={{pagination.pagePrevious.start}}&amp;rows={{pagination.rows}}"{% else %} disabled{% endif %}>
@@ -235,7 +159,7 @@
                   </sl-button>
                 </sl-tooltip>
               </sl-button-group>
-              <div>{{ pagination.startNum }} –— {{ pagination.endNum }} of {{ pagination.foundNum }}</div>
+            <div>{{ pagination.startNum }} – {{ pagination.endNum }} of {{ pagination.foundNum }}</div>
             </div>
 {%- endmacro htmPaginationButtonsBaseResultPage() %}
 {%- macro htmFormsBaseResultPage() %}
@@ -315,18 +239,20 @@
                   <div class="">
                     <label for="fqBaseResult_{{ key }}">{{ value.displayName }}<sup> ({{ value.classSimpleName }})</sup></label>
                     <div class="display-flex ">
-                      <sl-button id="buttonFacetBaseResult_{{ key }}" onclick="facetFieldChange('BaseResult', this); " title="see values " data-var="{{ value.var }}" data-clear="{% if value.facetField is defined %}true{% else %}false{% endif %}"><i class="fas fa-list "></i></sl-button>
+                      <sl-button id="buttonFacetBaseResult_{{ key }}" title="see values " data-var="{{ value.var }}" data-clear="{% if value.facetField is defined %}true{% else %}false{% endif %}"><i class="fas fa-list "></i></sl-button>
                       <sl-input id="fqBaseResult_{{ key }}" placeholder="{{ value.displayName }}" class="" onchange="fqChange('BaseResult', value); " data-var="{{ value.var }}" autocomplete="off=" value="{{ value.val }}"></sl-input>
                     </div>
                   </div>
                   <div>
-                    <div class="pageSearchVal " id="pageSearchVal-fqBaseResult_{{ key }}">{% if val is defined %}fq={{ value.var }}:{{ value.val | urlencode() }}{% endif %}</div>
+                    <div class="pageSearchVal " id="pageSearchVal-fqBaseResult_{{ key }}">{% if value.val is defined %}fq={{ value.var }}:{{ value.val | urlencode() }}{% endif %}</div>
                     <div class="pageSearchVal " id="pageSearchVal-buttonFacetBaseResult_{{ key }}">{% if value.facetField.var is defined %}facet.field={{ value.facetField.var }}{% endif %}</div>
-                    <ol class="pageFacetField pageFacetFieldBaseResult_{{ key }} " id="pageFacetFieldBaseResult_{{ key }}">
+                    <div class="pageFacetField pageFacetFieldBaseResult_{{ key }} " id="pageFacetFieldBaseResult_{{ key }}">
 {% for facetFieldKey, facetFieldValue in value.facetField.counts.items() %}
-                      <li class="cursor-pointer " data-class="BaseResult" data-var="{{ value.facetField.var }}" data-val="{{ facetFieldKey }}" onclick="fqReplace('BaseResult', facetFieldValue); ">{{ facetFieldKey }}: {{ facetFieldValue }}</li>
+                      <sl-tooltip content="{{ facetFieldValue | e }} null total with {{ value.facetField.var | e }} &quot;{{ facetFieldKey | e }}&quot;">
+                        <div class="cursor-pointer " data-class="BaseResult" data-var="{{ value.facetField.var }}" data-val="{{ facetFieldKey }}" onclick="fqReplace('BaseResult', this); ">{{ facetFieldValue }}: {{ facetFieldKey }}</div>
+                      </sl-tooltip>
 {% endfor %}
-                    </ol>
+                    </div>
                   </div>
                 {% endfor %}
               </div>
@@ -414,7 +340,7 @@
               </div>
               {% for key, value in varsFq.items() %}
               <div>
-                <sl-checkbox name="pageFacetPivot" class="pageFacetPivot " id="pageFacetPivotBaseResult_{{ key }}" value="{{ value.var }}"{% if pivot is defined %} checked="checked"{% endif %} onclick="facetPivotChange('BaseResult', value); ">{{ value.displayName }}</sl-checkbox>
+                <sl-checkbox name="pageFacetPivot" class="pageFacetPivot " id="pageFacetPivotBaseResult_{{ key }}" value="{{ value.var }}"{% if pivot is defined %} checked="checked"{% endif %}>{{ value.displayName }}</sl-checkbox>
               </div>
               {% endfor %}
               {%- endblock htmBodyPivotBaseResultPage %}
@@ -512,12 +438,8 @@
           {%- endblock htmBodySidebarBaseResultPage %}
         </div>
 
-        {%- block htmBodyGraphLocationBaseResultPage %}
-        <div id="htmBodyGraphLocationBaseResultPage" class="htmBodyGraphLocation "></div>
-        {%- endblock htmBodyGraphLocationBaseResultPage %}
-
         {%- block htmBodyGraphBaseResultPage %}
-        <div id="htmBodyGraphPageLayout" class="htmBodyGraph "></div>
+        <div id="htmBodyGraphBaseResultPage" class="htmBodyGraph "></div>
         {%- endblock htmBodyGraphBaseResultPage %}
         <div class="pageContent ">
           <div id="site-calendar-box">
@@ -585,7 +507,6 @@
         {{ htmForm_searchpageBaseResult() }}
   {% endif %}
         {%- endblock htmFormBaseResultPage %}
-        </div>
       {%- endblock htmBodyMiddleBaseResultPage %}
       {%- endblock htmBodyMiddlePageLayout %}
 
@@ -637,9 +558,9 @@
         </div>
 {%- endblock htmSuggestedBaseResultPage %}
 
-{%- macro inputCreatedBaseResultPage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputCreatedBaseResultPage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_created">
+                <form class="subgrid-2col " id="PageForm_created">
   {%- endif %}
                   <sl-input
                       type="text"
@@ -651,7 +572,7 @@
                       placeholder="MM/dd/yyyy h:mm a '['VV']'"
                       data-timeformat="MM/dd/yyyy h:mm a '['VV']'"
                       id="{{classApiMethodMethod}}_created"
-                      value="{%- if baseResult_.created is defined %}{{ formatZonedDateTime(baseResult_.created, "MM/dd/yyyy h:mm a '['VV']'", defaultLocaleId, defaultZoneId) }}{%- endif %}"
+                      value="{%- if baseResult_.created is defined %}{{ formatZonedDateTime(baseResult_.created, "MM/dd/yyyy h:mm a '['VV']'", defaultLocaleId, defaultZoneId) | e }}{%- endif %}"
   {%- if 'Page' == classApiMethodMethod %}
   {%- endif %}
                       data-id="{{ id }}"
@@ -662,13 +583,13 @@
   {%- endif %}
 {%- endmacro %}
 
-{%- macro htmCreatedBaseResultPage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputCreatedBaseResultPage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmCreatedBaseResultPage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputCreatedBaseResultPage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputModifiedBaseResultPage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputModifiedBaseResultPage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_modified">
+                <form class="subgrid-2col " id="PageForm_modified">
   {%- endif %}
                   <sl-input
                       type="text"
@@ -680,7 +601,7 @@
                       placeholder="MM/dd/yyyy h:mm a '['VV']'"
                       data-timeformat="MM/dd/yyyy h:mm a '['VV']'"
                       id="{{classApiMethodMethod}}_modified"
-                      value="{%- if baseResult_.modified is defined %}{{ formatZonedDateTime(baseResult_.modified, "MM/dd/yyyy h:mm a '['VV']'", defaultLocaleId, defaultZoneId) }}{%- endif %}"
+                      value="{%- if baseResult_.modified is defined %}{{ formatZonedDateTime(baseResult_.modified, "MM/dd/yyyy h:mm a '['VV']'", defaultLocaleId, defaultZoneId) | e }}{%- endif %}"
   {%- if 'Page' == classApiMethodMethod %}
   {%- endif %}
                       data-id="{{ id }}"
@@ -691,16 +612,16 @@
   {%- endif %}
 {%- endmacro %}
 
-{%- macro htmModifiedBaseResultPage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputModifiedBaseResultPage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmModifiedBaseResultPage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputModifiedBaseResultPage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputObjectIdBaseResultPage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputObjectIdBaseResultPage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_objectId">
+                <form class="subgrid-2col " id="PageForm_objectId">
   {%- endif %}
                   <sl-input
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
+                      {% if authForWriteBool == true %}clearable{% else %}readonly{% endif %}
                       placeholder="ID"
                       label="ID"
                       help-text="
@@ -720,7 +641,7 @@ A URL friendly unique ID for this object"
     {%- endif %}
   {%- endif %}
   {%- if "Page" == classApiMethodMethod %}
-                      value="{{baseResult_.objectId}}"
+                      value="{{baseResult_.objectId | e }}"
   {%- endif %}
                       ></sl-input>
 
@@ -729,13 +650,13 @@ A URL friendly unique ID for this object"
   {%- endif %}
 {%- endmacro %}
 
-{%- macro htmObjectIdBaseResultPage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputObjectIdBaseResultPage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmObjectIdBaseResultPage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputObjectIdBaseResultPage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}
 
-{%- macro inputArchivedBaseResultPage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
+{%- macro inputArchivedBaseResultPage(classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) %}
   {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_archived">
+                <form class="subgrid-2col " id="PageForm_archived">
   {%- endif %}
   {%- if 'Page' == classApiMethodMethod %}
                   <sl-button
@@ -746,7 +667,7 @@ A URL friendly unique ID for this object"
                       class="label-on-left {{classApiMethodMethod}}_archived classBaseResult inputBaseResult{{id}}Archived "
                       name="setArchived"
                       data-id="{{ id }}"
-                      data-val="{{ baseResult_.archived }}"
+                      data-val="{{ baseResult_.archived | e }}"
                       >archived</sl-button>
   {%- else %}
   {%- if 'Page' == classApiMethodMethod %}
@@ -757,7 +678,7 @@ A URL friendly unique ID for this object"
                   <sl-select
                       id="{{classApiMethodMethod}}_archived"
   {%- endif %}
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
+                      {% if authForWriteBool == true %}clearable{% else %}readonly{% endif %}
                       placeholder="archived"
                       label="archived"
                       help-text="For archiving this record"
@@ -792,69 +713,6 @@ A URL friendly unique ID for this object"
   {%- endif %}
 {%- endmacro %}
 
-{%- macro htmArchivedBaseResultPage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputArchivedBaseResultPage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
-{%- endmacro %}
-
-{%- macro inputDeletedBaseResultPage(classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) %}
-  {%- if 'Page' == classApiMethodMethod %}
-                <form id="PageForm_deleted">
-  {%- endif %}
-  {%- if 'Page' == classApiMethodMethod %}
-                  <sl-button
-                      id="{{classApiMethodMethod}}_deleted"
-                      placeholder="deleted"
-                      label="deleted"
-                      help-text="For deleting this record"
-                      class="label-on-left {{classApiMethodMethod}}_deleted classBaseResult inputBaseResult{{id}}Deleted "
-                      name="setDeleted"
-                      data-id="{{ id }}"
-                      data-val="{{ baseResult_.deleted }}"
-                      >deleted</sl-button>
-  {%- else %}
-  {%- if 'Page' == classApiMethodMethod %}
-                  <sl-checkbox
-                      id="{{classApiMethodMethod}}_deleted"
-                      value="true"
-  {%- else %}
-                  <sl-select
-                      id="{{classApiMethodMethod}}_deleted"
-  {%- endif %}
-                      {% if roleForWriteBool == true %}clearable{% else %}readonly{% endif %}
-                      placeholder="deleted"
-                      label="deleted"
-                      help-text="For deleting this record"
-  {%- if 'Page' == classApiMethodMethod %}
-                      class="label-on-left {{classApiMethodMethod}}_deleted classBaseResult inputBaseResult{{id}}Deleted "
-                      name="setDeleted"
-  {%- else %}
-    {%- if 'Page' == classApiMethodMethod %}
-                      class="label-on-left {{classApiMethodMethod}}_deleted classBaseResult inputBaseResult{{id}}Deleted "
-                      name="setDeleted"
-    {%- else %}
-                      class="label-on-left {{classApiMethodMethod}}_deleted setDeleted valueDeleted classBaseResult inputBaseResult{{id}}Deleted "
-                      name="setDeleted"
-    {%- endif %}
-  {%- endif %}
-  {%- if 'Page' == classApiMethodMethod %}
-    {%- if baseResult_.deleted == true %}
-                      checked
-    {%- endif %}
-                      data-id="{{ id }}"
-                      >deleted</sl-checkbox>
-  {%- else %}
-                      >
-                    <sl-option value="" selected="selected"></sl-option>
-                    <sl-option value="true">true</sl-option>
-                    <sl-option value="false">false</sl-option>
-                  </sl-select>
-  {%- endif %}
-  {%- endif %}
-  {%- if 'Page' == classApiMethodMethod %}
-                </form>
-  {%- endif %}
-{%- endmacro %}
-
-{%- macro htmDeletedBaseResultPage(classApiMethodMethod, roleForWriteBool=false, roleForReadBool=false) %}
-                            {{ inputDeletedBaseResultPage(classApiMethodMethod=classApiMethodMethod, roleForWrite=roleForWrite, roleForRead=roleForRead) }}
+{%- macro htmArchivedBaseResultPage(classApiMethodMethod, authForWriteBool=false, authForReadBool=false) %}
+                            {{ inputArchivedBaseResultPage(classApiMethodMethod=classApiMethodMethod, authForWrite=authForWrite, authForRead=authForRead) }}
 {%- endmacro %}

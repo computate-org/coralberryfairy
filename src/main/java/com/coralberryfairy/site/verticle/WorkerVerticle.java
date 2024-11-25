@@ -36,6 +36,10 @@ import com.coralberryfairy.site.config.ConfigKeys;
 import com.coralberryfairy.site.request.SiteRequest;
 import com.coralberryfairy.site.page.SitePage;
 import com.coralberryfairy.site.page.SitePageEnUSApiServiceImpl;
+import com.coralberryfairy.site.model.doll.Doll;
+import com.coralberryfairy.site.model.doll.DollEnUSApiServiceImpl;
+import com.coralberryfairy.site.page.SitePage;
+import com.coralberryfairy.site.page.SitePageEnUSApiServiceImpl;
 import org.computate.vertx.api.ApiCounter;
 import org.computate.vertx.api.ApiRequest;
 import org.computate.vertx.config.ComputateConfigKeys;
@@ -410,7 +414,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			if(BooleanUtils.isTrue(config().getBoolean(ConfigKeys.ENABLE_RABBITMQ))) {
 				try {
 					RabbitMQOptions options = new RabbitMQOptions()
-							.setHost(config().getString(ConfigKeys.RABBITMQ_HOST))
+							.setHost(config().getString(ConfigKeys.RABBITMQ_HOST_NAME))
 							.setPort(config().getInteger(ConfigKeys.RABBITMQ_PORT))
 							.setUser(config().getString(ConfigKeys.RABBITMQ_USER))
 							.setPassword(config().getString(ConfigKeys.RABBITMQ_PASSWORD))
@@ -452,8 +456,14 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			siteRequest.setWebClient(webClient);
 			siteRequest.initDeepSiteRequest(siteRequest);
 			String templatePath = config().getString(ComputateConfigKeys.TEMPLATE_PATH);
-			LOG.info("data import complete");
-			promise.complete();
+			DollEnUSApiServiceImpl apiDoll = new DollEnUSApiServiceImpl(vertx, config(), workerExecutor, oauth2AuthHandler, pgPool, kafkaProducer, mqttClient, amqpSender, rabbitmqClient, webClient, null, null, jinjava);
+			SitePageEnUSApiServiceImpl apiSitePage = new SitePageEnUSApiServiceImpl(vertx, config(), workerExecutor, oauth2AuthHandler, pgPool, kafkaProducer, mqttClient, amqpSender, rabbitmqClient, webClient, null, null, jinjava);
+			apiDoll.importTimer(Paths.get(templatePath, "/product/doll"), vertx, siteRequest, Doll.CLASS_SIMPLE_NAME, Doll.CLASS_API_ADDRESS_Doll).onSuccess(q1 -> {
+				apiSitePage.importTimer(Paths.get(templatePath, "/en-us/article"), vertx, siteRequest, SitePage.CLASS_SIMPLE_NAME, SitePage.CLASS_API_ADDRESS_SitePage).onSuccess(q2 -> {
+					LOG.info("data import complete");
+					promise.complete();
+				}).onFailure(ex -> promise.fail(ex));
+			}).onFailure(ex -> promise.fail(ex));
 		}
 		else {
 			LOG.info(importDataSkip);
