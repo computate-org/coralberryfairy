@@ -3,7 +3,7 @@ info:
   title: "Coralberry Fairy"
   version: 3.0.0
 paths:
-  /api/product/doll:
+  /api/doll:
     get:
       operationId: searchDoll
       x-vertx-event-bus: coralberryfairy-enUS-Doll
@@ -388,7 +388,7 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/DELETEFilterDollResponse'
-  /api/product/doll-import:
+  /api/doll-import:
     put:
       operationId: putimportDoll
       x-vertx-event-bus: coralberryfairy-enUS-Doll
@@ -458,7 +458,7 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/PUTImportDollResponse'
-  /api/product/doll/{pageId}:
+  /api/doll/{pageId}:
     get:
       operationId: getDoll
       x-vertx-event-bus: coralberryfairy-enUS-Doll
@@ -588,7 +588,7 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/DELETEDollResponse'
-  /edit/product/doll/{pageId}:
+  /edit/doll/{pageId}:
     get:
       operationId: editpageDoll
       x-vertx-event-bus: coralberryfairy-enUS-Doll
@@ -674,7 +674,7 @@ paths:
             text/html; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/EditPageDollResponse'
-  /product/doll:
+  /search/doll:
     get:
       operationId: searchpageDoll
       x-vertx-event-bus: coralberryfairy-enUS-Doll
@@ -862,7 +862,7 @@ paths:
             text/html; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/SearchPageDollResponse'
-  /view/product/doll/{pageId}:
+  /view/doll/{pageId}:
     get:
       operationId: displaypageDoll
       x-vertx-event-bus: coralberryfairy-enUS-Doll
@@ -904,7 +904,7 @@ paths:
             text/html; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/DisplayPageDollResponse'
-  /en-us/api/article:
+  /api/article:
     get:
       operationId: searchSitePage
       x-vertx-event-bus: coralberryfairy-enUS-SitePage
@@ -1207,7 +1207,7 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/POSTSitePageResponse'
-  /en-us/api/article-import:
+  /api/article-import:
     put:
       operationId: putimportSitePage
       x-vertx-event-bus: coralberryfairy-enUS-SitePage
@@ -1277,7 +1277,7 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/PUTImportSitePageResponse'
-  /en-us/api/article/{pageId}:
+  /api/article/{pageId}:
     get:
       operationId: getSitePage
       x-vertx-event-bus: coralberryfairy-enUS-SitePage
@@ -1319,7 +1319,7 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/GETSitePageResponse'
-  /en-us/edit/article/{pageId}:
+  /edit/article/{pageId}:
     get:
       operationId: editpageSitePage
       x-vertx-event-bus: coralberryfairy-enUS-SitePage
@@ -1405,7 +1405,7 @@ paths:
             text/html; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/EditPageSitePageResponse'
-  /en-us/search/article:
+  /search/article:
     get:
       operationId: searchpageSitePage
       x-vertx-event-bus: coralberryfairy-enUS-SitePage
@@ -1593,7 +1593,7 @@ paths:
             text/html; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/SearchPageSitePageResponse'
-  /en-us/view/article/{pageId}:
+  /view/article/{pageId}:
     get:
       operationId: displaypageSitePage
       x-vertx-event-bus: coralberryfairy-enUS-SitePage
@@ -1635,7 +1635,7 @@ paths:
             text/html; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/DisplayPageSitePageResponse'
-  /en-us/api/user:
+  /api/user:
     get:
       operationId: searchSiteUser
       x-vertx-event-bus: coralberryfairy-enUS-SiteUser
@@ -1942,7 +1942,7 @@ paths:
             application/json; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/POSTSiteUserResponse'
-  /en-us/edit/user/{userId}:
+  /edit/user/{userId}:
     get:
       operationId: editpageSiteUser
       x-vertx-event-bus: coralberryfairy-enUS-SiteUser
@@ -2028,7 +2028,7 @@ paths:
             text/html; charset=utf-8:
               schema:
                 $ref: '#/components/schemas/EditPageSiteUserResponse'
-  /en-us/search/user:
+  /search/user:
     get:
       operationId: searchpageSiteUser
       x-vertx-event-bus: coralberryfairy-enUS-SiteUser

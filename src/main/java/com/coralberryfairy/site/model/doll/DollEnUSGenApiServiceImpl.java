@@ -1391,7 +1391,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 	}
 
 	public String templateSearchPageDoll(ServiceRequest serviceRequest) {
-		return "product/doll/DollSearchPage.htm";
+		return "search/doll/DollSearchPage.htm";
 	}
 	public Future<ServiceResponse> response200SearchPageDoll(SearchList<Doll> listDoll) {
 		Promise<ServiceResponse> promise = Promise.promise();
@@ -1550,7 +1550,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 	}
 
 	public String templateEditPageDoll(ServiceRequest serviceRequest) {
-		return "edit/product/doll/DollEditPage.htm";
+		return "edit/doll/DollEditPage.htm";
 	}
 	public Future<ServiceResponse> response200EditPageDoll(SearchList<Doll> listDoll) {
 		Promise<ServiceResponse> promise = Promise.promise();

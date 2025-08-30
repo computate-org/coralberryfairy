@@ -38,16 +38,16 @@ import io.vertx.core.json.JsonObject;
  * Order: 4
  * Description: Read the latest articles to learn more
  * AName: an article
- * Icon: <i class="fa-duotone fa-regular fa-newspaper"></i>
+ * Icon: <i class="{{ FONTAWESOME_STYLE }} fa-newspaper"></i>
  * Sort.desc: courseNum
  * Sort.desc: lessonNum
  * Rows: 100
  * 
  * PublicRead: true
- * SearchPageUri: /en-us/search/article
- * EditPageUri: /en-us/edit/article/{pageId}
- * DisplayPageUri: /en-us/view/article/{pageId}
- * ApiUri: /en-us/api/article
+ * SearchPageUri: /search/article
+ * EditPageUri: /edit/article/{pageId}
+ * DisplayPageUri: /view/article/{pageId}
+ * ApiUri: /api/article
  * ApiMethod:
  *   Search:
  *   GET:

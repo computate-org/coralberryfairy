@@ -103,8 +103,8 @@ import io.vertx.core.json.JsonObject;
  * <h2>ApiTag.enUS: true</h2>
  * <p>This class contains a comment <b>"ApiTag: dolls"</b>, which groups all of the OpenAPIs for Doll objects under the tag "dolls". 
  * </p>
- * <h2>ApiUri.enUS: /api/product/doll</h2>
- * <p>This class contains a comment <b>"ApiUri: /api/product/doll"</b>, which defines the base API URI for Doll objects as "/api/product/doll" in the OpenAPI spec. 
+ * <h2>ApiUri.enUS: /api/doll</h2>
+ * <p>This class contains a comment <b>"ApiUri: /api/doll"</b>, which defines the base API URI for Doll objects as "/api/doll" in the OpenAPI spec. 
  * </p>
  * <h2>Color: null</h2>
  * <h2>Indexed: true</h2>
@@ -192,45 +192,45 @@ public abstract class DollGen<DEV> extends BaseResult {
 	public static final String Title_enUS = "dolls";
 	public static final String ThePluralName_enUS = "the dolls";
 	public static final String NoNameFound_enUS = "no doll found";
-	public static final String ApiUri_enUS = "/api/product/doll";
-	public static final String ApiUriSearchPage_enUS = "/product/doll";
-	public static final String ApiUriEditPage_enUS = "/edit/product/doll/{pageId}";
+	public static final String ApiUri_enUS = "/api/doll";
+	public static final String ApiUriSearchPage_enUS = "/search/doll";
+	public static final String ApiUriEditPage_enUS = "/edit/doll/{pageId}";
 	public static final String OfName_enUS = "of doll";
 	public static final String ANameAdjective_enUS = "a doll";
 	public static final String NameAdjectiveSingular_enUS = "doll";
 	public static final String NameAdjectivePlural_enUS = "dolls";
-	public static final String Search_enUS_OpenApiUri = "/api/product/doll";
-	public static final String Search_enUS_StringFormatUri = "/api/product/doll";
-	public static final String Search_enUS_StringFormatUrl = "%s/api/product/doll";
-	public static final String GET_enUS_OpenApiUri = "/api/product/doll/{pageId}";
-	public static final String GET_enUS_StringFormatUri = "/api/product/doll/%s";
-	public static final String GET_enUS_StringFormatUrl = "%s/api/product/doll/%s";
-	public static final String PATCH_enUS_OpenApiUri = "/api/product/doll";
-	public static final String PATCH_enUS_StringFormatUri = "/api/product/doll";
-	public static final String PATCH_enUS_StringFormatUrl = "%s/api/product/doll";
-	public static final String POST_enUS_OpenApiUri = "/api/product/doll";
-	public static final String POST_enUS_StringFormatUri = "/api/product/doll";
-	public static final String POST_enUS_StringFormatUrl = "%s/api/product/doll";
-	public static final String DELETE_enUS_OpenApiUri = "/api/product/doll/{pageId}";
-	public static final String DELETE_enUS_StringFormatUri = "/api/product/doll/%s";
-	public static final String DELETE_enUS_StringFormatUrl = "%s/api/product/doll/%s";
-	public static final String PUTImport_enUS_OpenApiUri = "/api/product/doll-import";
-	public static final String PUTImport_enUS_StringFormatUri = "/api/product/doll-import";
-	public static final String PUTImport_enUS_StringFormatUrl = "%s/api/product/doll-import";
-	public static final String SearchPage_enUS_OpenApiUri = "/product/doll";
-	public static final String SearchPage_enUS_StringFormatUri = "/product/doll";
-	public static final String SearchPage_enUS_StringFormatUrl = "%s/product/doll";
-	public static final String EditPage_enUS_OpenApiUri = "/edit/product/doll/{pageId}";
-	public static final String EditPage_enUS_StringFormatUri = "/edit/product/doll/%s";
-	public static final String EditPage_enUS_StringFormatUrl = "%s/edit/product/doll/%s";
-	public static final String DisplayPage_enUS_OpenApiUri = "/view/product/doll/{pageId}";
-	public static final String DisplayPage_enUS_StringFormatUri = "/view/product/doll/%s";
-	public static final String DisplayPage_enUS_StringFormatUrl = "%s/view/product/doll/%s";
-	public static final String DELETEFilter_enUS_OpenApiUri = "/api/product/doll";
-	public static final String DELETEFilter_enUS_StringFormatUri = "/api/product/doll";
-	public static final String DELETEFilter_enUS_StringFormatUrl = "%s/api/product/doll";
+	public static final String Search_enUS_OpenApiUri = "/api/doll";
+	public static final String Search_enUS_StringFormatUri = "/api/doll";
+	public static final String Search_enUS_StringFormatUrl = "%s/api/doll";
+	public static final String GET_enUS_OpenApiUri = "/api/doll/{pageId}";
+	public static final String GET_enUS_StringFormatUri = "/api/doll/%s";
+	public static final String GET_enUS_StringFormatUrl = "%s/api/doll/%s";
+	public static final String PATCH_enUS_OpenApiUri = "/api/doll";
+	public static final String PATCH_enUS_StringFormatUri = "/api/doll";
+	public static final String PATCH_enUS_StringFormatUrl = "%s/api/doll";
+	public static final String POST_enUS_OpenApiUri = "/api/doll";
+	public static final String POST_enUS_StringFormatUri = "/api/doll";
+	public static final String POST_enUS_StringFormatUrl = "%s/api/doll";
+	public static final String DELETE_enUS_OpenApiUri = "/api/doll/{pageId}";
+	public static final String DELETE_enUS_StringFormatUri = "/api/doll/%s";
+	public static final String DELETE_enUS_StringFormatUrl = "%s/api/doll/%s";
+	public static final String PUTImport_enUS_OpenApiUri = "/api/doll-import";
+	public static final String PUTImport_enUS_StringFormatUri = "/api/doll-import";
+	public static final String PUTImport_enUS_StringFormatUrl = "%s/api/doll-import";
+	public static final String SearchPage_enUS_OpenApiUri = "/search/doll";
+	public static final String SearchPage_enUS_StringFormatUri = "/search/doll";
+	public static final String SearchPage_enUS_StringFormatUrl = "%s/search/doll";
+	public static final String EditPage_enUS_OpenApiUri = "/edit/doll/{pageId}";
+	public static final String EditPage_enUS_StringFormatUri = "/edit/doll/%s";
+	public static final String EditPage_enUS_StringFormatUrl = "%s/edit/doll/%s";
+	public static final String DisplayPage_enUS_OpenApiUri = "/view/doll/{pageId}";
+	public static final String DisplayPage_enUS_StringFormatUri = "/view/doll/%s";
+	public static final String DisplayPage_enUS_StringFormatUrl = "%s/view/doll/%s";
+	public static final String DELETEFilter_enUS_OpenApiUri = "/api/doll";
+	public static final String DELETEFilter_enUS_StringFormatUri = "/api/doll";
+	public static final String DELETEFilter_enUS_StringFormatUrl = "%s/api/doll";
 
-	public static final String Icon = "<i class=\"fa-solid fa-reel\"></i>";
+	public static final String Icon = "<i class=\"{{ FONTAWESOME_STYLE }} fa-reel\"></i>";
 	public static final Integer Rows = 100;
 
 	//////////
@@ -1660,12 +1660,12 @@ public abstract class DollGen<DEV> extends BaseResult {
 
 	@Override
 	public String classStringFormatUrlEditPageForClass() {
-		return "%s/edit/product/doll/%s";
+		return "%s/edit/doll/%s";
 	}
 
 	@Override
 	public String classStringFormatUrlDisplayPageForClass() {
-		return "%s/view/product/doll/%s";
+		return "%s/view/doll/%s";
 	}
 
 	@Override

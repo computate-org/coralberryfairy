@@ -13,14 +13,14 @@ import com.coralberryfairy.site.result.BaseResult;
  * Description: See the available dolls
  * PublicRead: true
  * AName: a doll
- * Icon: <i class="fa-solid fa-reel"></i>
+ * Icon: <i class="{{ FONTAWESOME_STYLE }} fa-reel"></i>
  * Rows: 100
  * Sort.asc: name
  * 
- * SearchPageUri: /product/doll
- * EditPageUri: /edit/product/doll/{pageId}
- * ApiUri: /api/product/doll
- * DisplayPageUri: /view/product/doll/{pageId}
+ * SearchPageUri: /search/doll
+ * EditPageUri: /edit/doll/{pageId}
+ * DisplayPageUri: /view/doll/{pageId}
+ * ApiUri: /api/doll
  * ApiMethod:
  *   Search:
  *   GET:

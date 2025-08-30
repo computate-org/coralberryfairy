@@ -1141,7 +1141,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	}
 
 	public String templateSearchPageSitePage(ServiceRequest serviceRequest) {
-		return "en-us/search/article/SitePageSearchPage.htm";
+		return "search/article/SitePageSearchPage.htm";
 	}
 	public Future<ServiceResponse> response200SearchPageSitePage(SearchList<SitePage> listSitePage) {
 		Promise<ServiceResponse> promise = Promise.promise();
@@ -1300,7 +1300,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	}
 
 	public String templateEditPageSitePage(ServiceRequest serviceRequest) {
-		return "en-us/edit/article/SitePageEditPage.htm";
+		return "edit/article/SitePageEditPage.htm";
 	}
 	public Future<ServiceResponse> response200EditPageSitePage(SearchList<SitePage> listSitePage) {
 		Promise<ServiceResponse> promise = Promise.promise();

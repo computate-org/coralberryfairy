@@ -510,12 +510,12 @@ public class DollGenPage extends DollGenPageGen<PageLayout> {
 
   @Override
   protected void _pageUri(Wrap<String> c) {
-    c.o("/product/doll");
+    c.o("/search/doll");
   }
 
   @Override
   protected void _apiUri(Wrap<String> c) {
-    c.o("/api/product/doll");
+    c.o("/api/doll");
   }
 
   @Override
@@ -530,15 +530,15 @@ public class DollGenPage extends DollGenPageGen<PageLayout> {
 
   @Override
   protected void _pageImageUri(Wrap<String> c) {
-      c.o("/png/product/doll-999.png");
+      c.o("/png/search/doll-999.png");
   }
 
   @Override
   protected void _classIcon(Wrap<String> c) {
-      c.o("<i class=\"fa-solid fa-reel\"></i>");
+      c.o("<i class=\"{{ FONTAWESOME_STYLE }} fa-reel\"></i>");
   }
 
   protected void _pageUriDoll(Wrap<String> c) {
-      c.o("/product/doll");
+      c.o("/search/doll");
   }
 }

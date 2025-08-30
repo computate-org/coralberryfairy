@@ -511,12 +511,12 @@ public class SitePageGenPage extends SitePageGenPageGen<PageLayout> {
 
   @Override
   protected void _pageUri(Wrap<String> c) {
-    c.o("/en-us/search/article");
+    c.o("/search/article");
   }
 
   @Override
   protected void _apiUri(Wrap<String> c) {
-    c.o("/en-us/api/article");
+    c.o("/api/article");
   }
 
   @Override
@@ -531,15 +531,15 @@ public class SitePageGenPage extends SitePageGenPageGen<PageLayout> {
 
   @Override
   protected void _pageImageUri(Wrap<String> c) {
-      c.o("/png/en-us/search/article-999.png");
+      c.o("/png/search/article-999.png");
   }
 
   @Override
   protected void _classIcon(Wrap<String> c) {
-      c.o("<i class=\"fa-duotone fa-regular fa-newspaper\"></i>");
+      c.o("<i class=\"{{ FONTAWESOME_STYLE }} fa-newspaper\"></i>");
   }
 
   protected void _pageUriSitePage(Wrap<String> c) {
-      c.o("/en-us/search/article");
+      c.o("/search/article");
   }
 }

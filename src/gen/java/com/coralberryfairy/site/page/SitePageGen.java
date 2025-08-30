@@ -100,8 +100,8 @@ import io.vertx.core.json.JsonObject;
  * <h2>ApiTag.enUS: true</h2>
  * <p>This class contains a comment <b>"ApiTag: articles"</b>, which groups all of the OpenAPIs for SitePage objects under the tag "articles". 
  * </p>
- * <h2>ApiUri.enUS: /en-us/api/article</h2>
- * <p>This class contains a comment <b>"ApiUri: /en-us/api/article"</b>, which defines the base API URI for SitePage objects as "/en-us/api/article" in the OpenAPI spec. 
+ * <h2>ApiUri.enUS: /api/article</h2>
+ * <p>This class contains a comment <b>"ApiUri: /api/article"</b>, which defines the base API URI for SitePage objects as "/api/article" in the OpenAPI spec. 
  * </p>
  * <h2>Color: null</h2>
  * <h2>Indexed: true</h2>
@@ -189,39 +189,39 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 	public static final String Title_enUS = "articles";
 	public static final String ThePluralName_enUS = "the articles";
 	public static final String NoNameFound_enUS = "no article found";
-	public static final String ApiUri_enUS = "/en-us/api/article";
-	public static final String ApiUriSearchPage_enUS = "/en-us/search/article";
-	public static final String ApiUriEditPage_enUS = "/en-us/edit/article/{pageId}";
+	public static final String ApiUri_enUS = "/api/article";
+	public static final String ApiUriSearchPage_enUS = "/search/article";
+	public static final String ApiUriEditPage_enUS = "/edit/article/{pageId}";
 	public static final String OfName_enUS = "of article";
 	public static final String ANameAdjective_enUS = "an article";
 	public static final String NameAdjectiveSingular_enUS = "article";
 	public static final String NameAdjectivePlural_enUS = "articles";
-	public static final String Search_enUS_OpenApiUri = "/en-us/api/article";
-	public static final String Search_enUS_StringFormatUri = "/en-us/api/article";
-	public static final String Search_enUS_StringFormatUrl = "%s/en-us/api/article";
-	public static final String GET_enUS_OpenApiUri = "/en-us/api/article/{pageId}";
-	public static final String GET_enUS_StringFormatUri = "/en-us/api/article/%s";
-	public static final String GET_enUS_StringFormatUrl = "%s/en-us/api/article/%s";
-	public static final String PATCH_enUS_OpenApiUri = "/en-us/api/article";
-	public static final String PATCH_enUS_StringFormatUri = "/en-us/api/article";
-	public static final String PATCH_enUS_StringFormatUrl = "%s/en-us/api/article";
-	public static final String POST_enUS_OpenApiUri = "/en-us/api/article";
-	public static final String POST_enUS_StringFormatUri = "/en-us/api/article";
-	public static final String POST_enUS_StringFormatUrl = "%s/en-us/api/article";
-	public static final String PUTImport_enUS_OpenApiUri = "/en-us/api/article-import";
-	public static final String PUTImport_enUS_StringFormatUri = "/en-us/api/article-import";
-	public static final String PUTImport_enUS_StringFormatUrl = "%s/en-us/api/article-import";
-	public static final String SearchPage_enUS_OpenApiUri = "/en-us/search/article";
-	public static final String SearchPage_enUS_StringFormatUri = "/en-us/search/article";
-	public static final String SearchPage_enUS_StringFormatUrl = "%s/en-us/search/article";
-	public static final String EditPage_enUS_OpenApiUri = "/en-us/edit/article/{pageId}";
-	public static final String EditPage_enUS_StringFormatUri = "/en-us/edit/article/%s";
-	public static final String EditPage_enUS_StringFormatUrl = "%s/en-us/edit/article/%s";
-	public static final String DisplayPage_enUS_OpenApiUri = "/en-us/view/article/{pageId}";
-	public static final String DisplayPage_enUS_StringFormatUri = "/en-us/view/article/%s";
-	public static final String DisplayPage_enUS_StringFormatUrl = "%s/en-us/view/article/%s";
+	public static final String Search_enUS_OpenApiUri = "/api/article";
+	public static final String Search_enUS_StringFormatUri = "/api/article";
+	public static final String Search_enUS_StringFormatUrl = "%s/api/article";
+	public static final String GET_enUS_OpenApiUri = "/api/article/{pageId}";
+	public static final String GET_enUS_StringFormatUri = "/api/article/%s";
+	public static final String GET_enUS_StringFormatUrl = "%s/api/article/%s";
+	public static final String PATCH_enUS_OpenApiUri = "/api/article";
+	public static final String PATCH_enUS_StringFormatUri = "/api/article";
+	public static final String PATCH_enUS_StringFormatUrl = "%s/api/article";
+	public static final String POST_enUS_OpenApiUri = "/api/article";
+	public static final String POST_enUS_StringFormatUri = "/api/article";
+	public static final String POST_enUS_StringFormatUrl = "%s/api/article";
+	public static final String PUTImport_enUS_OpenApiUri = "/api/article-import";
+	public static final String PUTImport_enUS_StringFormatUri = "/api/article-import";
+	public static final String PUTImport_enUS_StringFormatUrl = "%s/api/article-import";
+	public static final String SearchPage_enUS_OpenApiUri = "/search/article";
+	public static final String SearchPage_enUS_StringFormatUri = "/search/article";
+	public static final String SearchPage_enUS_StringFormatUrl = "%s/search/article";
+	public static final String EditPage_enUS_OpenApiUri = "/edit/article/{pageId}";
+	public static final String EditPage_enUS_StringFormatUri = "/edit/article/%s";
+	public static final String EditPage_enUS_StringFormatUrl = "%s/edit/article/%s";
+	public static final String DisplayPage_enUS_OpenApiUri = "/view/article/{pageId}";
+	public static final String DisplayPage_enUS_StringFormatUri = "/view/article/%s";
+	public static final String DisplayPage_enUS_StringFormatUrl = "%s/view/article/%s";
 
-	public static final String Icon = "<i class=\"fa-duotone fa-regular fa-newspaper\"></i>";
+	public static final String Icon = "<i class=\"{{ FONTAWESOME_STYLE }} fa-newspaper\"></i>";
 	public static final Integer Rows = 100;
 
 	/////////////
@@ -3390,12 +3390,12 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 
 	@Override
 	public String classStringFormatUrlEditPageForClass() {
-		return "%s/en-us/edit/article/%s";
+		return "%s/edit/article/%s";
 	}
 
 	@Override
 	public String classStringFormatUrlDisplayPageForClass() {
-		return "%s/en-us/view/article/%s";
+		return "%s/view/article/%s";
 	}
 
 	@Override

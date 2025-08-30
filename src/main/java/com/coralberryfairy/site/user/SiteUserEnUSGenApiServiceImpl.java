@@ -1395,7 +1395,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	}
 
 	public String templateSearchPageSiteUser(ServiceRequest serviceRequest) {
-		return "en-us/search/user/SiteUserSearchPage.htm";
+		return "search/user/SiteUserSearchPage.htm";
 	}
 	public Future<ServiceResponse> response200SearchPageSiteUser(SearchList<SiteUser> listSiteUser) {
 		Promise<ServiceResponse> promise = Promise.promise();
@@ -1557,7 +1557,7 @@ public class SiteUserEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	}
 
 	public String templateEditPageSiteUser(ServiceRequest serviceRequest) {
-		return "en-us/edit/user/SiteUserEditPage.htm";
+		return "edit/user/SiteUserEditPage.htm";
 	}
 	public Future<ServiceResponse> response200EditPageSiteUser(SearchList<SiteUser> listSiteUser) {
 		Promise<ServiceResponse> promise = Promise.promise();

@@ -18,9 +18,9 @@ import com.coralberryfairy.site.request.SiteRequest;
  * Filter: userId
  * AuthUser: true
  * 
- * SearchPageUri: /en-us/search/user
- * EditPageUri: /en-us/edit/user/{userId}
- * ApiUri: /en-us/api/user
+ * SearchPageUri: /search/user
+ * EditPageUri: /edit/user/{userId}
+ * ApiUri: /api/user
  * ApiMethod:
  *   Search:
  *   PATCH:
@@ -115,8 +115,9 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateSiteUse
 	 * Persist: true
 	 * HtmRow: 4
 	 * HtmCell: 2
-	 * DisplayName: awesome effect (requires refresh)
-	 * Description: an awesome effect for the entire site
+	 * Refresh: true
+	 * DisplayName: awesome effect
+	 * Description: An awesome effect for the entire site.
 	 */
 	protected void _awesomeEffect(Wrap<Boolean> w) {
 		w.o(false);
@@ -125,7 +126,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateSiteUse
 	/**
 	 * DocValues: true
 	 * Persist: true
-	 * Description: The display name for this user
+	 * Description: The display name for this user.
 	 * VarName: true
 	 */
 	protected void _displayName(Wrap<String> c) {
@@ -139,7 +140,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateSiteUse
 	 * HtmRow: 4
 	 * HtmCell: 1
 	 * DisplayName: font size
-	 * Description: The default font size for the site (small, medium, large). 
+	 * Description: The default font size for the site.
 	 * Refresh: true
 	 * Radio:
 	 *   s: small

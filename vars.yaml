@@ -78,7 +78,7 @@ USER_SEARCH_URI: "/user-search"
 # The URL to sign up for the mailing list. 
 MAILING_LIST_URL: https://computate.topicbox.com/groups/computate
 # The email address of the mailing list. 
-MAILING_LIST_EMAIL: coralberryfairy@computate.topicbox.com
+MAILING_LIST_EMAIL: coralberryfairy@group.computate.org
 
 ################
 # API defaults #
@@ -203,8 +203,6 @@ FONTAWESOME_KIT: "{{ (query('kubernetes.core.k8s', kind='Secret', resource_name=
 FONTAWESOME_STYLE: "{{ (query('kubernetes.core.k8s', kind='Secret', resource_name=WEB_COMPONENTS_SECRET, namespace=SITE_NAMESPACE) | first | default({})).data.FONTAWESOME_STYLE | default('', true) | b64decode | default('fa-duotone fa-regular ', true) }}"
 # Site default theme, light or dark. 
 SITE_THEME: "{{ (query('kubernetes.core.k8s', kind='Secret', resource_name=WEB_COMPONENTS_SECRET, namespace=SITE_NAMESPACE) | first | default({})).data.SITE_THEME | default('', true) | b64decode | default('light', true) }}"
-# The site logo relative URI
-SITE_LOGO_URI: "/logo/coralberry-fairy-{{ SITE_THEME }}-v1.svg"
 # The name of the repository containing the web static content. 
 SITE_STATIC_NAME: "{{ SITE_NAME }}-static"
 # The static files git repository for the project. 
