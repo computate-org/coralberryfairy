@@ -194,7 +194,7 @@ data:
     # Static content defaults #
     ###########################
 
-    WEB_COMPONENTS_SECRET: "font-awesome"
+    WEB_COMPONENTS_SECRET: "local-font-awesome"
     # Switch between Shoelace "sl-" and Web Awesome "wa-" element prefixes. 
     WEB_COMPONENTS_PREFIX: wa-
     # An optional link element to either a Shoelace web components JavaScript or a Web Awesome Backer web components JavaScript. 

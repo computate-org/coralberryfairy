@@ -9,37 +9,22 @@ import com.coralberryfairy.site.model.BaseModel;
 import com.coralberryfairy.site.request.SiteRequest;
 
 /**
- * Model: true
- * Api: true
- * Page: true
- * SuperPage: BaseModelPage
- * Indexed: true
- * SqlOrder: 1
- * Order: 3
+ * Order: 1
+ * Description: A user record for each site user
+ * AName: a site user
+ * Icon: <i class="fa-regular fa-user-gear"></i>
  * 
- * ApiTag: User
- * ApiUri: /api/user
+ * Keyword: classSimpleNameSiteUser
+ * Filter: userId
+ * AuthUser: true
  * 
+ * SearchPageUri: /en-us/search/user
+ * EditPageUri: /en-us/edit/user/{userId}
+ * ApiUri: /en-us/api/user
  * ApiMethod:
  *   Search:
  *   PATCH:
  *   POST:
- *   PUTImport:
- *   SearchPage:
- *     Page: SiteUserPage
- *     PageSuper: BaseModelPage
- *     ApiUri: /user
- * 
- * Keyword: classSimpleNameSiteUser
- * Role: SiteAdmin
- * Filter: userId
- * 
- * AName: a site user
- * Icon: <i class="fa-duotone fa-solid fa-user-gear"></i>
- * 
- * RoleUser: true
- * Role: SiteAdmin
- * Description: A user record for each site user
  */
 public class SiteUser extends SiteUserGen<BaseModel> implements ComputateSiteUser {
 
@@ -57,6 +42,8 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateSiteUse
 	 * DocValues: true
 	 * Persist: true
 	 * Description: The unique user ID from the SSO server
+	 * VarId: true
+	 * Unique: true
 	 */
 	protected void _userId(Wrap<String> c) {
 	}
@@ -114,7 +101,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateSiteUse
 	 * Persist: true
 	 * HtmRow: 4
 	 * HtmCell: 1
-	 * HtmRowTitle: user options
+	 * HtmRowTitleOpen: user options
 	 * DisplayName: see archived
 	 * Description: A user field allowing a user to see archived records
 	 */
@@ -128,19 +115,82 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateSiteUse
 	 * Persist: true
 	 * HtmRow: 4
 	 * HtmCell: 2
-	 * DisplayName: see deleted
-	 * Description: A user field allowing a user to see deleted records
+	 * DisplayName: awesome effect (requires refresh)
+	 * Description: an awesome effect for the entire site
 	 */
-	protected void _seeDeleted(Wrap<Boolean> c) {
-		c.o(false);
+	protected void _awesomeEffect(Wrap<Boolean> w) {
+		w.o(false);
 	}
 
 	/**
-	 * Description: An implementation for the interface for the object title
+	 * DocValues: true
+	 * Persist: true
+	 * Description: The display name for this user
+	 * VarName: true
 	 */
-	@Override
-	protected void _objectTitle(Wrap<String> c) {
+	protected void _displayName(Wrap<String> c) {
 		c.o(String.format("%s (%s) <%s>", userFullName, userName, userEmail));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * HtmRow: 4
+	 * HtmCell: 1
+	 * DisplayName: font size
+	 * Description: The default font size for the site (small, medium, large). 
+	 * Refresh: true
+	 * Radio:
+	 *   s: small
+	 *   m: medium
+	 *   l: large
+	 */
+	protected void _siteFontSize(Wrap<String> w) {
+		w.o("m");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * HtmRow: 4
+	 * HtmCell: 2
+	 * DisplayName: site theme
+	 * Description: The site theme, either light or dark. 
+	 * Refresh: true
+	 * Radio:
+	 *   light: Light
+	 *   dark: Dark
+	 */
+	protected void _siteTheme(Wrap<String> w) {
+		w.o("dark");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * HtmRow: 4
+	 * HtmCell: 3
+	 * DisplayName: web components theme
+	 * Description: The web components theme for the site. 
+	 * Refresh: true
+	 * Radio:
+	 *   default: Default — "Your trusty companion, like a perfectly broken-in pair of jeans."
+	 *   classic: Classic — "Timeless elegance that never goes out of style."
+	 *   awesome: Awesome — "Punchy and vibrant, the rockstar of themes."
+	 *   active: Active — "Energetic and tactile, always in motion."
+	 *   brutalist: Brutalist — "Sharp, square, and unapologetically bold."
+	 *   glossy: Glossy — "Bustling with plenty of luster and shine."
+	 *   matter: Matter — "Digital design inspired by the real world."
+	 *   mellow: Mellow — "Soft and soothing, like a lazy Sunday morning."
+	 *   playful: Playful — "Cheerful and engaging, like a playground on screen."
+	 *   premium: Premium — "The ultimate in sophistication and style."
+	 *   tailspin: Tailspin — "Like a bird in flight, guiding you from there to here."
+	 */
+	protected void _webComponentsTheme(Wrap<String> w) {
+		w.o("tailspin");
 	}
 
 	/**

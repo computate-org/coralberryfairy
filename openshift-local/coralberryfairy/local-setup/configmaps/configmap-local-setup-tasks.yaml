@@ -267,4 +267,4 @@ data:
         state: present
         definition: "{{ lookup('template', 'font-awesome-secret.yaml') }}"
         validate_certs: false
-      when: query('kubernetes.core.k8s', kind='Secret', resource_name=WEB_COMPONENTS_SECRET, namespace=SITE_NAMESPACE) is not defined
+      when: query('kubernetes.core.k8s', kind='Secret', resource_name=WEB_COMPONENTS_SECRET, namespace=SITE_NAMESPACE) | length == 0

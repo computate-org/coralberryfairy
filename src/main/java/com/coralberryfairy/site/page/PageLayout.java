@@ -25,14 +25,17 @@ import com.coralberryfairy.site.request.SiteRequest;
 import org.computate.vertx.config.ComputateConfigKeys;
 
 import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.api.service.ServiceRequest;
+import io.vertx.ext.web.client.WebClient;
 
 
 /**
  * Keyword: classSimpleNamePageLayout
  * Description: Defines variables to be used when rendering Handlebars template pages
+ * PageTemplate: en-us/PageLayout.htm
  * Promise: true
  **/
 public class PageLayout extends PageLayoutGen<Object> {
@@ -51,6 +54,23 @@ public class PageLayout extends PageLayoutGen<Object> {
 
 	public static DateTimeFormatter FORMATTimeDisplay = DateTimeFormatter.ofPattern("h:mm a", Locale.US);
 
+	/**
+	 * {@inheritDoc}
+	 * Ignore: true
+	 * Description: The current request object
+	 * Initialized: true
+	**/
+	protected void _webClient(Wrap<WebClient> w) {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * Ignore: true
+	 * Description: The current request object
+	 * Initialized: true
+	**/
+	protected void _vertx(Wrap<Vertx> w) {
+	}
 	/**
 	 * Ignore: true
 	 * Description: The current request object
@@ -164,10 +184,52 @@ public class PageLayout extends PageLayoutGen<Object> {
 	}
 
 	/**
+	 * Description: The current user's id
+	 */
+	protected void _userId(Wrap<String> w) {
+		w.o(siteRequest_.getUserId());
+	}
+
+	/**
 	 * Description: The current user's email
 	 */
 	protected void _userEmail(Wrap<String> w) {
 		w.o(siteRequest_.getUserEmail());
+	}
+
+	/**
+	 * Description: The current user's groups
+	 */
+	protected void _userGroups(Wrap<List<String>> w) {
+		w.o(siteRequest_.getGroups().stream().filter(group -> group.startsWith("/")).collect(Collectors.toList()));
+	}
+
+	/**
+	 * Description: The user's default font size. 
+	 */
+	protected void _userFontSize(Wrap<String> w) {
+		w.o(Optional.ofNullable(siteRequest_.getSiteUser_()).map(user -> user.getSiteFontSize()).orElse("m"));
+	}
+
+	/**
+	 * Description: The user's web components theme
+	 */
+	protected void _userWebComponentsTheme(Wrap<String> w) {
+		w.o(Optional.ofNullable(siteRequest_.getSiteUser_()).map(user -> user.getWebComponentsTheme()).orElse("glossy"));
+	}
+
+	/**
+	 * Description: The user's siteTheme
+	 */
+	protected void _userSiteTheme(Wrap<String> w) {
+		w.o(Optional.ofNullable(siteRequest_.getSiteUser_()).map(user -> user.getSiteTheme()).orElse("dark"));
+	}
+
+	/**
+	 * Description: The user's awesome effect setting
+	 */
+	protected void _userAwesomeEffect(Wrap<Boolean> w) {
+		w.o(Optional.ofNullable(siteRequest_.getSiteUser_()).map(user -> user.getAwesomeEffect()).orElse(false));
 	}
 
 	/**
@@ -177,7 +239,12 @@ public class PageLayout extends PageLayoutGen<Object> {
 		try {
 			JsonObject config = siteRequest_.getConfig();
 			JsonObject authClient = Optional.ofNullable(config.getJsonObject(ConfigKeys.AUTH_CLIENTS)).map(authClients -> authClients.getJsonObject(config.getString(ConfigKeys.AUTH_CLIENT))).orElse(config);
-			w.o(authClient.getString(ConfigKeys.AUTH_URL) + "/realms/" + authClient.getString(ConfigKeys.AUTH_REALM) + "/protocol/openid-connect/logout?redirect_url=" + URLEncoder.encode(config.getString(ConfigKeys.SITE_BASE_URL) + authClient.getString(ConfigKeys.AUTH_LOGOUT_URI), "UTF-8"));
+			w.o(String.format("%s/realms/%s/protocol/openid-connect/logout?post_logout_redirect_uri=%s&client_id=%s"
+					, authClient.getString(ConfigKeys.AUTH_URL)
+					, authClient.getString(ConfigKeys.AUTH_REALM)
+					, URLEncoder.encode(config.getString(ConfigKeys.SITE_BASE_URL) + authClient.getString(ConfigKeys.AUTH_LOGOUT_URI), "UTF-8")
+					, authClient.getString(ConfigKeys.AUTH_CLIENT)
+			));
 		} catch (UnsupportedEncodingException ex) {
 			ExceptionUtils.rethrow(ex);
 		}
@@ -238,6 +305,9 @@ public class PageLayout extends PageLayoutGen<Object> {
 	protected void _defaultFieldListVars(List<String> l) {
 	}
 
+	protected void _defaultSortVars(List<String> l) {
+	}
+
 	protected void _defaultStatsVars(List<String> l) {
 	}
 
@@ -245,6 +315,9 @@ public class PageLayout extends PageLayoutGen<Object> {
 	}
 
 	protected void _varsQ(JsonObject vars) {
+	}
+
+	protected void _varsFqCount(Wrap<Integer> w) {
 	}
 
 	protected void _varsFq(JsonObject vars) {
