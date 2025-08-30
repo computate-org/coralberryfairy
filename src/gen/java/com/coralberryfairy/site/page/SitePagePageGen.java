@@ -117,18 +117,18 @@ public abstract class SitePagePageGen<DEV> extends SitePageGenPage {
 	// initDeep //
 	//////////////
 
-	public Future<Void> promiseDeepSitePagePage(SiteRequest siteRequest_) {
+	public Future<SitePagePageGen<DEV>> promiseDeepSitePagePage(SiteRequest siteRequest_) {
 		setSiteRequest_(siteRequest_);
 		return promiseDeepSitePagePage();
 	}
 
-	public Future<Void> promiseDeepSitePagePage() {
-		Promise<Void> promise = Promise.promise();
+	public Future<SitePagePageGen<DEV>> promiseDeepSitePagePage() {
+		Promise<SitePagePageGen<DEV>> promise = Promise.promise();
 		Promise<Void> promise2 = Promise.promise();
 		promiseSitePagePage(promise2);
 		promise2.future().onSuccess(a -> {
 			super.promiseDeepSitePageGenPage(siteRequest_).onSuccess(b -> {
-				promise.complete();
+				promise.complete(this);
 			}).onFailure(ex -> {
 				promise.fail(ex);
 			});
@@ -155,7 +155,7 @@ public abstract class SitePagePageGen<DEV> extends SitePageGenPage {
 		return promise.future();
 	}
 
-	@Override public Future<Void> promiseDeepForClass(SiteRequest siteRequest_) {
+	@Override public Future<? extends SitePagePageGen<DEV>> promiseDeepForClass(SiteRequest siteRequest_) {
 		return promiseDeepSitePagePage(siteRequest_);
 	}
 
@@ -229,13 +229,13 @@ public abstract class SitePagePageGen<DEV> extends SitePageGenPage {
 	// staticSet //
 	///////////////
 
-	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String o) {
-		return staticSetSitePagePage(entityVar,  siteRequest_, o);
+	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String v, SitePagePage o) {
+		return staticSetSitePagePage(entityVar,  siteRequest_, v, o);
 	}
-	public static Object staticSetSitePagePage(String entityVar, SiteRequest siteRequest_, String o) {
+	public static Object staticSetSitePagePage(String entityVar, SiteRequest siteRequest_, String v, SitePagePage o) {
 		switch(entityVar) {
 			default:
-				return SitePageGenPage.staticSetSitePageGenPage(entityVar,  siteRequest_, o);
+				return SitePageGenPage.staticSetSitePageGenPage(entityVar,  siteRequest_, v, o);
 		}
 	}
 
@@ -292,7 +292,54 @@ public abstract class SitePagePageGen<DEV> extends SitePageGenPage {
 	}
 
 	public static final String CLASS_SIMPLE_NAME = "SitePagePage";
+	public static final String CLASS_CANONICAL_NAME = "com.coralberryfairy.site.page.SitePagePage";
+	public static final String CLASS_AUTH_RESOURCE = "";
 
+
+	@Override
+	public String idForClass() {
+		return null;
+	}
+
+	@Override
+	public String titleForClass() {
+		return null;
+	}
+
+	@Override
+	public String nameForClass() {
+		return null;
+	}
+
+	@Override
+	public String classNameAdjectiveSingularForClass() {
+		return null;
+	}
+
+	@Override
+	public String descriptionForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlEditPageForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlDisplayPageForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlUserPageForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlDownloadForClass() {
+		return null;
+	}
 
 	public static String displayNameForClass(String var) {
 		return SitePagePage.displayNameSitePagePage(var);
@@ -301,6 +348,71 @@ public abstract class SitePagePageGen<DEV> extends SitePageGenPage {
 		switch(var) {
 		default:
 			return SitePageGenPage.displayNameSitePageGenPage(var);
+		}
+	}
+
+	public static String descriptionSitePagePage(String var) {
+		if(var == null)
+			return null;
+		switch(var) {
+			default:
+				return SitePageGenPage.descriptionSitePageGenPage(var);
+		}
+	}
+
+	public static String classSimpleNameSitePagePage(String var) {
+		switch(var) {
+			default:
+				return SitePageGenPage.classSimpleNameSitePageGenPage(var);
+		}
+	}
+
+	public static Integer htmColumnSitePagePage(String var) {
+		switch(var) {
+			default:
+				return SitePageGenPage.htmColumnSitePageGenPage(var);
+		}
+	}
+
+	public static Integer htmRowSitePagePage(String var) {
+		switch(var) {
+			default:
+				return SitePageGenPage.htmRowSitePageGenPage(var);
+		}
+	}
+
+	public static Integer htmCellSitePagePage(String var) {
+		switch(var) {
+			default:
+				return SitePageGenPage.htmCellSitePageGenPage(var);
+		}
+	}
+
+	public static Integer lengthMinSitePagePage(String var) {
+		switch(var) {
+			default:
+				return SitePageGenPage.lengthMinSitePageGenPage(var);
+		}
+	}
+
+	public static Integer lengthMaxSitePagePage(String var) {
+		switch(var) {
+			default:
+				return SitePageGenPage.lengthMaxSitePageGenPage(var);
+		}
+	}
+
+	public static Integer maxSitePagePage(String var) {
+		switch(var) {
+			default:
+				return SitePageGenPage.maxSitePageGenPage(var);
+		}
+	}
+
+	public static Integer minSitePagePage(String var) {
+		switch(var) {
+			default:
+				return SitePageGenPage.minSitePageGenPage(var);
 		}
 	}
 }

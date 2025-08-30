@@ -1,9 +1,12 @@
 package com.coralberryfairy.site.user;
 
-import com.coralberryfairy.site.page.PageLayout;
-import com.coralberryfairy.site.model.BaseModelPage;
-import com.coralberryfairy.site.request.SiteRequest;
 import com.coralberryfairy.site.user.SiteUser;
+import java.util.List;
+import java.lang.Long;
+import java.lang.String;
+import java.lang.Boolean;
+import com.coralberryfairy.site.page.PageLayout;
+import com.coralberryfairy.site.request.SiteRequest;
 import java.io.IOException;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
@@ -25,7 +28,6 @@ import java.net.URLDecoder;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
@@ -41,13 +43,14 @@ import java.util.HashMap;
 import org.computate.search.tool.TimeTool;
 import org.computate.search.tool.SearchTool;
 import java.time.ZoneId;
+import io.vertx.pgclient.data.Point;
 
 
 /**
  * Translate: false
  * Generated: true
  **/
-public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
+public class SiteUserGenPage extends SiteUserGenPageGen<PageLayout> {
 
   /**
    * {@inheritDoc}
@@ -59,17 +62,17 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
   @Override
   protected void _pageResponse(Wrap<String> w) {
     if(searchListSiteUser_ != null)
-      w.o(JsonObject.mapFrom(searchListSiteUser_.getResponse()).toString());
+      w.o(Optional.ofNullable(searchListSiteUser_.getResponse()).map(response -> JsonObject.mapFrom(response).toString()).orElse(null));
   }
 
   @Override
   protected void _stats(Wrap<SolrResponse.Stats> w) {
-    w.o(searchListSiteUser_.getResponse().getStats());
+    w.o(Optional.ofNullable(searchListSiteUser_.getResponse()).map(response -> response.getStats()).orElse(null));
   }
 
   @Override
   protected void _facetCounts(Wrap<SolrResponse.FacetCounts> w) {
-    w.o(searchListSiteUser_.getResponse().getFacetCounts());
+    w.o(Optional.ofNullable(searchListSiteUser_.getResponse()).map(response -> response.getFacetCounts()).orElse(null));
   }
 
   @Override
@@ -77,7 +80,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
     JsonArray pages = new JsonArray();
     Long start = searchListSiteUser_.getStart().longValue();
     Long rows = searchListSiteUser_.getRows().longValue();
-    Long foundNum = searchListSiteUser_.getResponse().getResponse().getNumFound().longValue();
+    Long foundNum = Optional.ofNullable(searchListSiteUser_.getResponse()).map(response -> response.getResponse().getNumFound().longValue()).orElse(Long.valueOf(searchListSiteUser_.getList().size()));
     Long startNum = start + 1L;
     Long endNum = start + rows;
     Long floorMod = (rows == 0L ? 0L : Math.floorMod(foundNum, rows));
@@ -130,9 +133,14 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
   }
 
   @Override
+  protected void _varsFqCount(Wrap<Integer> w) {
+  }
+
+  @Override
   protected void _varsFq(JsonObject vars) {
     Map<String, SolrResponse.FacetField> facetFields = Optional.ofNullable(facetCounts).map(c -> c.getFacetFields()).map(f -> f.getFacets()).orElse(new HashMap<String,SolrResponse.FacetField>());
-    SiteUser.varsFqForClass().forEach(var -> {
+    varsFqCount = 0;
+    for(String var : SiteUser.varsFqForClass()) {
       String varIndexed = SiteUser.varIndexedSiteUser(var);
       String varStored = SiteUser.varStoredSiteUser(var);
       JsonObject json = new JsonObject();
@@ -142,7 +150,11 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
       String type = StringUtils.substringAfterLast(varIndexed, "_");
       json.put("displayName", Optional.ofNullable(SiteUser.displayNameSiteUser(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
       json.put("classSimpleName", Optional.ofNullable(SiteUser.classSimpleNameSiteUser(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-      json.put("val", searchListSiteUser_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(SiteUser.varIndexedSiteUser(var) + ":")).findFirst().map(s -> SearchTool.unescapeQueryChars(StringUtils.substringAfter(s, ":"))).orElse(null));
+      Object v = searchListSiteUser_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(SiteUser.varIndexedSiteUser(var) + ":")).findFirst().map(s -> SearchTool.unescapeQueryChars(StringUtils.substringAfter(s, ":"))).orElse(null);
+      if(v != null) {
+        json.put("val", v);
+        varsFqCount++;
+      }
       Optional.ofNullable(stats).map(s -> s.get(varIndexed)).ifPresent(stat -> {
         json.put("stats", JsonObject.mapFrom(stat));
       });
@@ -198,8 +210,13 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
       if(defaultPivotVars.contains(var)) {
         json.put("pivot", true);
       }
+      if(defaultSortVars.contains(String.format("%s asc", var))) {
+        json.put("sort", "asc");
+      } else if(defaultSortVars.contains(String.format("%s desc", var))) {
+        json.put("sort", "desc");
+      }
       vars.put(var, json);
-    });
+    }
   }
 
   @Override
@@ -221,7 +238,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
     JsonObject params = serviceRequest.getParams();
 
     JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-    Long num = searchListSiteUser_.getResponse().getResponse().getNumFound().longValue();
+    Long num = Optional.ofNullable(searchListSiteUser_.getResponse()).map(response -> response.getResponse().getNumFound().longValue()).orElse(Long.valueOf(searchListSiteUser_.getList().size()));
     String q = "*:*";
     String q1 = "objectText";
     String q2 = "";
@@ -333,7 +350,7 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
   @Override
   protected void _defaultRangeGap(Wrap<String> w) {
-    w.o(Optional.ofNullable(rangeGap).orElse(Optional.ofNullable(defaultRangeStats).map(s -> s.getString("defaultRangeGap")).orElse("+1DAY")));
+    w.o(Optional.ofNullable(rangeGap).orElse(Optional.ofNullable(defaultRangeStats).map(s -> s.getString("defaultRangeGap")).orElse("+1HOUR")));
   }
 
   @Override
@@ -373,12 +390,6 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
   @Override
   protected void _DEFAULT_MAP_LOCATION(Wrap<JsonObject> w) {
-    String pointStr = Optional.ofNullable(siteRequest_.getRequestVars().get(VAR_DEFAULT_MAP_LOCATION)).orElse(siteRequest_.getConfig().getString(ConfigKeys.DEFAULT_MAP_LOCATION));
-    if(pointStr != null) {
-      String[] parts = pointStr.replace("[", "").replace("]", "").replace("\"", "").split(",");
-      JsonObject point = new JsonObject().put("lat", Double.parseDouble(parts[0])).put("lon", Double.parseDouble(parts[1]));
-      w.o(point);
-    }
   }
 
   @Override
@@ -386,6 +397,18 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
     String s = Optional.ofNullable(siteRequest_.getRequestVars().get(VAR_DEFAULT_MAP_ZOOM)).orElse(siteRequest_.getConfig().getString(ConfigKeys.DEFAULT_MAP_ZOOM));
     if(s != null)
       w.o(new BigDecimal(s));
+  }
+
+  @Override
+  protected void _defaultSortVars(List<String> l) {
+    if(!searchListSiteUser_.getDefaultSort()) {
+      Optional.ofNullable(searchListSiteUser_.getSorts()).orElse(Arrays.asList()).forEach(varSortStr -> {
+        String varSortParts[] = varSortStr.split(" ");
+        String varSort = SiteUser.searchVarSiteUser(varSortParts[0]);
+        String varSortDirection = varSortParts[1];
+        l.add(String.format("%s %s", varSort, varSortDirection));
+      });
+    }
   }
 
   @Override
@@ -446,23 +469,26 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
     Optional.ofNullable(searchListSiteUser_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
   }
 
-  protected void _siteUserCount(Wrap<Integer> w) {
+  protected void _resultCount(Wrap<Integer> w) {
     w.o(searchListSiteUser_ == null ? 0 : searchListSiteUser_.size());
   }
 
-  protected void _siteUser_(Wrap<SiteUser> w) {
-    if(siteUserCount == 1 && Optional.ofNullable(siteRequest_.getServiceRequest().getParams().getJsonObject("path")).map(o -> o.getString("id")).orElse(null) != null)
+  /**
+   * Initialized: false
+  **/
+  protected void _result(Wrap<SiteUser> w) {
+    if(resultCount >= 1 && Optional.ofNullable(siteRequest_.getServiceRequest().getParams().getJsonObject("path")).map(o -> o.getString("userId")).orElse(null) != null)
       w.o(searchListSiteUser_.get(0));
   }
 
   protected void _pk(Wrap<Long> w) {
-    if(siteUser_ != null)
-      w.o(siteUser_.getPk());
+    if(result != null)
+      w.o(result.getPk());
   }
 
-  protected void _id(Wrap<String> w) {
-    if(siteUser_ != null)
-      w.o(siteUser_.getId());
+  protected void _solrId(Wrap<String> w) {
+    if(result != null)
+      w.o(result.getSolrId());
   }
 
   @Override
@@ -477,11 +503,11 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
   @Override
   protected void _pageTitle(Wrap<String> c) {
-    if(siteUser_ != null && siteUser_.getObjectTitle() != null)
-      c.o(siteUser_.getObjectTitle());
-    else if(siteUser_ != null)
+    if(result != null && result.getObjectTitle() != null)
+      c.o(result.getObjectTitle());
+    else if(result != null)
       c.o("site users");
-    else if(searchListSiteUser_ == null || siteUserCount == 0)
+    else if(searchListSiteUser_ == null || resultCount == 0)
       c.o("no site user found");
     else
       c.o("site users");
@@ -489,12 +515,12 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
   @Override
   protected void _pageUri(Wrap<String> c) {
-    c.o("/user");
+    c.o("/en-us/search/user");
   }
 
   @Override
   protected void _apiUri(Wrap<String> c) {
-    c.o("/api/user");
+    c.o("/en-us/api/user");
   }
 
   @Override
@@ -509,15 +535,15 @@ public class SiteUserGenPage extends SiteUserGenPageGen<BaseModelPage> {
 
   @Override
   protected void _pageImageUri(Wrap<String> c) {
-      c.o("/png/user-999.png");
+      c.o("/png/en-us/search/user-999.png");
   }
 
   @Override
   protected void _classIcon(Wrap<String> c) {
-      c.o("<i class=\"fa-duotone fa-solid fa-user-gear\"></i>");
+      c.o("<i class=\"fa-regular fa-user-gear\"></i>");
   }
 
   protected void _pageUriSiteUser(Wrap<String> c) {
-      c.o("/user");
+      c.o("/en-us/search/user");
   }
 }

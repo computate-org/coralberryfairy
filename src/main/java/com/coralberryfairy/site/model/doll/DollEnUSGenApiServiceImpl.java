@@ -80,10 +80,12 @@ import java.net.URLEncoder;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.http.HttpHeaders;
+import io.vertx.core.http.HttpResponseExpectation;
 import java.nio.charset.Charset;
 import io.vertx.ext.auth.authorization.RoleBasedAuthorization;
 import io.vertx.ext.web.api.service.ServiceRequest;
 import io.vertx.ext.web.api.service.ServiceResponse;
+import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
 import java.util.HashMap;
 import io.vertx.ext.auth.User;
@@ -112,15 +114,12 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 
 	protected static final Logger LOG = LoggerFactory.getLogger(DollEnUSGenApiServiceImpl.class);
 
-	public DollEnUSGenApiServiceImpl(Vertx vertx, JsonObject config, WorkerExecutor workerExecutor, ComputateOAuth2AuthHandlerImpl oauth2AuthHandler, PgPool pgPool, KafkaProducer<String, String> kafkaProducer, MqttClient mqttClient, AmqpSender amqpSender, RabbitMQClient rabbitmqClient, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider, Jinjava jinjava) {
-		super(vertx, config, workerExecutor, oauth2AuthHandler, pgPool, kafkaProducer, mqttClient, amqpSender, rabbitmqClient, webClient, oauth2AuthenticationProvider, authorizationProvider, jinjava);
-	}
-
 	// Search //
 
 	@Override
 	public void searchDoll(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
 						searchDollList(siteRequest, false, true, false).onSuccess(listDoll -> {
 							response200SearchDoll(listDoll).onSuccess(response -> {
 								eventHandler.handle(Future.succeededFuture(response));
@@ -159,7 +158,6 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		});
 	}
 
-
 	public Future<ServiceResponse> response200SearchDoll(SearchList<Doll> listDoll) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
@@ -193,7 +191,15 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 			});
 			json.put("list", l);
 			response200Search(listDoll.getRequest(), listDoll.getResponse(), json);
-			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			if(json == null) {
+				String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+				String m = String.format("%s %s not found", "doll", pageId);
+				promise.complete(new ServiceResponse(404
+						, m
+						, Buffer.buffer(new JsonObject().put("message", m).encodePrettily()), null));
+			} else {
+				promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			}
 		} catch(Exception ex) {
 			LOG.error(String.format("response200SearchDoll failed. "), ex);
 			promise.fail(ex);
@@ -239,7 +245,8 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 
 	@Override
 	public void getDoll(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
 						searchDollList(siteRequest, false, true, false).onSuccess(listDoll -> {
 							response200GETDoll(listDoll).onSuccess(response -> {
 								eventHandler.handle(Future.succeededFuture(response));
@@ -278,13 +285,20 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		});
 	}
 
-
 	public Future<ServiceResponse> response200GETDoll(SearchList<Doll> listDoll) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			SiteRequest siteRequest = listDoll.getSiteRequest_(SiteRequest.class);
 			JsonObject json = JsonObject.mapFrom(listDoll.getList().stream().findFirst().orElse(null));
-			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			if(json == null) {
+				String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+				String m = String.format("%s %s not found", "doll", pageId);
+				promise.complete(new ServiceResponse(404
+						, m
+						, Buffer.buffer(new JsonObject().put("message", m).encodePrettily()), null));
+			} else {
+				promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			}
 		} catch(Exception ex) {
 			LOG.error(String.format("response200GETDoll failed. "), ex);
 			promise.fail(ex);
@@ -297,36 +311,37 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 	@Override
 	public void patchDoll(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("patchDoll started. "));
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+			String DOLL = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("DOLL");
+			MultiMap form = MultiMap.caseInsensitiveMultiMap();
+			form.add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket");
+			form.add("audience", config.getString(ComputateConfigKeys.AUTH_CLIENT));
+			form.add("response_mode", "permissions");
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_ADMIN)));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_SUPER_ADMIN)));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "GET"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "POST"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "DELETE"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PATCH"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PUT"));
+			if(pageId != null)
+				form.add("permission", String.format("%s#%s", pageId, "PATCH"));
 			webClient.post(
 					config.getInteger(ComputateConfigKeys.AUTH_PORT)
 					, config.getString(ComputateConfigKeys.AUTH_HOST_NAME)
 					, config.getString(ComputateConfigKeys.AUTH_TOKEN_URI)
 					)
 					.ssl(config.getBoolean(ComputateConfigKeys.AUTH_SSL))
-					.putHeader("Authorization", String.format("Bearer %s", siteRequest.getUser().principal().getString("access_token")))
-					.expect(ResponsePredicate.status(200))
-					.sendForm(MultiMap.caseInsensitiveMultiMap()
-							.add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket")
-							.add("audience", config.getString(ComputateConfigKeys.AUTH_CLIENT))
-							.add("response_mode", "permissions")
-							.add("permission", String.format("%s#%s", Doll.CLASS_SIMPLE_NAME, "PATCH"))
-			).onFailure(ex -> {
-				String msg = String.format("403 FORBIDDEN user %s to %s %s", siteRequest.getUser().attributes().getJsonObject("accessToken").getString("preferred_username"), serviceRequest.getExtra().getString("method"), serviceRequest.getExtra().getString("uri"));
-				eventHandler.handle(Future.succeededFuture(
-					new ServiceResponse(403, "FORBIDDEN",
-						Buffer.buffer().appendString(
-							new JsonObject()
-								.put("errorCode", "403")
-								.put("errorMessage", msg)
-								.encodePrettily()
-							), MultiMap.caseInsensitiveMultiMap()
-					)
-				));
-			}).onSuccess(authorizationDecision -> {
+					.putHeader("Authorization", String.format("Bearer %s", Optional.ofNullable(siteRequest.getUser()).map(u -> u.principal().getString("access_token")).orElse("")))
+					.sendForm(form)
+					.expecting(HttpResponseExpectation.SC_OK)
+			.onComplete(authorizationDecisionResponse -> {
 				try {
-					JsonArray scopes = authorizationDecision.bodyAsJsonArray().stream().findFirst().map(decision -> ((JsonObject)decision).getJsonArray("scopes")).orElse(new JsonArray());
-					if(!scopes.contains("PATCH")) {
+					HttpResponse<Buffer> authorizationDecision = authorizationDecisionResponse.result();
+					JsonArray scopes = authorizationDecisionResponse.failed() ? new JsonArray() : authorizationDecision.bodyAsJsonArray().stream().findFirst().map(decision -> ((JsonObject)decision).getJsonArray("scopes")).orElse(new JsonArray());
+					if(authorizationDecisionResponse.failed() && !scopes.contains("PATCH")) {
 						String msg = String.format("403 FORBIDDEN user %s to %s %s", siteRequest.getUser().attributes().getJsonObject("accessToken").getString("preferred_username"), serviceRequest.getExtra().getString("method"), serviceRequest.getExtra().getString("uri"));
 						eventHandler.handle(Future.succeededFuture(
 							new ServiceResponse(403, "FORBIDDEN",
@@ -340,6 +355,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 						));
 					} else {
 						siteRequest.setScopes(scopes.stream().map(o -> o.toString()).collect(Collectors.toList()));
+						List<String> scopes2 = siteRequest.getScopes();
 						searchDollList(siteRequest, true, false, true).onSuccess(listDoll -> {
 							try {
 								ApiRequest apiRequest = new ApiRequest();
@@ -350,6 +366,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 								siteRequest.setApiRequest_(apiRequest);
 								if(apiRequest.getNumFound() == 1L)
 									apiRequest.setOriginal(listDoll.first());
+								apiRequest.setId(Optional.ofNullable(listDoll.first()).map(o2 -> o2.getPageId().toString()).orElse(null));
 								eventBus.publish("websocketDoll", JsonObject.mapFrom(apiRequest).toString());
 
 								listPATCHDoll(apiRequest, listDoll).onSuccess(e -> {
@@ -404,17 +421,20 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		});
 	}
 
-
 	public Future<Void> listPATCHDoll(ApiRequest apiRequest, SearchList<Doll> listDoll) {
 		Promise<Void> promise = Promise.promise();
 		List<Future> futures = new ArrayList<>();
 		SiteRequest siteRequest = listDoll.getSiteRequest_(SiteRequest.class);
 		listDoll.getList().forEach(o -> {
 			SiteRequest siteRequest2 = generateSiteRequest(siteRequest.getUser(), siteRequest.getUserPrincipal(), siteRequest.getServiceRequest(), siteRequest.getJsonObject(), SiteRequest.class);
+			siteRequest2.setScopes(siteRequest.getScopes());
 			o.setSiteRequest_(siteRequest2);
 			siteRequest2.setApiRequest_(siteRequest.getApiRequest_());
+			JsonObject jsonObject = JsonObject.mapFrom(o);
+			Doll o2 = jsonObject.mapTo(Doll.class);
+			o2.setSiteRequest_(siteRequest2);
 			futures.add(Future.future(promise1 -> {
-				patchDollFuture(o, false).onSuccess(a -> {
+				patchDollFuture(o2, false).onSuccess(a -> {
 					promise1.complete();
 				}).onFailure(ex -> {
 					LOG.error(String.format("listPATCHDoll failed. "), ex);
@@ -447,10 +467,16 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 
 	@Override
 	public void patchDollFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 				serviceRequest.getParams().getJsonObject("query").put("rows", 1);
+				Optional.ofNullable(serviceRequest.getParams().getJsonArray("scopes")).ifPresent(scopes -> {
+					scopes.stream().map(v -> v.toString()).forEach(scope -> {
+						siteRequest.addScopes(scope);
+					});
+				});
 				searchDollList(siteRequest, false, true, true).onSuccess(listDoll -> {
 					try {
 						Doll o = listDoll.first();
@@ -466,7 +492,11 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 							}
 							if(apiRequest.getNumFound() == 1L)
 								apiRequest.setOriginal(o);
-							patchDollFuture(o, false).onSuccess(o2 -> {
+							apiRequest.setId(Optional.ofNullable(listDoll.first()).map(o2 -> o2.getPageId().toString()).orElse(null));
+							JsonObject jsonObject = JsonObject.mapFrom(o);
+							Doll o2 = jsonObject.mapTo(Doll.class);
+							o2.setSiteRequest_(siteRequest);
+							patchDollFuture(o2, false).onSuccess(o3 -> {
 								eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
 							}).onFailure(ex -> {
 								eventHandler.handle(Future.failedFuture(ex));
@@ -492,7 +522,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		});
 	}
 
-	public Future<Doll> patchDollFuture(Doll o, Boolean inheritPk) {
+	public Future<Doll> patchDollFuture(Doll o, Boolean inheritPrimaryKey) {
 		SiteRequest siteRequest = o.getSiteRequest_();
 		Promise<Doll> promise = Promise.promise();
 
@@ -500,6 +530,14 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 			ApiRequest apiRequest = siteRequest.getApiRequest_();
 			persistDoll(o, true).onSuccess(c -> {
 				indexDoll(o).onSuccess(e -> {
+					if(apiRequest != null) {
+						apiRequest.setNumPATCH(apiRequest.getNumPATCH() + 1);
+						if(apiRequest.getNumFound() == 1L && Optional.ofNullable(siteRequest.getJsonObject()).map(json -> json.size() > 0).orElse(false)) {
+							o.apiRequestDoll();
+							if(apiRequest.getVars().size() > 0)
+								eventBus.publish("websocketDoll", JsonObject.mapFrom(apiRequest).toString());
+						}
+					}
 					promise.complete(o);
 				}).onFailure(ex -> {
 					promise.fail(ex);
@@ -518,7 +556,15 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			JsonObject json = new JsonObject();
-			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			if(json == null) {
+				String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+				String m = String.format("%s %s not found", "doll", pageId);
+				promise.complete(new ServiceResponse(404
+						, m
+						, Buffer.buffer(new JsonObject().put("message", m).encodePrettily()), null));
+			} else {
+				promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			}
 		} catch(Exception ex) {
 			LOG.error(String.format("response200PATCHDoll failed. "), ex);
 			promise.fail(ex);
@@ -531,36 +577,37 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 	@Override
 	public void postDoll(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("postDoll started. "));
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+			String DOLL = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("DOLL");
+			MultiMap form = MultiMap.caseInsensitiveMultiMap();
+			form.add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket");
+			form.add("audience", config.getString(ComputateConfigKeys.AUTH_CLIENT));
+			form.add("response_mode", "permissions");
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_ADMIN)));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_SUPER_ADMIN)));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "GET"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "POST"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "DELETE"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PATCH"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PUT"));
+			if(pageId != null)
+				form.add("permission", String.format("%s#%s", pageId, "POST"));
 			webClient.post(
 					config.getInteger(ComputateConfigKeys.AUTH_PORT)
 					, config.getString(ComputateConfigKeys.AUTH_HOST_NAME)
 					, config.getString(ComputateConfigKeys.AUTH_TOKEN_URI)
 					)
 					.ssl(config.getBoolean(ComputateConfigKeys.AUTH_SSL))
-					.putHeader("Authorization", String.format("Bearer %s", siteRequest.getUser().principal().getString("access_token")))
-					.expect(ResponsePredicate.status(200))
-					.sendForm(MultiMap.caseInsensitiveMultiMap()
-							.add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket")
-							.add("audience", config.getString(ComputateConfigKeys.AUTH_CLIENT))
-							.add("response_mode", "permissions")
-							.add("permission", String.format("%s#%s", Doll.CLASS_SIMPLE_NAME, "POST"))
-			).onFailure(ex -> {
-				String msg = String.format("403 FORBIDDEN user %s to %s %s", siteRequest.getUser().attributes().getJsonObject("accessToken").getString("preferred_username"), serviceRequest.getExtra().getString("method"), serviceRequest.getExtra().getString("uri"));
-				eventHandler.handle(Future.succeededFuture(
-					new ServiceResponse(403, "FORBIDDEN",
-						Buffer.buffer().appendString(
-							new JsonObject()
-								.put("errorCode", "403")
-								.put("errorMessage", msg)
-								.encodePrettily()
-							), MultiMap.caseInsensitiveMultiMap()
-					)
-				));
-			}).onSuccess(authorizationDecision -> {
+					.putHeader("Authorization", String.format("Bearer %s", Optional.ofNullable(siteRequest.getUser()).map(u -> u.principal().getString("access_token")).orElse("")))
+					.sendForm(form)
+					.expecting(HttpResponseExpectation.SC_OK)
+			.onComplete(authorizationDecisionResponse -> {
 				try {
-					JsonArray scopes = authorizationDecision.bodyAsJsonArray().stream().findFirst().map(decision -> ((JsonObject)decision).getJsonArray("scopes")).orElse(new JsonArray());
-					if(!scopes.contains("POST")) {
+					HttpResponse<Buffer> authorizationDecision = authorizationDecisionResponse.result();
+					JsonArray scopes = authorizationDecisionResponse.failed() ? new JsonArray() : authorizationDecision.bodyAsJsonArray().stream().findFirst().map(decision -> ((JsonObject)decision).getJsonArray("scopes")).orElse(new JsonArray());
+					if(authorizationDecisionResponse.failed() && !scopes.contains("POST")) {
 						String msg = String.format("403 FORBIDDEN user %s to %s %s", siteRequest.getUser().attributes().getJsonObject("accessToken").getString("preferred_username"), serviceRequest.getExtra().getString("method"), serviceRequest.getExtra().getString("uri"));
 						eventHandler.handle(Future.succeededFuture(
 							new ServiceResponse(403, "FORBIDDEN",
@@ -574,6 +621,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 						));
 					} else {
 						siteRequest.setScopes(scopes.stream().map(o -> o.toString()).collect(Collectors.toList()));
+						List<String> scopes2 = siteRequest.getScopes();
 						ApiRequest apiRequest = new ApiRequest();
 						apiRequest.setRows(1L);
 						apiRequest.setNumFound(1L);
@@ -584,7 +632,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 						JsonObject params = new JsonObject();
 						params.put("body", siteRequest.getJsonObject());
 						params.put("path", new JsonObject());
-						params.put("cookie", new JsonObject());
+						params.put("cookie", siteRequest.getServiceRequest().getParams().getJsonObject("cookie"));
 						params.put("header", siteRequest.getServiceRequest().getParams().getJsonObject("header"));
 						params.put("form", new JsonObject());
 						JsonObject query = new JsonObject();
@@ -640,24 +688,34 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		});
 	}
 
-
 	@Override
 	public void postDollFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
-			ApiRequest apiRequest = new ApiRequest();
-			apiRequest.setRows(1L);
-			apiRequest.setNumFound(1L);
-			apiRequest.setNumPATCH(0L);
-			apiRequest.initDeepApiRequest(siteRequest);
-			siteRequest.setApiRequest_(apiRequest);
-			if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
-				siteRequest.getRequestVars().put( "refresh", "false" );
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			try {
+				Optional.ofNullable(serviceRequest.getParams().getJsonArray("scopes")).ifPresent(scopes -> {
+					scopes.stream().map(v -> v.toString()).forEach(scope -> {
+						siteRequest.addScopes(scope);
+					});
+				});
+				ApiRequest apiRequest = new ApiRequest();
+				apiRequest.setRows(1L);
+				apiRequest.setNumFound(1L);
+				apiRequest.setNumPATCH(0L);
+				apiRequest.initDeepApiRequest(siteRequest);
+				siteRequest.setApiRequest_(apiRequest);
+				if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
+					siteRequest.getRequestVars().put( "refresh", "false" );
+				}
+				postDollFuture(siteRequest, false).onSuccess(o -> {
+					eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(JsonObject.mapFrom(o).encodePrettily()))));
+				}).onFailure(ex -> {
+					eventHandler.handle(Future.failedFuture(ex));
+				});
+			} catch(Throwable ex) {
+				LOG.error(String.format("postDoll failed. "), ex);
+				error(null, eventHandler, ex);
 			}
-			postDollFuture(siteRequest, false).onSuccess(o -> {
-				eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(JsonObject.mapFrom(o).encodePrettily()))));
-			}).onFailure(ex -> {
-				eventHandler.handle(Future.failedFuture(ex));
-			});
 		}).onFailure(ex -> {
 			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
@@ -684,7 +742,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		});
 	}
 
-	public Future<Doll> postDollFuture(SiteRequest siteRequest, Boolean inheritPk) {
+	public Future<Doll> postDollFuture(SiteRequest siteRequest, Boolean pageId) {
 		Promise<Doll> promise = Promise.promise();
 
 		try {
@@ -713,7 +771,15 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		try {
 			SiteRequest siteRequest = o.getSiteRequest_();
 			JsonObject json = JsonObject.mapFrom(o);
-			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			if(json == null) {
+				String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+				String m = String.format("%s %s not found", "doll", pageId);
+				promise.complete(new ServiceResponse(404
+						, m
+						, Buffer.buffer(new JsonObject().put("message", m).encodePrettily()), null));
+			} else {
+				promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			}
 		} catch(Exception ex) {
 			LOG.error(String.format("response200POSTDoll failed. "), ex);
 			promise.fail(ex);
@@ -721,46 +787,42 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		return promise.future();
 	}
 
-	// PUTImport //
+	// DELETE //
 
 	@Override
-	public void putimportDoll(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		LOG.debug(String.format("putimportDoll started. "));
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+	public void deleteDoll(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		LOG.debug(String.format("deleteDoll started. "));
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+			String DOLL = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("DOLL");
+			MultiMap form = MultiMap.caseInsensitiveMultiMap();
+			form.add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket");
+			form.add("audience", config.getString(ComputateConfigKeys.AUTH_CLIENT));
+			form.add("response_mode", "permissions");
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_ADMIN)));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_SUPER_ADMIN)));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "GET"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "POST"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "DELETE"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PATCH"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PUT"));
+			if(pageId != null)
+				form.add("permission", String.format("%s#%s", pageId, "DELETE"));
 			webClient.post(
 					config.getInteger(ComputateConfigKeys.AUTH_PORT)
 					, config.getString(ComputateConfigKeys.AUTH_HOST_NAME)
 					, config.getString(ComputateConfigKeys.AUTH_TOKEN_URI)
 					)
 					.ssl(config.getBoolean(ComputateConfigKeys.AUTH_SSL))
-					.putHeader("Authorization", String.format("Bearer %s", siteRequest.getUser().principal().getString("access_token")))
-					.expect(ResponsePredicate.status(200))
-					.sendForm(MultiMap.caseInsensitiveMultiMap()
-							.add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket")
-							.add("audience", config.getString(ComputateConfigKeys.AUTH_CLIENT))
-							.add("response_mode", "permissions")
-							.add("permission", String.format("%s#%s", Doll.CLASS_SIMPLE_NAME, config.getString(ComputateConfigKeys.AUTH_SCOPE_ADMIN)))
-							.add("permission", String.format("%s#%s", Doll.CLASS_SIMPLE_NAME, config.getString(ComputateConfigKeys.AUTH_SCOPE_SUPER_ADMIN)))
-							.add("permission", String.format("%s#%s", Doll.CLASS_SIMPLE_NAME, "GET"))
-							.add("permission", String.format("%s#%s", Doll.CLASS_SIMPLE_NAME, "POST"))
-							.add("permission", String.format("%s#%s", Doll.CLASS_SIMPLE_NAME, "DELETE"))
-							.add("permission", String.format("%s#%s", Doll.CLASS_SIMPLE_NAME, "PATCH"))
-			).onFailure(ex -> {
-				String msg = String.format("403 FORBIDDEN user %s to %s %s", siteRequest.getUser().attributes().getJsonObject("accessToken").getString("preferred_username"), serviceRequest.getExtra().getString("method"), serviceRequest.getExtra().getString("uri"));
-				eventHandler.handle(Future.succeededFuture(
-					new ServiceResponse(403, "FORBIDDEN",
-						Buffer.buffer().appendString(
-							new JsonObject()
-								.put("errorCode", "403")
-								.put("errorMessage", msg)
-								.encodePrettily()
-							), MultiMap.caseInsensitiveMultiMap()
-					)
-				));
-			}).onSuccess(authorizationDecision -> {
+					.putHeader("Authorization", String.format("Bearer %s", Optional.ofNullable(siteRequest.getUser()).map(u -> u.principal().getString("access_token")).orElse("")))
+					.sendForm(form)
+					.expecting(HttpResponseExpectation.SC_OK)
+			.onComplete(authorizationDecisionResponse -> {
 				try {
-					JsonArray scopes = authorizationDecision.bodyAsJsonArray().stream().findFirst().map(decision -> ((JsonObject)decision).getJsonArray("scopes")).orElse(new JsonArray());
-					if(!scopes.contains("PUT")) {
+					HttpResponse<Buffer> authorizationDecision = authorizationDecisionResponse.result();
+					JsonArray scopes = authorizationDecisionResponse.failed() ? new JsonArray() : authorizationDecision.bodyAsJsonArray().stream().findFirst().map(decision -> ((JsonObject)decision).getJsonArray("scopes")).orElse(new JsonArray());
+					if(authorizationDecisionResponse.failed() && !scopes.contains("DELETE")) {
 						String msg = String.format("403 FORBIDDEN user %s to %s %s", siteRequest.getUser().attributes().getJsonObject("accessToken").getString("preferred_username"), serviceRequest.getExtra().getString("method"), serviceRequest.getExtra().getString("uri"));
 						eventHandler.handle(Future.succeededFuture(
 							new ServiceResponse(403, "FORBIDDEN",
@@ -774,6 +836,257 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 						));
 					} else {
 						siteRequest.setScopes(scopes.stream().map(o -> o.toString()).collect(Collectors.toList()));
+						List<String> scopes2 = siteRequest.getScopes();
+						searchDollList(siteRequest, true, false, true).onSuccess(listDoll -> {
+							try {
+								ApiRequest apiRequest = new ApiRequest();
+								apiRequest.setRows(listDoll.getRequest().getRows());
+								apiRequest.setNumFound(listDoll.getResponse().getResponse().getNumFound());
+								apiRequest.setNumPATCH(0L);
+								apiRequest.initDeepApiRequest(siteRequest);
+								siteRequest.setApiRequest_(apiRequest);
+								if(apiRequest.getNumFound() == 1L)
+									apiRequest.setOriginal(listDoll.first());
+								eventBus.publish("websocketDoll", JsonObject.mapFrom(apiRequest).toString());
+
+								listDELETEDoll(apiRequest, listDoll).onSuccess(e -> {
+									response200DELETEDoll(siteRequest).onSuccess(response -> {
+										LOG.debug(String.format("deleteDoll succeeded. "));
+										eventHandler.handle(Future.succeededFuture(response));
+									}).onFailure(ex -> {
+										LOG.error(String.format("deleteDoll failed. "), ex);
+										error(siteRequest, eventHandler, ex);
+									});
+								}).onFailure(ex -> {
+									LOG.error(String.format("deleteDoll failed. "), ex);
+									error(siteRequest, eventHandler, ex);
+								});
+							} catch(Exception ex) {
+								LOG.error(String.format("deleteDoll failed. "), ex);
+								error(siteRequest, eventHandler, ex);
+							}
+						}).onFailure(ex -> {
+							LOG.error(String.format("deleteDoll failed. "), ex);
+							error(siteRequest, eventHandler, ex);
+						});
+					}
+				} catch(Exception ex) {
+					LOG.error(String.format("deleteDoll failed. "), ex);
+					error(null, eventHandler, ex);
+				}
+			});
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("deleteDoll failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else if(StringUtils.startsWith(ex.getMessage(), "401 UNAUTHORIZED ")) {
+				eventHandler.handle(Future.succeededFuture(
+					new ServiceResponse(401, "UNAUTHORIZED",
+						Buffer.buffer().appendString(
+							new JsonObject()
+								.put("errorCode", "401")
+								.put("errorMessage", "SSO Resource Permission check returned DENY")
+								.encodePrettily()
+							), MultiMap.caseInsensitiveMultiMap()
+							)
+					));
+			} else {
+				LOG.error(String.format("deleteDoll failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+	public Future<Void> listDELETEDoll(ApiRequest apiRequest, SearchList<Doll> listDoll) {
+		Promise<Void> promise = Promise.promise();
+		List<Future> futures = new ArrayList<>();
+		SiteRequest siteRequest = listDoll.getSiteRequest_(SiteRequest.class);
+		listDoll.getList().forEach(o -> {
+			SiteRequest siteRequest2 = generateSiteRequest(siteRequest.getUser(), siteRequest.getUserPrincipal(), siteRequest.getServiceRequest(), siteRequest.getJsonObject(), SiteRequest.class);
+			siteRequest2.setScopes(siteRequest.getScopes());
+			o.setSiteRequest_(siteRequest2);
+			siteRequest2.setApiRequest_(siteRequest.getApiRequest_());
+			JsonObject jsonObject = JsonObject.mapFrom(o);
+			Doll o2 = jsonObject.mapTo(Doll.class);
+			o2.setSiteRequest_(siteRequest2);
+			futures.add(Future.future(promise1 -> {
+				deleteDollFuture(o).onSuccess(a -> {
+					promise1.complete();
+				}).onFailure(ex -> {
+					LOG.error(String.format("listDELETEDoll failed. "), ex);
+					promise1.fail(ex);
+				});
+			}));
+		});
+		CompositeFuture.all(futures).onSuccess( a -> {
+			listDoll.next().onSuccess(next -> {
+				if(next) {
+					listDELETEDoll(apiRequest, listDoll).onSuccess(b -> {
+						promise.complete();
+					}).onFailure(ex -> {
+						LOG.error(String.format("listDELETEDoll failed. "), ex);
+						promise.fail(ex);
+					});
+				} else {
+					promise.complete();
+				}
+			}).onFailure(ex -> {
+				LOG.error(String.format("listDELETEDoll failed. "), ex);
+				promise.fail(ex);
+			});
+		}).onFailure(ex -> {
+			LOG.error(String.format("listDELETEDoll failed. "), ex);
+			promise.fail(ex);
+		});
+		return promise.future();
+	}
+
+	@Override
+	public void deleteDollFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			try {
+				siteRequest.setJsonObject(body);
+				serviceRequest.getParams().getJsonObject("query").put("rows", 1);
+				Optional.ofNullable(serviceRequest.getParams().getJsonArray("scopes")).ifPresent(scopes -> {
+					scopes.stream().map(v -> v.toString()).forEach(scope -> {
+						siteRequest.addScopes(scope);
+					});
+				});
+				searchDollList(siteRequest, false, true, true).onSuccess(listDoll -> {
+					try {
+						Doll o = listDoll.first();
+						if(o != null && listDoll.getResponse().getResponse().getNumFound() == 1) {
+							ApiRequest apiRequest = new ApiRequest();
+							apiRequest.setRows(1L);
+							apiRequest.setNumFound(1L);
+							apiRequest.setNumPATCH(0L);
+							apiRequest.initDeepApiRequest(siteRequest);
+							siteRequest.setApiRequest_(apiRequest);
+							if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
+								siteRequest.getRequestVars().put( "refresh", "false" );
+							}
+							if(apiRequest.getNumFound() == 1L)
+								apiRequest.setOriginal(o);
+							apiRequest.setId(Optional.ofNullable(listDoll.first()).map(o2 -> o2.getPageId().toString()).orElse(null));
+							deleteDollFuture(o).onSuccess(o2 -> {
+								eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
+							}).onFailure(ex -> {
+								eventHandler.handle(Future.failedFuture(ex));
+							});
+						} else {
+							eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
+						}
+					} catch(Exception ex) {
+						LOG.error(String.format("deleteDoll failed. "), ex);
+						error(siteRequest, eventHandler, ex);
+					}
+				}).onFailure(ex -> {
+					LOG.error(String.format("deleteDoll failed. "), ex);
+					error(siteRequest, eventHandler, ex);
+				});
+			} catch(Exception ex) {
+				LOG.error(String.format("deleteDoll failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		}).onFailure(ex -> {
+			LOG.error(String.format("deleteDoll failed. "), ex);
+			error(null, eventHandler, ex);
+		});
+	}
+
+	public Future<Doll> deleteDollFuture(Doll o) {
+		SiteRequest siteRequest = o.getSiteRequest_();
+		Promise<Doll> promise = Promise.promise();
+
+		try {
+			ApiRequest apiRequest = siteRequest.getApiRequest_();
+			unindexDoll(o).onSuccess(e -> {
+				promise.complete(o);
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("deleteDollFuture failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+
+	public Future<ServiceResponse> response200DELETEDoll(SiteRequest siteRequest) {
+		Promise<ServiceResponse> promise = Promise.promise();
+		try {
+			JsonObject json = new JsonObject();
+			if(json == null) {
+				String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+				String m = String.format("%s %s not found", "doll", pageId);
+				promise.complete(new ServiceResponse(404
+						, m
+						, Buffer.buffer(new JsonObject().put("message", m).encodePrettily()), null));
+			} else {
+				promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			}
+		} catch(Exception ex) {
+			LOG.error(String.format("response200DELETEDoll failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+
+	// PUTImport //
+
+	@Override
+	public void putimportDoll(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		LOG.debug(String.format("putimportDoll started. "));
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+			String DOLL = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("DOLL");
+			MultiMap form = MultiMap.caseInsensitiveMultiMap();
+			form.add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket");
+			form.add("audience", config.getString(ComputateConfigKeys.AUTH_CLIENT));
+			form.add("response_mode", "permissions");
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_ADMIN)));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_SUPER_ADMIN)));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "GET"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "POST"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "DELETE"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PATCH"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PUT"));
+			if(pageId != null)
+				form.add("permission", String.format("%s#%s", pageId, "PUT"));
+			webClient.post(
+					config.getInteger(ComputateConfigKeys.AUTH_PORT)
+					, config.getString(ComputateConfigKeys.AUTH_HOST_NAME)
+					, config.getString(ComputateConfigKeys.AUTH_TOKEN_URI)
+					)
+					.ssl(config.getBoolean(ComputateConfigKeys.AUTH_SSL))
+					.putHeader("Authorization", String.format("Bearer %s", Optional.ofNullable(siteRequest.getUser()).map(u -> u.principal().getString("access_token")).orElse("")))
+					.sendForm(form)
+					.expecting(HttpResponseExpectation.SC_OK)
+			.onComplete(authorizationDecisionResponse -> {
+				try {
+					HttpResponse<Buffer> authorizationDecision = authorizationDecisionResponse.result();
+					JsonArray scopes = authorizationDecisionResponse.failed() ? new JsonArray() : authorizationDecision.bodyAsJsonArray().stream().findFirst().map(decision -> ((JsonObject)decision).getJsonArray("scopes")).orElse(new JsonArray());
+					if(authorizationDecisionResponse.failed() && !scopes.contains("PUT")) {
+						String msg = String.format("403 FORBIDDEN user %s to %s %s", siteRequest.getUser().attributes().getJsonObject("accessToken").getString("preferred_username"), serviceRequest.getExtra().getString("method"), serviceRequest.getExtra().getString("uri"));
+						eventHandler.handle(Future.succeededFuture(
+							new ServiceResponse(403, "FORBIDDEN",
+								Buffer.buffer().appendString(
+									new JsonObject()
+										.put("errorCode", "403")
+										.put("errorMessage", msg)
+										.encodePrettily()
+									), MultiMap.caseInsensitiveMultiMap()
+							)
+						));
+					} else {
+						siteRequest.setScopes(scopes.stream().map(o -> o.toString()).collect(Collectors.toList()));
+						List<String> scopes2 = siteRequest.getScopes();
 						ApiRequest apiRequest = new ApiRequest();
 						JsonArray jsonArray = Optional.ofNullable(siteRequest.getJsonObject()).map(o -> o.getJsonArray("list")).orElse(new JsonArray());
 						apiRequest.setRows(Long.valueOf(jsonArray.size()));
@@ -831,7 +1144,6 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		});
 	}
 
-
 	public Future<Void> listPUTImportDoll(ApiRequest apiRequest, SiteRequest siteRequest) {
 		Promise<Void> promise = Promise.promise();
 		List<Future> futures = new ArrayList<>();
@@ -842,7 +1154,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 					JsonObject params = new JsonObject();
 					params.put("body", obj);
 					params.put("path", new JsonObject());
-					params.put("cookie", new JsonObject());
+					params.put("cookie", siteRequest.getServiceRequest().getParams().getJsonObject("cookie"));
 					params.put("header", siteRequest.getServiceRequest().getParams().getJsonObject("header"));
 					params.put("form", new JsonObject());
 					JsonObject query = new JsonObject();
@@ -881,17 +1193,21 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 
 	@Override
 	public void putimportDollFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
 			try {
+				Optional.ofNullable(serviceRequest.getParams().getJsonArray("scopes")).ifPresent(scopes -> {
+					scopes.stream().map(v -> v.toString()).forEach(scope -> {
+						siteRequest.addScopes(scope);
+					});
+				});
 				ApiRequest apiRequest = new ApiRequest();
 				apiRequest.setRows(1L);
 				apiRequest.setNumFound(1L);
 				apiRequest.setNumPATCH(0L);
 				apiRequest.initDeepApiRequest(siteRequest);
 				siteRequest.setApiRequest_(apiRequest);
-				String inheritPk = Optional.ofNullable(body.getString(Doll.VAR_id)).orElse(body.getString(Doll.VAR_id));
-				body.put("inheritPk", inheritPk);
-				body.put("inheritPk", body.getValue("id"));
+				String pageId = Optional.ofNullable(body.getString(Doll.VAR_pageId)).orElse(body.getString(Doll.VAR_solrId));
 				if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
 					siteRequest.getRequestVars().put( "refresh", "false" );
 				}
@@ -901,7 +1217,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 				searchList.q("*:*");
 				searchList.setC(Doll.class);
 				searchList.fq("archived_docvalues_boolean:false");
-				searchList.fq("inheritPk_docvalues_string:" + SearchTool.escapeQueryChars(inheritPk));
+				searchList.fq("pageId_docvalues_string:" + SearchTool.escapeQueryChars(pageId));
 				searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
 					try {
 						if(searchList.size() >= 1) {
@@ -915,7 +1231,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 									JsonArray bodyVals = (JsonArray)bodyVal;
 									Object valsObj = o.obtainForClass(f);
 									Collection<?> vals = valsObj instanceof JsonArray ? ((JsonArray)valsObj).getList() : (Collection<?>)valsObj;
-									if(bodyVals.size() == vals.size()) {
+									if(vals != null && bodyVals.size() == vals.size()) {
 										Boolean match = true;
 										for(Object val : vals) {
 											if(val != null) {
@@ -931,40 +1247,38 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 										vals.clear();
 										body2.put("set" + StringUtils.capitalize(f), bodyVal);
 									} else {
-										vals.clear();
+										if(vals != null)
+											vals.clear();
 										body2.put("set" + StringUtils.capitalize(f), bodyVal);
 									}
 								} else {
 									o2.persistForClass(f, bodyVal);
 									o2.relateForClass(f, bodyVal);
-									if(!StringUtils.containsAny(f, "id", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
+									if(!StringUtils.containsAny(f, "pageId", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
 										body2.put("set" + StringUtils.capitalize(f), bodyVal);
 								}
 							}
 							for(String f : Optional.ofNullable(o.getSaves()).orElse(new ArrayList<>())) {
 								if(!body.fieldNames().contains(f)) {
-									if(!StringUtils.containsAny(f, "id", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
+									if(!StringUtils.containsAny(f, "pageId", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
 										body2.putNull("set" + StringUtils.capitalize(f));
 								}
 							}
-							if(body2.size() > 0) {
-								if(searchList.size() == 1) {
-									apiRequest.setOriginal(o);
-								}
-								siteRequest.setJsonObject(body2);
-								patchDollFuture(o2, true).onSuccess(b -> {
-									LOG.debug("Import Doll {} succeeded, modified Doll. ", body.getValue(Doll.VAR_id));
-									eventHandler.handle(Future.succeededFuture());
-								}).onFailure(ex -> {
-									LOG.error(String.format("putimportDollFuture failed. "), ex);
-									eventHandler.handle(Future.failedFuture(ex));
-								});
-							} else {
-								eventHandler.handle(Future.succeededFuture());
+							if(searchList.size() == 1) {
+								apiRequest.setOriginal(o);
+								apiRequest.setId(Optional.ofNullable(o.getPageId()).map(v -> v.toString()).orElse(null));
 							}
+							siteRequest.setJsonObject(body2);
+							patchDollFuture(o2, true).onSuccess(b -> {
+								LOG.debug("Import Doll {} succeeded, modified Doll. ", body.getValue(Doll.VAR_pageId));
+								eventHandler.handle(Future.succeededFuture());
+							}).onFailure(ex -> {
+								LOG.error(String.format("putimportDollFuture failed. "), ex);
+								eventHandler.handle(Future.failedFuture(ex));
+							});
 						} else {
 							postDollFuture(siteRequest, true).onSuccess(b -> {
-								LOG.debug("Import Doll {} succeeded, created new Doll. ", body.getValue(Doll.VAR_id));
+								LOG.debug("Import Doll {} succeeded, created new Doll. ", body.getValue(Doll.VAR_pageId));
 								eventHandler.handle(Future.succeededFuture());
 							}).onFailure(ex -> {
 								LOG.error(String.format("putimportDollFuture failed. "), ex);
@@ -1013,7 +1327,15 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			JsonObject json = new JsonObject();
-			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			if(json == null) {
+				String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+				String m = String.format("%s %s not found", "doll", pageId);
+				promise.complete(new ServiceResponse(404
+						, m
+						, Buffer.buffer(new JsonObject().put("message", m).encodePrettily()), null));
+			} else {
+				promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			}
 		} catch(Exception ex) {
 			LOG.error(String.format("response200PUTImportDoll failed. "), ex);
 			promise.fail(ex);
@@ -1024,49 +1346,9 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 	// SearchPage //
 
 	@Override
-	public void searchpageDollId(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
-						searchDollList(siteRequest, false, true, false).onSuccess(listDoll -> {
-							response200SearchPageDoll(listDoll).onSuccess(response -> {
-								eventHandler.handle(Future.succeededFuture(response));
-								LOG.debug(String.format("searchpageDoll succeeded. "));
-							}).onFailure(ex -> {
-								LOG.error(String.format("searchpageDoll failed. "), ex);
-								error(siteRequest, eventHandler, ex);
-							});
-						}).onFailure(ex -> {
-							LOG.error(String.format("searchpageDoll failed. "), ex);
-							error(siteRequest, eventHandler, ex);
-						});
-		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
-				try {
-					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
-				} catch(Exception ex2) {
-					LOG.error(String.format("searchpageDoll failed. ", ex2));
-					error(null, eventHandler, ex2);
-				}
-			} else if(StringUtils.startsWith(ex.getMessage(), "401 UNAUTHORIZED ")) {
-				eventHandler.handle(Future.succeededFuture(
-					new ServiceResponse(401, "UNAUTHORIZED",
-						Buffer.buffer().appendString(
-							new JsonObject()
-								.put("errorCode", "401")
-								.put("errorMessage", "SSO Resource Permission check returned DENY")
-								.encodePrettily()
-							), MultiMap.caseInsensitiveMultiMap()
-							)
-					));
-			} else {
-				LOG.error(String.format("searchpageDoll failed. "), ex);
-				error(null, eventHandler, ex);
-			}
-		});
-	}
-
-	@Override
 	public void searchpageDoll(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
 						searchDollList(siteRequest, false, true, false).onSuccess(listDoll -> {
 							response200SearchPageDoll(listDoll).onSuccess(response -> {
 								eventHandler.handle(Future.succeededFuture(response));
@@ -1104,19 +1386,18 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 			}
 		});
 	}
-
 
 	public void searchpageDollPageInit(DollPage page, SearchList<Doll> listDoll) {
 	}
 
-	public String templateSearchPageDoll() {
-		return "en-us/DollPage.htm";
+	public String templateSearchPageDoll(ServiceRequest serviceRequest) {
+		return "product/doll/DollSearchPage.htm";
 	}
 	public Future<ServiceResponse> response200SearchPageDoll(SearchList<Doll> listDoll) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			SiteRequest siteRequest = listDoll.getSiteRequest_(SiteRequest.class);
-			String pageTemplateUri = templateSearchPageDoll();
+			String pageTemplateUri = templateSearchPageDoll(siteRequest.getServiceRequest());
 			String siteTemplatePath = config.getString(ComputateConfigKeys.TEMPLATE_PATH);
 			Path resourceTemplatePath = Path.of(siteTemplatePath, pageTemplateUri);
 			String template = siteTemplatePath == null ? Resources.toString(Resources.getResource(resourceTemplatePath.toString()), StandardCharsets.UTF_8) : Files.readString(resourceTemplatePath, Charset.forName("UTF-8"));
@@ -1127,9 +1408,11 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 			page.setSearchListDoll_(listDoll);
 			page.setSiteRequest_(siteRequest);
 			page.setServiceRequest(siteRequest.getServiceRequest());
+			page.setWebClient(webClient);
+			page.setVertx(vertx);
 			page.promiseDeepDollPage(siteRequest).onSuccess(a -> {
 				try {
-					JsonObject ctx = ComputateConfigKeys.getPageContext(config);
+					JsonObject ctx = ConfigKeys.getPageContext(config);
 					ctx.mergeIn(JsonObject.mapFrom(page));
 					String renderedTemplate = jinjava.render(template, ctx.getMap());
 					Buffer buffer = Buffer.buffer(renderedTemplate);
@@ -1143,6 +1426,571 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 			});
 		} catch(Exception ex) {
 			LOG.error(String.format("response200SearchPageDoll failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+	public void responsePivotSearchPageDoll(List<SolrResponse.Pivot> pivots, JsonArray pivotArray) {
+		if(pivots != null) {
+			for(SolrResponse.Pivot pivotField : pivots) {
+				String entityIndexed = pivotField.getField();
+				String entityVar = StringUtils.substringBefore(entityIndexed, "_docvalues_");
+				JsonObject pivotJson = new JsonObject();
+				pivotArray.add(pivotJson);
+				pivotJson.put("field", entityVar);
+				pivotJson.put("value", pivotField.getValue());
+				pivotJson.put("count", pivotField.getCount());
+				Collection<SolrResponse.PivotRange> pivotRanges = pivotField.getRanges().values();
+				List<SolrResponse.Pivot> pivotFields2 = pivotField.getPivotList();
+				if(pivotRanges != null) {
+					JsonObject rangeJson = new JsonObject();
+					pivotJson.put("ranges", rangeJson);
+					for(SolrResponse.PivotRange rangeFacet : pivotRanges) {
+						JsonObject rangeFacetJson = new JsonObject();
+						String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
+						rangeJson.put(rangeFacetVar, rangeFacetJson);
+						JsonObject rangeFacetCountsObject = new JsonObject();
+						rangeFacetJson.put("counts", rangeFacetCountsObject);
+						rangeFacet.getCounts().forEach((value, count) -> {
+							rangeFacetCountsObject.put(value, count);
+						});
+					}
+				}
+				if(pivotFields2 != null) {
+					JsonArray pivotArray2 = new JsonArray();
+					pivotJson.put("pivot", pivotArray2);
+					responsePivotSearchPageDoll(pivotFields2, pivotArray2);
+				}
+			}
+		}
+	}
+
+	// EditPage //
+
+	@Override
+	public void editpageDoll(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+			String DOLL = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("DOLL");
+			MultiMap form = MultiMap.caseInsensitiveMultiMap();
+			form.add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket");
+			form.add("audience", config.getString(ComputateConfigKeys.AUTH_CLIENT));
+			form.add("response_mode", "permissions");
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_ADMIN)));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_SUPER_ADMIN)));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "GET"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "POST"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "DELETE"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PATCH"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PUT"));
+			if(pageId != null)
+				form.add("permission", String.format("%s#%s", pageId, "GET"));
+			webClient.post(
+					config.getInteger(ComputateConfigKeys.AUTH_PORT)
+					, config.getString(ComputateConfigKeys.AUTH_HOST_NAME)
+					, config.getString(ComputateConfigKeys.AUTH_TOKEN_URI)
+					)
+					.ssl(config.getBoolean(ComputateConfigKeys.AUTH_SSL))
+					.putHeader("Authorization", String.format("Bearer %s", Optional.ofNullable(siteRequest.getUser()).map(u -> u.principal().getString("access_token")).orElse("")))
+					.sendForm(form)
+					.expecting(HttpResponseExpectation.SC_OK)
+			.onComplete(authorizationDecisionResponse -> {
+				try {
+					HttpResponse<Buffer> authorizationDecision = authorizationDecisionResponse.result();
+					JsonArray scopes = authorizationDecisionResponse.failed() ? new JsonArray() : authorizationDecision.bodyAsJsonArray().stream().findFirst().map(decision -> ((JsonObject)decision).getJsonArray("scopes")).orElse(new JsonArray());
+					{
+						siteRequest.setScopes(scopes.stream().map(o -> o.toString()).collect(Collectors.toList()));
+						List<String> scopes2 = siteRequest.getScopes();
+						searchDollList(siteRequest, false, true, false).onSuccess(listDoll -> {
+							response200EditPageDoll(listDoll).onSuccess(response -> {
+								eventHandler.handle(Future.succeededFuture(response));
+								LOG.debug(String.format("editpageDoll succeeded. "));
+							}).onFailure(ex -> {
+								LOG.error(String.format("editpageDoll failed. "), ex);
+								error(siteRequest, eventHandler, ex);
+							});
+						}).onFailure(ex -> {
+							LOG.error(String.format("editpageDoll failed. "), ex);
+							error(siteRequest, eventHandler, ex);
+						});
+					}
+				} catch(Exception ex) {
+					LOG.error(String.format("editpageDoll failed. "), ex);
+					error(null, eventHandler, ex);
+				}
+			});
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("editpageDoll failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else if(StringUtils.startsWith(ex.getMessage(), "401 UNAUTHORIZED ")) {
+				eventHandler.handle(Future.succeededFuture(
+					new ServiceResponse(401, "UNAUTHORIZED",
+						Buffer.buffer().appendString(
+							new JsonObject()
+								.put("errorCode", "401")
+								.put("errorMessage", "SSO Resource Permission check returned DENY")
+								.encodePrettily()
+							), MultiMap.caseInsensitiveMultiMap()
+							)
+					));
+			} else {
+				LOG.error(String.format("editpageDoll failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+	public void editpageDollPageInit(DollPage page, SearchList<Doll> listDoll) {
+	}
+
+	public String templateEditPageDoll(ServiceRequest serviceRequest) {
+		return "edit/product/doll/DollEditPage.htm";
+	}
+	public Future<ServiceResponse> response200EditPageDoll(SearchList<Doll> listDoll) {
+		Promise<ServiceResponse> promise = Promise.promise();
+		try {
+			SiteRequest siteRequest = listDoll.getSiteRequest_(SiteRequest.class);
+			String pageTemplateUri = templateEditPageDoll(siteRequest.getServiceRequest());
+			String siteTemplatePath = config.getString(ComputateConfigKeys.TEMPLATE_PATH);
+			Path resourceTemplatePath = Path.of(siteTemplatePath, pageTemplateUri);
+			String template = siteTemplatePath == null ? Resources.toString(Resources.getResource(resourceTemplatePath.toString()), StandardCharsets.UTF_8) : Files.readString(resourceTemplatePath, Charset.forName("UTF-8"));
+			DollPage page = new DollPage();
+			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
+			siteRequest.setRequestHeaders(requestHeaders);
+
+			page.setSearchListDoll_(listDoll);
+			page.setSiteRequest_(siteRequest);
+			page.setServiceRequest(siteRequest.getServiceRequest());
+			page.setWebClient(webClient);
+			page.setVertx(vertx);
+			page.promiseDeepDollPage(siteRequest).onSuccess(a -> {
+				try {
+					JsonObject ctx = ConfigKeys.getPageContext(config);
+					ctx.mergeIn(JsonObject.mapFrom(page));
+					String renderedTemplate = jinjava.render(template, ctx.getMap());
+					Buffer buffer = Buffer.buffer(renderedTemplate);
+					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+				} catch(Exception ex) {
+					LOG.error(String.format("response200EditPageDoll failed. "), ex);
+					promise.fail(ex);
+				}
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("response200EditPageDoll failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+	public void responsePivotEditPageDoll(List<SolrResponse.Pivot> pivots, JsonArray pivotArray) {
+		if(pivots != null) {
+			for(SolrResponse.Pivot pivotField : pivots) {
+				String entityIndexed = pivotField.getField();
+				String entityVar = StringUtils.substringBefore(entityIndexed, "_docvalues_");
+				JsonObject pivotJson = new JsonObject();
+				pivotArray.add(pivotJson);
+				pivotJson.put("field", entityVar);
+				pivotJson.put("value", pivotField.getValue());
+				pivotJson.put("count", pivotField.getCount());
+				Collection<SolrResponse.PivotRange> pivotRanges = pivotField.getRanges().values();
+				List<SolrResponse.Pivot> pivotFields2 = pivotField.getPivotList();
+				if(pivotRanges != null) {
+					JsonObject rangeJson = new JsonObject();
+					pivotJson.put("ranges", rangeJson);
+					for(SolrResponse.PivotRange rangeFacet : pivotRanges) {
+						JsonObject rangeFacetJson = new JsonObject();
+						String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
+						rangeJson.put(rangeFacetVar, rangeFacetJson);
+						JsonObject rangeFacetCountsObject = new JsonObject();
+						rangeFacetJson.put("counts", rangeFacetCountsObject);
+						rangeFacet.getCounts().forEach((value, count) -> {
+							rangeFacetCountsObject.put(value, count);
+						});
+					}
+				}
+				if(pivotFields2 != null) {
+					JsonArray pivotArray2 = new JsonArray();
+					pivotJson.put("pivot", pivotArray2);
+					responsePivotEditPageDoll(pivotFields2, pivotArray2);
+				}
+			}
+		}
+	}
+
+	// DisplayPage //
+
+	@Override
+	public void displaypageDoll(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+						searchDollList(siteRequest, false, true, false).onSuccess(listDoll -> {
+							response200DisplayPageDoll(listDoll).onSuccess(response -> {
+								eventHandler.handle(Future.succeededFuture(response));
+								LOG.debug(String.format("displaypageDoll succeeded. "));
+							}).onFailure(ex -> {
+								LOG.error(String.format("displaypageDoll failed. "), ex);
+								error(siteRequest, eventHandler, ex);
+							});
+						}).onFailure(ex -> {
+							LOG.error(String.format("displaypageDoll failed. "), ex);
+							error(siteRequest, eventHandler, ex);
+						});
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("displaypageDoll failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else if(StringUtils.startsWith(ex.getMessage(), "401 UNAUTHORIZED ")) {
+				eventHandler.handle(Future.succeededFuture(
+					new ServiceResponse(401, "UNAUTHORIZED",
+						Buffer.buffer().appendString(
+							new JsonObject()
+								.put("errorCode", "401")
+								.put("errorMessage", "SSO Resource Permission check returned DENY")
+								.encodePrettily()
+							), MultiMap.caseInsensitiveMultiMap()
+							)
+					));
+			} else {
+				LOG.error(String.format("displaypageDoll failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+	public void displaypageDollPageInit(DollPage page, SearchList<Doll> listDoll) {
+	}
+
+	public String templateDisplayPageDoll(ServiceRequest serviceRequest) {
+		return String.format("%s.htm", serviceRequest.getExtra().getString("uri").substring(1));
+	}
+	public Future<ServiceResponse> response200DisplayPageDoll(SearchList<Doll> listDoll) {
+		Promise<ServiceResponse> promise = Promise.promise();
+		try {
+			SiteRequest siteRequest = listDoll.getSiteRequest_(SiteRequest.class);
+			String pageTemplateUri = templateDisplayPageDoll(siteRequest.getServiceRequest());
+			String siteTemplatePath = config.getString(ComputateConfigKeys.TEMPLATE_PATH);
+			Path resourceTemplatePath = Path.of(siteTemplatePath, pageTemplateUri);
+			String template = siteTemplatePath == null ? Resources.toString(Resources.getResource(resourceTemplatePath.toString()), StandardCharsets.UTF_8) : Files.readString(resourceTemplatePath, Charset.forName("UTF-8"));
+			DollPage page = new DollPage();
+			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
+			siteRequest.setRequestHeaders(requestHeaders);
+
+			page.setSearchListDoll_(listDoll);
+			page.setSiteRequest_(siteRequest);
+			page.setServiceRequest(siteRequest.getServiceRequest());
+			page.setWebClient(webClient);
+			page.setVertx(vertx);
+			page.promiseDeepDollPage(siteRequest).onSuccess(a -> {
+				try {
+					JsonObject ctx = ConfigKeys.getPageContext(config);
+					ctx.mergeIn(JsonObject.mapFrom(page));
+					String renderedTemplate = jinjava.render(template, ctx.getMap());
+					Buffer buffer = Buffer.buffer(renderedTemplate);
+					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+				} catch(Exception ex) {
+					LOG.error(String.format("response200DisplayPageDoll failed. "), ex);
+					promise.fail(ex);
+				}
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("response200DisplayPageDoll failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+	public void responsePivotDisplayPageDoll(List<SolrResponse.Pivot> pivots, JsonArray pivotArray) {
+		if(pivots != null) {
+			for(SolrResponse.Pivot pivotField : pivots) {
+				String entityIndexed = pivotField.getField();
+				String entityVar = StringUtils.substringBefore(entityIndexed, "_docvalues_");
+				JsonObject pivotJson = new JsonObject();
+				pivotArray.add(pivotJson);
+				pivotJson.put("field", entityVar);
+				pivotJson.put("value", pivotField.getValue());
+				pivotJson.put("count", pivotField.getCount());
+				Collection<SolrResponse.PivotRange> pivotRanges = pivotField.getRanges().values();
+				List<SolrResponse.Pivot> pivotFields2 = pivotField.getPivotList();
+				if(pivotRanges != null) {
+					JsonObject rangeJson = new JsonObject();
+					pivotJson.put("ranges", rangeJson);
+					for(SolrResponse.PivotRange rangeFacet : pivotRanges) {
+						JsonObject rangeFacetJson = new JsonObject();
+						String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
+						rangeJson.put(rangeFacetVar, rangeFacetJson);
+						JsonObject rangeFacetCountsObject = new JsonObject();
+						rangeFacetJson.put("counts", rangeFacetCountsObject);
+						rangeFacet.getCounts().forEach((value, count) -> {
+							rangeFacetCountsObject.put(value, count);
+						});
+					}
+				}
+				if(pivotFields2 != null) {
+					JsonArray pivotArray2 = new JsonArray();
+					pivotJson.put("pivot", pivotArray2);
+					responsePivotDisplayPageDoll(pivotFields2, pivotArray2);
+				}
+			}
+		}
+	}
+
+	// DELETEFilter //
+
+	@Override
+	public void deletefilterDoll(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		LOG.debug(String.format("deletefilterDoll started. "));
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+			String DOLL = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("DOLL");
+			MultiMap form = MultiMap.caseInsensitiveMultiMap();
+			form.add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket");
+			form.add("audience", config.getString(ComputateConfigKeys.AUTH_CLIENT));
+			form.add("response_mode", "permissions");
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_ADMIN)));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_SUPER_ADMIN)));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "GET"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "POST"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "DELETE"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PATCH"));
+			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PUT"));
+			if(pageId != null)
+				form.add("permission", String.format("%s#%s", pageId, "DELETE"));
+			webClient.post(
+					config.getInteger(ComputateConfigKeys.AUTH_PORT)
+					, config.getString(ComputateConfigKeys.AUTH_HOST_NAME)
+					, config.getString(ComputateConfigKeys.AUTH_TOKEN_URI)
+					)
+					.ssl(config.getBoolean(ComputateConfigKeys.AUTH_SSL))
+					.putHeader("Authorization", String.format("Bearer %s", Optional.ofNullable(siteRequest.getUser()).map(u -> u.principal().getString("access_token")).orElse("")))
+					.sendForm(form)
+					.expecting(HttpResponseExpectation.SC_OK)
+			.onComplete(authorizationDecisionResponse -> {
+				try {
+					HttpResponse<Buffer> authorizationDecision = authorizationDecisionResponse.result();
+					JsonArray scopes = authorizationDecisionResponse.failed() ? new JsonArray() : authorizationDecision.bodyAsJsonArray().stream().findFirst().map(decision -> ((JsonObject)decision).getJsonArray("scopes")).orElse(new JsonArray());
+					if(authorizationDecisionResponse.failed() && !scopes.contains("DELETE")) {
+						String msg = String.format("403 FORBIDDEN user %s to %s %s", siteRequest.getUser().attributes().getJsonObject("accessToken").getString("preferred_username"), serviceRequest.getExtra().getString("method"), serviceRequest.getExtra().getString("uri"));
+						eventHandler.handle(Future.succeededFuture(
+							new ServiceResponse(403, "FORBIDDEN",
+								Buffer.buffer().appendString(
+									new JsonObject()
+										.put("errorCode", "403")
+										.put("errorMessage", msg)
+										.encodePrettily()
+									), MultiMap.caseInsensitiveMultiMap()
+							)
+						));
+					} else {
+						siteRequest.setScopes(scopes.stream().map(o -> o.toString()).collect(Collectors.toList()));
+						List<String> scopes2 = siteRequest.getScopes();
+						searchDollList(siteRequest, true, false, true).onSuccess(listDoll -> {
+							try {
+								ApiRequest apiRequest = new ApiRequest();
+								apiRequest.setRows(listDoll.getRequest().getRows());
+								apiRequest.setNumFound(listDoll.getResponse().getResponse().getNumFound());
+								apiRequest.setNumPATCH(0L);
+								apiRequest.initDeepApiRequest(siteRequest);
+								siteRequest.setApiRequest_(apiRequest);
+								if(apiRequest.getNumFound() == 1L)
+									apiRequest.setOriginal(listDoll.first());
+								eventBus.publish("websocketDoll", JsonObject.mapFrom(apiRequest).toString());
+
+								listDELETEFilterDoll(apiRequest, listDoll).onSuccess(e -> {
+									response200DELETEFilterDoll(siteRequest).onSuccess(response -> {
+										LOG.debug(String.format("deletefilterDoll succeeded. "));
+										eventHandler.handle(Future.succeededFuture(response));
+									}).onFailure(ex -> {
+										LOG.error(String.format("deletefilterDoll failed. "), ex);
+										error(siteRequest, eventHandler, ex);
+									});
+								}).onFailure(ex -> {
+									LOG.error(String.format("deletefilterDoll failed. "), ex);
+									error(siteRequest, eventHandler, ex);
+								});
+							} catch(Exception ex) {
+								LOG.error(String.format("deletefilterDoll failed. "), ex);
+								error(siteRequest, eventHandler, ex);
+							}
+						}).onFailure(ex -> {
+							LOG.error(String.format("deletefilterDoll failed. "), ex);
+							error(siteRequest, eventHandler, ex);
+						});
+					}
+				} catch(Exception ex) {
+					LOG.error(String.format("deletefilterDoll failed. "), ex);
+					error(null, eventHandler, ex);
+				}
+			});
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("deletefilterDoll failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else if(StringUtils.startsWith(ex.getMessage(), "401 UNAUTHORIZED ")) {
+				eventHandler.handle(Future.succeededFuture(
+					new ServiceResponse(401, "UNAUTHORIZED",
+						Buffer.buffer().appendString(
+							new JsonObject()
+								.put("errorCode", "401")
+								.put("errorMessage", "SSO Resource Permission check returned DENY")
+								.encodePrettily()
+							), MultiMap.caseInsensitiveMultiMap()
+							)
+					));
+			} else {
+				LOG.error(String.format("deletefilterDoll failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+	public Future<Void> listDELETEFilterDoll(ApiRequest apiRequest, SearchList<Doll> listDoll) {
+		Promise<Void> promise = Promise.promise();
+		List<Future> futures = new ArrayList<>();
+		SiteRequest siteRequest = listDoll.getSiteRequest_(SiteRequest.class);
+		listDoll.getList().forEach(o -> {
+			SiteRequest siteRequest2 = generateSiteRequest(siteRequest.getUser(), siteRequest.getUserPrincipal(), siteRequest.getServiceRequest(), siteRequest.getJsonObject(), SiteRequest.class);
+			siteRequest2.setScopes(siteRequest.getScopes());
+			o.setSiteRequest_(siteRequest2);
+			siteRequest2.setApiRequest_(siteRequest.getApiRequest_());
+			JsonObject jsonObject = JsonObject.mapFrom(o);
+			Doll o2 = jsonObject.mapTo(Doll.class);
+			o2.setSiteRequest_(siteRequest2);
+			futures.add(Future.future(promise1 -> {
+				deletefilterDollFuture(o).onSuccess(a -> {
+					promise1.complete();
+				}).onFailure(ex -> {
+					LOG.error(String.format("listDELETEFilterDoll failed. "), ex);
+					promise1.fail(ex);
+				});
+			}));
+		});
+		CompositeFuture.all(futures).onSuccess( a -> {
+			listDoll.next().onSuccess(next -> {
+				if(next) {
+					listDELETEFilterDoll(apiRequest, listDoll).onSuccess(b -> {
+						promise.complete();
+					}).onFailure(ex -> {
+						LOG.error(String.format("listDELETEFilterDoll failed. "), ex);
+						promise.fail(ex);
+					});
+				} else {
+					promise.complete();
+				}
+			}).onFailure(ex -> {
+				LOG.error(String.format("listDELETEFilterDoll failed. "), ex);
+				promise.fail(ex);
+			});
+		}).onFailure(ex -> {
+			LOG.error(String.format("listDELETEFilterDoll failed. "), ex);
+			promise.fail(ex);
+		});
+		return promise.future();
+	}
+
+	@Override
+	public void deletefilterDollFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			try {
+				siteRequest.setJsonObject(body);
+				serviceRequest.getParams().getJsonObject("query").put("rows", 1);
+				Optional.ofNullable(serviceRequest.getParams().getJsonArray("scopes")).ifPresent(scopes -> {
+					scopes.stream().map(v -> v.toString()).forEach(scope -> {
+						siteRequest.addScopes(scope);
+					});
+				});
+				searchDollList(siteRequest, false, true, true).onSuccess(listDoll -> {
+					try {
+						Doll o = listDoll.first();
+						if(o != null && listDoll.getResponse().getResponse().getNumFound() == 1) {
+							ApiRequest apiRequest = new ApiRequest();
+							apiRequest.setRows(1L);
+							apiRequest.setNumFound(1L);
+							apiRequest.setNumPATCH(0L);
+							apiRequest.initDeepApiRequest(siteRequest);
+							siteRequest.setApiRequest_(apiRequest);
+							if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
+								siteRequest.getRequestVars().put( "refresh", "false" );
+							}
+							if(apiRequest.getNumFound() == 1L)
+								apiRequest.setOriginal(o);
+							apiRequest.setId(Optional.ofNullable(listDoll.first()).map(o2 -> o2.getPageId().toString()).orElse(null));
+							deletefilterDollFuture(o).onSuccess(o2 -> {
+								eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
+							}).onFailure(ex -> {
+								eventHandler.handle(Future.failedFuture(ex));
+							});
+						} else {
+							eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
+						}
+					} catch(Exception ex) {
+						LOG.error(String.format("deletefilterDoll failed. "), ex);
+						error(siteRequest, eventHandler, ex);
+					}
+				}).onFailure(ex -> {
+					LOG.error(String.format("deletefilterDoll failed. "), ex);
+					error(siteRequest, eventHandler, ex);
+				});
+			} catch(Exception ex) {
+				LOG.error(String.format("deletefilterDoll failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		}).onFailure(ex -> {
+			LOG.error(String.format("deletefilterDoll failed. "), ex);
+			error(null, eventHandler, ex);
+		});
+	}
+
+	public Future<Doll> deletefilterDollFuture(Doll o) {
+		SiteRequest siteRequest = o.getSiteRequest_();
+		Promise<Doll> promise = Promise.promise();
+
+		try {
+			ApiRequest apiRequest = siteRequest.getApiRequest_();
+			unindexDoll(o).onSuccess(e -> {
+				promise.complete(o);
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("deletefilterDollFuture failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+
+	public Future<ServiceResponse> response200DELETEFilterDoll(SiteRequest siteRequest) {
+		Promise<ServiceResponse> promise = Promise.promise();
+		try {
+			JsonObject json = new JsonObject();
+			if(json == null) {
+				String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+				String m = String.format("%s %s not found", "doll", pageId);
+				promise.complete(new ServiceResponse(404
+						, m
+						, Buffer.buffer(new JsonObject().put("message", m).encodePrettily()), null));
+			} else {
+				promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			}
+		} catch(Exception ex) {
+			LOG.error(String.format("response200DELETEFilterDoll failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();
@@ -1260,11 +2108,9 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 				}
 			}
 
-			String id = serviceRequest.getParams().getJsonObject("path").getString("id");
-			if(id != null && NumberUtils.isCreatable(id)) {
-				searchList.fq("(_docvalues_long:" + SearchTool.escapeQueryChars(id) + " OR objectId_docvalues_string:" + SearchTool.escapeQueryChars(id) + ")");
-			} else if(id != null) {
-				searchList.fq("objectId_docvalues_string:" + SearchTool.escapeQueryChars(id));
+			String pageId = serviceRequest.getParams().getJsonObject("path").getString("pageId");
+			if(pageId != null) {
+				searchList.fq("pageId_docvalues_string:" + SearchTool.escapeQueryChars(pageId));
 			}
 
 			for(String paramName : serviceRequest.getParams().getJsonObject("query").fieldNames()) {
@@ -1281,8 +2127,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 				try {
 					if(paramValuesObject != null && "facet.pivot".equals(paramName)) {
 						Matcher mFacetPivot = Pattern.compile("(?:(\\{![^\\}]+\\}))?(.*)").matcher(StringUtils.join(paramObjects.getList().toArray(), ","));
-						boolean foundFacetPivot = mFacetPivot.find();
-						if(foundFacetPivot) {
+						if(mFacetPivot.find()) {
 							String solrLocalParams = mFacetPivot.group(1);
 							String[] entityVars = mFacetPivot.group(2).trim().split(",");
 							String[] varsIndexed = new String[entityVars.length];
@@ -1296,33 +2141,29 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 						for(Object paramObject : paramObjects) {
 							if(paramName.equals("q")) {
 								Matcher mQ = Pattern.compile("(\\w+):(.+?(?=(\\)|\\s+OR\\s+|\\s+AND\\s+|\\^|$)))").matcher((String)paramObject);
-								boolean foundQ = mQ.find();
-								if(foundQ) {
-									StringBuffer sb = new StringBuffer();
-									while(foundQ) {
-										entityVar = mQ.group(1).trim();
-										valueIndexed = mQ.group(2).trim();
-										varIndexed = Doll.varIndexedDoll(entityVar);
-										String entityQ = searchDollFq(searchList, entityVar, valueIndexed, varIndexed);
-										mQ.appendReplacement(sb, entityQ);
-										foundQ = mQ.find();
-									}
+								StringBuffer sb = new StringBuffer();
+								while(mQ.find()) {
+									entityVar = mQ.group(1).trim();
+									valueIndexed = mQ.group(2).trim();
+									varIndexed = Doll.varIndexedDoll(entityVar);
+									String entityQ = searchDollFq(searchList, entityVar, valueIndexed, varIndexed);
+									mQ.appendReplacement(sb, entityQ);
+								}
+								if(!sb.isEmpty()) {
 									mQ.appendTail(sb);
 									searchList.q(sb.toString());
 								}
 							} else if(paramName.equals("fq")) {
 								Matcher mFq = Pattern.compile("(\\w+):(.+?(?=(\\)|\\s+OR\\s+|\\s+AND\\s+|$)))").matcher((String)paramObject);
-								boolean foundFq = mFq.find();
-								if(foundFq) {
 									StringBuffer sb = new StringBuffer();
-									while(foundFq) {
-										entityVar = mFq.group(1).trim();
-										valueIndexed = mFq.group(2).trim();
-										varIndexed = Doll.varIndexedDoll(entityVar);
-										String entityFq = searchDollFq(searchList, entityVar, valueIndexed, varIndexed);
-										mFq.appendReplacement(sb, entityFq);
-										foundFq = mFq.find();
-									}
+								while(mFq.find()) {
+									entityVar = mFq.group(1).trim();
+									valueIndexed = mFq.group(2).trim();
+									varIndexed = Doll.varIndexedDoll(entityVar);
+									String entityFq = searchDollFq(searchList, entityVar, valueIndexed, varIndexed);
+									mFq.appendReplacement(sb, entityFq);
+								}
+								if(!sb.isEmpty()) {
 									mFq.appendTail(sb);
 									searchList.fq(sb.toString());
 								}
@@ -1341,8 +2182,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 								searchList.stats((Boolean)paramObject);
 							} else if(paramName.equals("stats.field")) {
 								Matcher mStats = Pattern.compile("(?:(\\{![^\\}]+\\}))?(.*)").matcher((String)paramObject);
-								boolean foundStats = mStats.find();
-								if(foundStats) {
+								if(mStats.find()) {
 									String solrLocalParams = mStats.group(1);
 									entityVar = mStats.group(2).trim();
 									varIndexed = Doll.varIndexedDoll(entityVar);
@@ -1368,8 +2208,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 								facetRangeGap = gap;
 							} else if(paramName.equals("facet.range")) {
 								Matcher mFacetRange = Pattern.compile("(?:(\\{![^\\}]+\\}))?(.*)").matcher((String)paramObject);
-								boolean foundFacetRange = mFacetRange.find();
-								if(foundFacetRange) {
+								if(mFacetRange.find()) {
 									String solrLocalParams = mFacetRange.group(1);
 									entityVar = mFacetRange.group(2).trim();
 									varIndexed = Doll.varIndexedDoll(entityVar);
@@ -1398,6 +2237,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 			}
 			if("*:*".equals(searchList.getQuery()) && searchList.getSorts().size() == 0) {
 				searchList.sort("name_docvalues_string", "asc");
+				searchList.setDefaultSort(true);
 			}
 			String facetRange2 = facetRange;
 			Date facetRangeStart2 = facetRangeStart;
@@ -1406,7 +2246,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 			String statsField2 = statsField;
 			String statsFieldIndexed2 = statsFieldIndexed;
 			searchDoll2(siteRequest, populate, store, modify, searchList);
-			searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
+			searchList.promiseDeepForClass(siteRequest).onSuccess(searchList2 -> {
 				if(facetRange2 != null && statsField2 != null && facetRange2.equals(statsField2)) {
 					StatsField stats = searchList.getResponse().getStats().getStatsFields().get(statsFieldIndexed2);
 					Instant min = Optional.ofNullable(stats.getMin()).map(val -> Instant.parse(val.toString())).orElse(Instant.now());
@@ -1416,7 +2256,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 						max = max.plus(2, ChronoUnit.DAYS);
 					}
 					Duration duration = Duration.between(min, max);
-					String gap = "DAY";
+					String gap = "HOUR";
 					if(duration.toDays() >= 365)
 						gap = "YEAR";
 					else if(duration.toDays() >= 28)
@@ -1524,9 +2364,9 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 			String solrUsername = siteRequest.getConfig().getString(ConfigKeys.SOLR_USERNAME);
 			String solrPassword = siteRequest.getConfig().getString(ConfigKeys.SOLR_PASSWORD);
 			String solrHostName = siteRequest.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
-			Integer solrPort = siteRequest.getConfig().getInteger(ConfigKeys.SOLR_PORT);
+			Integer solrPort = Integer.parseInt(siteRequest.getConfig().getString(ConfigKeys.SOLR_PORT));
 			String solrCollection = siteRequest.getConfig().getString(ConfigKeys.SOLR_COLLECTION);
-			Boolean solrSsl = siteRequest.getConfig().getBoolean(ConfigKeys.SOLR_SSL);
+			Boolean solrSsl = Boolean.parseBoolean(siteRequest.getConfig().getString(ConfigKeys.SOLR_SSL));
 			Boolean softCommit = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getBoolean("softCommit")).orElse(null);
 			Integer commitWithin = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getInteger("commitWithin")).orElse(null);
 				if(softCommit == null && commitWithin == null)
@@ -1534,7 +2374,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 				else if(softCommit == null)
 					softCommit = false;
 			String solrRequestUri = String.format("/solr/%s/update%s%s%s", solrCollection, "?overwrite=true&wt=json", softCommit ? "&softCommit=true" : "", commitWithin != null ? ("&commitWithin=" + commitWithin) : "");
-			webClient.post(solrPort, solrHostName, solrRequestUri).ssl(solrSsl).authentication(new UsernamePasswordCredentials(solrUsername, solrPassword)).putHeader("Content-Type", "application/json").expect(ResponsePredicate.SC_OK).sendBuffer(json.toBuffer()).onSuccess(b -> {
+			webClient.post(solrPort, solrHostName, solrRequestUri).ssl(solrSsl).authentication(new UsernamePasswordCredentials(solrUsername, solrPassword)).putHeader("Content-Type", "application/json").sendBuffer(json.toBuffer()).expecting(HttpResponseExpectation.SC_OK).onSuccess(b -> {
 				promise.complete(o);
 			}).onFailure(ex -> {
 				LOG.error(String.format("indexDoll failed. "), new RuntimeException(ex));
@@ -1556,14 +2396,14 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 				JsonObject json = new JsonObject();
 				JsonObject delete = new JsonObject();
 				json.put("delete", delete);
-				String query = String.format("filter(id_docvalues_string:%s)", o.obtainForClass("id"));
+				String query = String.format("filter(%s:%s)", Doll.VAR_solrId, o.obtainForClass(Doll.VAR_solrId));
 				delete.put("query", query);
 				String solrUsername = siteRequest.getConfig().getString(ConfigKeys.SOLR_USERNAME);
 				String solrPassword = siteRequest.getConfig().getString(ConfigKeys.SOLR_PASSWORD);
 				String solrHostName = siteRequest.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
-				Integer solrPort = siteRequest.getConfig().getInteger(ConfigKeys.SOLR_PORT);
+				Integer solrPort = Integer.parseInt(siteRequest.getConfig().getString(ConfigKeys.SOLR_PORT));
 				String solrCollection = siteRequest.getConfig().getString(ConfigKeys.SOLR_COLLECTION);
-				Boolean solrSsl = siteRequest.getConfig().getBoolean(ConfigKeys.SOLR_SSL);
+				Boolean solrSsl = Boolean.parseBoolean(siteRequest.getConfig().getString(ConfigKeys.SOLR_SSL));
 				Boolean softCommit = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getBoolean("softCommit")).orElse(null);
 				Integer commitWithin = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getInteger("commitWithin")).orElse(null);
 					if(softCommit == null && commitWithin == null)
@@ -1571,7 +2411,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 					else if(softCommit == null)
 						softCommit = false;
 				String solrRequestUri = String.format("/solr/%s/update%s%s%s", solrCollection, "?overwrite=true&wt=json", softCommit ? "&softCommit=true" : "", commitWithin != null ? ("&commitWithin=" + commitWithin) : "");
-				webClient.post(solrPort, solrHostName, solrRequestUri).ssl(solrSsl).authentication(new UsernamePasswordCredentials(solrUsername, solrPassword)).putHeader("Content-Type", "application/json").expect(ResponsePredicate.SC_OK).sendBuffer(json.toBuffer()).onSuccess(b -> {
+				webClient.post(solrPort, solrHostName, solrRequestUri).ssl(solrSsl).authentication(new UsernamePasswordCredentials(solrUsername, solrPassword)).putHeader("Content-Type", "application/json").sendBuffer(json.toBuffer()).expecting(HttpResponseExpectation.SC_OK).onSuccess(b -> {
 					promise.complete(o);
 				}).onFailure(ex -> {
 					LOG.error(String.format("unindexDoll failed. "), new RuntimeException(ex));
@@ -1583,6 +2423,52 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 			});
 		} catch(Exception ex) {
 			LOG.error(String.format("unindexDoll failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+
+	@Override
+	public Future<JsonObject> generatePageBody(ComputateSiteRequest siteRequest, Map<String, Object> ctx, String templatePath, String classSimpleName) {
+		Promise<JsonObject> promise = Promise.promise();
+		try {
+			Map<String, Object> result = (Map<String, Object>)ctx.get("result");
+			SiteRequest siteRequest2 = (SiteRequest)siteRequest;
+			String siteBaseUrl = config.getString(ComputateConfigKeys.SITE_BASE_URL);
+			Doll page = new Doll();
+			page.setSiteRequest_((SiteRequest)siteRequest);
+
+			page.persistForClass(Doll.VAR_name, Doll.staticSetName(siteRequest2, (String)result.get(Doll.VAR_name)));
+			page.persistForClass(Doll.VAR_created, Doll.staticSetCreated(siteRequest2, (String)result.get(Doll.VAR_created), Optional.ofNullable(siteRequest).map(r -> r.getConfig()).map(config -> config.getString(ConfigKeys.SITE_ZONE)).map(z -> ZoneId.of(z)).orElse(ZoneId.of("UTC"))));
+			page.persistForClass(Doll.VAR_description, Doll.staticSetDescription(siteRequest2, (String)result.get(Doll.VAR_description)));
+			page.persistForClass(Doll.VAR_price, Doll.staticSetPrice(siteRequest2, (String)result.get(Doll.VAR_price)));
+			page.persistForClass(Doll.VAR_archived, Doll.staticSetArchived(siteRequest2, (String)result.get(Doll.VAR_archived)));
+			page.persistForClass(Doll.VAR_pageId, Doll.staticSetPageId(siteRequest2, (String)result.get(Doll.VAR_pageId)));
+			page.persistForClass(Doll.VAR_resourceUri, Doll.staticSetResourceUri(siteRequest2, (String)result.get(Doll.VAR_resourceUri)));
+			page.persistForClass(Doll.VAR_templateUri, Doll.staticSetTemplateUri(siteRequest2, (String)result.get(Doll.VAR_templateUri)));
+			page.persistForClass(Doll.VAR_emailTemplate, Doll.staticSetEmailTemplate(siteRequest2, (String)result.get(Doll.VAR_emailTemplate)));
+			page.persistForClass(Doll.VAR_storeUrl, Doll.staticSetStoreUrl(siteRequest2, (String)result.get(Doll.VAR_storeUrl)));
+			page.persistForClass(Doll.VAR_instagramUrl, Doll.staticSetInstagramUrl(siteRequest2, (String)result.get(Doll.VAR_instagramUrl)));
+			page.persistForClass(Doll.VAR_objectTitle, Doll.staticSetObjectTitle(siteRequest2, (String)result.get(Doll.VAR_objectTitle)));
+			page.persistForClass(Doll.VAR_title, Doll.staticSetTitle(siteRequest2, (String)result.get(Doll.VAR_title)));
+			page.persistForClass(Doll.VAR_displayPage, Doll.staticSetDisplayPage(siteRequest2, (String)result.get(Doll.VAR_displayPage)));
+			page.persistForClass(Doll.VAR_productNum, Doll.staticSetProductNum(siteRequest2, (String)result.get(Doll.VAR_productNum)));
+			page.persistForClass(Doll.VAR_solrId, Doll.staticSetSolrId(siteRequest2, (String)result.get(Doll.VAR_solrId)));
+
+			page.promiseDeepForClass((SiteRequest)siteRequest).onSuccess(a -> {
+				try {
+					JsonObject data = JsonObject.mapFrom(result);
+					promise.complete(data);
+				} catch(Exception ex) {
+					LOG.error(String.format(importModelFail, classSimpleName), ex);
+					promise.fail(ex);
+				}
+			}).onFailure(ex -> {
+				LOG.error(String.format("generatePageBody failed. "), ex);
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("generatePageBody failed. "), ex);
 			promise.fail(ex);
 		}
 		return promise.future();

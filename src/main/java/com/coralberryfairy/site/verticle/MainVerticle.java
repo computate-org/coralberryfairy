@@ -166,6 +166,12 @@ import com.coralberryfairy.site.user.SiteUserEnUSGenApiService;
 import com.coralberryfairy.site.user.SiteUserEnUSApiServiceImpl;
 import com.coralberryfairy.site.result.BaseResult;
 import com.coralberryfairy.site.model.BaseModel;
+import com.coralberryfairy.site.page.SitePageEnUSGenApiService;
+import com.coralberryfairy.site.page.SitePageEnUSApiServiceImpl;
+import com.coralberryfairy.site.page.SitePage;
+import com.coralberryfairy.site.model.doll.DollEnUSGenApiService;
+import com.coralberryfairy.site.model.doll.DollEnUSApiServiceImpl;
+import com.coralberryfairy.site.model.doll.Doll;
 
 
 /**
@@ -299,9 +305,28 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			siteRequest.setConfig(config);
 			siteRequest.setWebClient(webClient);
 			siteRequest.initDeepSiteRequest(siteRequest);
+			SiteUserEnUSApiServiceImpl apiSiteUser = new SiteUserEnUSApiServiceImpl();
+			apiSiteUser.setVertx(vertx);
+			apiSiteUser.setConfig(config);
+			apiSiteUser.setWebClient(webClient);
+			SitePageEnUSApiServiceImpl apiSitePage = new SitePageEnUSApiServiceImpl();
+			apiSitePage.setVertx(vertx);
+			apiSitePage.setConfig(config);
+			apiSitePage.setWebClient(webClient);
+			DollEnUSApiServiceImpl apiDoll = new DollEnUSApiServiceImpl();
+			apiDoll.setVertx(vertx);
+			apiDoll.setConfig(config);
+			apiDoll.setWebClient(webClient);
 			apiSiteUser.createAuthorizationScopes().onSuccess(authToken -> {
-				LOG.info("authorize data complete");
-				promise.complete();
+					apiSitePage.authorizeGroupData(authToken, SitePage.CLASS_AUTH_RESOURCE, "Admin", new String[] { "POST", "PATCH", "GET", "DELETE", "Admin" })
+							.compose(q2 -> apiSitePage.authorizeGroupData(authToken, SitePage.CLASS_AUTH_RESOURCE, "SuperAdmin", new String[] { "POST", "PATCH", "GET", "DELETE", "SuperAdmin" }))
+							.onSuccess(q2 -> {
+						apiDoll.authorizeGroupData(authToken, Doll.CLASS_AUTH_RESOURCE, "Admin", new String[] { "POST", "PATCH", "GET", "PUT", "DELETE", "Admin" })
+								.onSuccess(q3 -> {
+							LOG.info("authorize data complete");
+							promise.complete();
+					}).onFailure(ex -> promise.fail(ex));
+				}).onFailure(ex -> promise.fail(ex));
 			}).onFailure(ex -> promise.fail(ex));
 		} catch(Throwable ex) {
 			LOG.error(authorizeDataFail, ex);
@@ -1299,14 +1324,22 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 		Promise<Void> promise = Promise.promise();
 		try {
 			List<Future<?>> futures = new ArrayList<>();
-			List<String> authClassSimpleNames = Arrays.asList();
-			List<String> authResources = Arrays.asList();
-			List<String> publicClassSimpleNames = Arrays.asList();
+			List<String> authClassSimpleNames = Arrays.asList("SitePage","Doll");
+			List<String> authResources = Arrays.asList("SITEPAGE","DOLL");
+			List<String> publicClassSimpleNames = Arrays.asList("SitePage","Doll");
 			SiteUserEnUSApiServiceImpl apiSiteUser = new SiteUserEnUSApiServiceImpl();
 			initializeApiService(apiSiteUser);
 			registerApiService(SiteUserEnUSGenApiService.class, apiSiteUser, SiteUser.getClassApiAddress());
 			apiSiteUser.configureUserSearchApi(config().getString(ComputateConfigKeys.USER_SEARCH_URI), router, SiteRequest.class, SiteUser.class, SiteUser.CLASS_API_ADDRESS_SiteUser, config(), webClient, authResources, authClassSimpleNames);
 			apiSiteUser.configurePublicSearchApi(config().getString(ComputateConfigKeys.PUBLIC_SEARCH_URI), router, SiteRequest.class, config(), webClient, publicClassSimpleNames);
+
+			SitePageEnUSApiServiceImpl apiSitePage = new SitePageEnUSApiServiceImpl();
+			initializeApiService(apiSitePage);
+			registerApiService(SitePageEnUSGenApiService.class, apiSitePage, SitePage.getClassApiAddress());
+
+			DollEnUSApiServiceImpl apiDoll = new DollEnUSApiServiceImpl();
+			initializeApiService(apiDoll);
+			registerApiService(DollEnUSGenApiService.class, apiDoll, Doll.getClassApiAddress());
 
 			Future.all(futures).onSuccess( a -> {
 				LOG.info("The API was configured properly.");

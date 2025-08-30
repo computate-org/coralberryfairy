@@ -1,7 +1,7 @@
 package com.coralberryfairy.site.model.doll;
 
 import com.coralberryfairy.site.request.SiteRequest;
-import com.coralberryfairy.site.result.BaseResultPage;
+import com.coralberryfairy.site.page.PageLayout;
 import com.coralberryfairy.site.model.BaseModel;
 import org.computate.vertx.api.ApiRequest;
 import com.coralberryfairy.site.config.ConfigKeys;
@@ -39,6 +39,8 @@ import java.lang.String;
 import org.computate.search.response.solr.SolrResponse.Stats;
 import org.computate.search.response.solr.SolrResponse.FacetCounts;
 import io.vertx.core.json.JsonObject;
+import org.computate.vertx.serialize.vertx.JsonObjectDeserializer;
+import java.lang.Integer;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.lang.Long;
@@ -51,9 +53,9 @@ import java.util.Date;
 import java.time.format.DateTimeFormatter;
 import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.lang.Integer;
 import java.math.BigDecimal;
 import io.vertx.core.json.JsonArray;
+import org.computate.vertx.serialize.vertx.JsonArrayDeserializer;
 import java.lang.Void;
 import org.computate.search.wrap.Wrap;
 import io.vertx.core.Promise;
@@ -65,7 +67,7 @@ import io.vertx.core.Future;
  * <li>You can add a class comment <b>"Api: true"</b> if you wish to GET, POST, PATCH or PUT these DollGenPage objects in a RESTful API. 
  * </li><li>You can add a class comment "{@inheritDoc}" if you wish to inherit the helpful inherited class comments from class DollGenPageGen into the class DollGenPage. 
  * </li>
- * <h3>About the DollGenPage class and it's generated class DollGenPageGen&lt;BaseResultPage&gt;: </h3>extends DollGenPageGen
+ * <h3>About the DollGenPage class and it's generated class DollGenPageGen&lt;PageLayout&gt;: </h3>extends DollGenPageGen
  * <p>
  * This Java class extends a generated Java class DollGenPageGen built by the <a href="https://github.com/computate-org/computate">https://github.com/computate-org/computate</a> project. 
  * Whenever this Java class is modified or touched, the watch service installed as described in the README, indexes all the information about this Java class in a local Apache Solr Search Engine. 
@@ -76,9 +78,9 @@ import io.vertx.core.Future;
  * The extended class ending with "Gen" did not exist at first, but was automatically created by the same watch service based on the data retrieved from the local Apache Server search engine. 
  * The extended class contains many generated fields, getters, setters, initialization code, and helper methods to help build a website and API fast, reactive, and scalable. 
  * </p>
- * extends DollGenPageGen<BaseResultPage>
- * <p>This <code>class DollGenPage extends DollGenPageGen&lt;BaseResultPage&gt;</code>, which means it extends a newly generated DollGenPageGen. 
- * The generated <code>class DollGenPageGen extends BaseResultPage</code> which means that DollGenPage extends DollGenPageGen which extends BaseResultPage. 
+ * extends DollGenPageGen<PageLayout>
+ * <p>This <code>class DollGenPage extends DollGenPageGen&lt;PageLayout&gt;</code>, which means it extends a newly generated DollGenPageGen. 
+ * The generated <code>class DollGenPageGen extends PageLayout</code> which means that DollGenPage extends DollGenPageGen which extends PageLayout. 
  * This generated inheritance is a powerful feature that allows a lot of boiler plate code to be created for you automatically while still preserving inheritance through the power of Java Generic classes. 
  * </p>
  * <h2>Api: true</h2>
@@ -131,7 +133,7 @@ import io.vertx.core.Future;
  * </p>
  * Generated: true
  **/
-public abstract class DollGenPageGen<DEV> extends BaseResultPage {
+public abstract class DollGenPageGen<DEV> extends PageLayout {
 	protected static final Logger LOG = LoggerFactory.getLogger(DollGenPage.class);
 
 	/////////////////////
@@ -184,6 +186,7 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonArrayDeserializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected JsonArray listDoll = new JsonArray();
 
@@ -229,157 +232,157 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 		return DollGenPage.staticSearchListDoll(siteRequest_, DollGenPage.staticSetListDoll(siteRequest_, o)).toString();
 	}
 
-	///////////////
-	// dollCount //
-	///////////////
+	/////////////////
+	// resultCount //
+	/////////////////
 
 
-	/**	 The entity dollCount
+	/**	 The entity resultCount
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
 	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
-	protected Integer dollCount;
+	protected Integer resultCount;
 
-	/**	<br> The entity dollCount
+	/**	<br> The entity resultCount
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.doll.DollGenPage&fq=entiteVar_enUS_indexed_string:dollCount">Find the entity dollCount in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.doll.DollGenPage&fq=entiteVar_enUS_indexed_string:resultCount">Find the entity resultCount in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _dollCount(Wrap<Integer> w);
+	protected abstract void _resultCount(Wrap<Integer> w);
 
-	public Integer getDollCount() {
-		return dollCount;
+	public Integer getResultCount() {
+		return resultCount;
 	}
 
-	public void setDollCount(Integer dollCount) {
-		this.dollCount = dollCount;
+	public void setResultCount(Integer resultCount) {
+		this.resultCount = resultCount;
 	}
 	@JsonIgnore
-	public void setDollCount(String o) {
-		this.dollCount = DollGenPage.staticSetDollCount(siteRequest_, o);
+	public void setResultCount(String o) {
+		this.resultCount = DollGenPage.staticSetResultCount(siteRequest_, o);
 	}
-	public static Integer staticSetDollCount(SiteRequest siteRequest_, String o) {
+	public static Integer staticSetResultCount(SiteRequest siteRequest_, String o) {
 		if(NumberUtils.isParsable(o))
 			return Integer.parseInt(o);
 		return null;
 	}
-	protected DollGenPage dollCountInit() {
-		Wrap<Integer> dollCountWrap = new Wrap<Integer>().var("dollCount");
-		if(dollCount == null) {
-			_dollCount(dollCountWrap);
-			Optional.ofNullable(dollCountWrap.getO()).ifPresent(o -> {
-				setDollCount(o);
+	protected DollGenPage resultCountInit() {
+		Wrap<Integer> resultCountWrap = new Wrap<Integer>().var("resultCount");
+		if(resultCount == null) {
+			_resultCount(resultCountWrap);
+			Optional.ofNullable(resultCountWrap.getO()).ifPresent(o -> {
+				setResultCount(o);
 			});
 		}
 		return (DollGenPage)this;
 	}
 
-	public static Integer staticSearchDollCount(SiteRequest siteRequest_, Integer o) {
+	public static Integer staticSearchResultCount(SiteRequest siteRequest_, Integer o) {
 		return o;
 	}
 
-	public static String staticSearchStrDollCount(SiteRequest siteRequest_, Integer o) {
+	public static String staticSearchStrResultCount(SiteRequest siteRequest_, Integer o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqDollCount(SiteRequest siteRequest_, String o) {
-		return DollGenPage.staticSearchDollCount(siteRequest_, DollGenPage.staticSetDollCount(siteRequest_, o)).toString();
+	public static String staticSearchFqResultCount(SiteRequest siteRequest_, String o) {
+		return DollGenPage.staticSearchResultCount(siteRequest_, DollGenPage.staticSetResultCount(siteRequest_, o)).toString();
 	}
 
-	///////////
-	// doll_ //
-	///////////
+	////////////
+	// result //
+	////////////
 
 
-	/**	 The entity doll_
+	/**	 The entity result
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Doll doll_;
+	protected Doll result;
 
-	/**	<br> The entity doll_
+	/**	<br> The entity result
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.doll.DollGenPage&fq=entiteVar_enUS_indexed_string:doll_">Find the entity doll_ in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.doll.DollGenPage&fq=entiteVar_enUS_indexed_string:result">Find the entity result in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _doll_(Wrap<Doll> w);
+	protected abstract void _result(Wrap<Doll> w);
 
-	public Doll getDoll_() {
-		return doll_;
+	public Doll getResult() {
+		return result;
 	}
 
-	public void setDoll_(Doll doll_) {
-		this.doll_ = doll_;
+	public void setResult(Doll result) {
+		this.result = result;
 	}
-	public static Doll staticSetDoll_(SiteRequest siteRequest_, String o) {
+	public static Doll staticSetResult(SiteRequest siteRequest_, String o) {
 		return null;
 	}
-	protected DollGenPage doll_Init() {
-		Wrap<Doll> doll_Wrap = new Wrap<Doll>().var("doll_");
-		if(doll_ == null) {
-			_doll_(doll_Wrap);
-			Optional.ofNullable(doll_Wrap.getO()).ifPresent(o -> {
-				setDoll_(o);
+	protected DollGenPage resultInit() {
+		Wrap<Doll> resultWrap = new Wrap<Doll>().var("result");
+		if(result == null) {
+			_result(resultWrap);
+			Optional.ofNullable(resultWrap.getO()).ifPresent(o -> {
+				setResult(o);
 			});
 		}
 		return (DollGenPage)this;
 	}
 
-	////////
-	// id //
-	////////
+	////////////
+	// solrId //
+	////////////
 
 
-	/**	 The entity id
+	/**	 The entity solrId
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected String id;
+	protected String solrId;
 
-	/**	<br> The entity id
+	/**	<br> The entity solrId
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.doll.DollGenPage&fq=entiteVar_enUS_indexed_string:id">Find the entity id in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.doll.DollGenPage&fq=entiteVar_enUS_indexed_string:solrId">Find the entity solrId in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _id(Wrap<String> w);
+	protected abstract void _solrId(Wrap<String> w);
 
-	public String getId() {
-		return id;
+	public String getSolrId() {
+		return solrId;
 	}
-	public void setId(String o) {
-		this.id = DollGenPage.staticSetId(siteRequest_, o);
+	public void setSolrId(String o) {
+		this.solrId = DollGenPage.staticSetSolrId(siteRequest_, o);
 	}
-	public static String staticSetId(SiteRequest siteRequest_, String o) {
+	public static String staticSetSolrId(SiteRequest siteRequest_, String o) {
 		return o;
 	}
-	protected DollGenPage idInit() {
-		Wrap<String> idWrap = new Wrap<String>().var("id");
-		if(id == null) {
-			_id(idWrap);
-			Optional.ofNullable(idWrap.getO()).ifPresent(o -> {
-				setId(o);
+	protected DollGenPage solrIdInit() {
+		Wrap<String> solrIdWrap = new Wrap<String>().var("solrId");
+		if(solrId == null) {
+			_solrId(solrIdWrap);
+			Optional.ofNullable(solrIdWrap.getO()).ifPresent(o -> {
+				setSolrId(o);
 			});
 		}
 		return (DollGenPage)this;
 	}
 
-	public static String staticSearchId(SiteRequest siteRequest_, String o) {
+	public static String staticSearchSolrId(SiteRequest siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrId(SiteRequest siteRequest_, String o) {
+	public static String staticSearchStrSolrId(SiteRequest siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqId(SiteRequest siteRequest_, String o) {
-		return DollGenPage.staticSearchId(siteRequest_, DollGenPage.staticSetId(siteRequest_, o)).toString();
+	public static String staticSearchFqSolrId(SiteRequest siteRequest_, String o) {
+		return DollGenPage.staticSearchSolrId(siteRequest_, DollGenPage.staticSetSolrId(siteRequest_, o)).toString();
 	}
 
 	/////////////////
@@ -438,18 +441,18 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 	// initDeep //
 	//////////////
 
-	public Future<Void> promiseDeepDollGenPage(SiteRequest siteRequest_) {
+	public Future<DollGenPageGen<DEV>> promiseDeepDollGenPage(SiteRequest siteRequest_) {
 		setSiteRequest_(siteRequest_);
 		return promiseDeepDollGenPage();
 	}
 
-	public Future<Void> promiseDeepDollGenPage() {
-		Promise<Void> promise = Promise.promise();
+	public Future<DollGenPageGen<DEV>> promiseDeepDollGenPage() {
+		Promise<DollGenPageGen<DEV>> promise = Promise.promise();
 		Promise<Void> promise2 = Promise.promise();
 		promiseDollGenPage(promise2);
 		promise2.future().onSuccess(a -> {
-			super.promiseDeepBaseResultPage(siteRequest_).onSuccess(b -> {
-				promise.complete();
+			super.promiseDeepPageLayout(siteRequest_).onSuccess(b -> {
+				promise.complete(this);
 			}).onFailure(ex -> {
 				promise.fail(ex);
 			});
@@ -465,9 +468,9 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 			try {
 				searchListDoll_Init();
 				listDollInit();
-				dollCountInit();
-				doll_Init();
-				idInit();
+				resultCountInit();
+				resultInit();
+				solrIdInit();
 				pageUriDollInit();
 				promise2.complete();
 			} catch(Exception ex) {
@@ -482,7 +485,7 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 		return promise.future();
 	}
 
-	@Override public Future<Void> promiseDeepForClass(SiteRequest siteRequest_) {
+	@Override public Future<? extends DollGenPageGen<DEV>> promiseDeepForClass(SiteRequest siteRequest_) {
 		return promiseDeepDollGenPage(siteRequest_);
 	}
 
@@ -491,7 +494,7 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 	/////////////////
 
 	public void siteRequestDollGenPage(SiteRequest siteRequest_) {
-			super.siteRequestBaseResultPage(siteRequest_);
+			super.siteRequestPageLayout(siteRequest_);
 	}
 
 	public void siteRequestForClass(SiteRequest siteRequest_) {
@@ -526,16 +529,16 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 				return oDollGenPage.searchListDoll_;
 			case "listDoll":
 				return oDollGenPage.listDoll;
-			case "dollCount":
-				return oDollGenPage.dollCount;
-			case "doll_":
-				return oDollGenPage.doll_;
-			case "id":
-				return oDollGenPage.id;
+			case "resultCount":
+				return oDollGenPage.resultCount;
+			case "result":
+				return oDollGenPage.result;
+			case "solrId":
+				return oDollGenPage.solrId;
 			case "pageUriDoll":
 				return oDollGenPage.pageUriDoll;
 			default:
-				return super.obtainBaseResultPage(var);
+				return super.obtainPageLayout(var);
 		}
 	}
 
@@ -560,7 +563,7 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 		DollGenPage oDollGenPage = (DollGenPage)this;
 		switch(var) {
 			default:
-				return super.relateBaseResultPage(var, val);
+				return super.relatePageLayout(var, val);
 		}
 	}
 
@@ -568,21 +571,21 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 	// staticSet //
 	///////////////
 
-	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String o) {
-		return staticSetDollGenPage(entityVar,  siteRequest_, o);
+	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String v, DollGenPage o) {
+		return staticSetDollGenPage(entityVar,  siteRequest_, v, o);
 	}
-	public static Object staticSetDollGenPage(String entityVar, SiteRequest siteRequest_, String o) {
+	public static Object staticSetDollGenPage(String entityVar, SiteRequest siteRequest_, String v, DollGenPage o) {
 		switch(entityVar) {
 		case "listDoll":
-			return DollGenPage.staticSetListDoll(siteRequest_, o);
-		case "dollCount":
-			return DollGenPage.staticSetDollCount(siteRequest_, o);
-		case "id":
-			return DollGenPage.staticSetId(siteRequest_, o);
+			return DollGenPage.staticSetListDoll(siteRequest_, v);
+		case "resultCount":
+			return DollGenPage.staticSetResultCount(siteRequest_, v);
+		case "solrId":
+			return DollGenPage.staticSetSolrId(siteRequest_, v);
 		case "pageUriDoll":
-			return DollGenPage.staticSetPageUriDoll(siteRequest_, o);
+			return DollGenPage.staticSetPageUriDoll(siteRequest_, v);
 			default:
-				return BaseResultPage.staticSetBaseResultPage(entityVar,  siteRequest_, o);
+				return PageLayout.staticSetPageLayout(entityVar,  siteRequest_, v, o);
 		}
 	}
 
@@ -597,14 +600,14 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 		switch(entityVar) {
 		case "listDoll":
 			return DollGenPage.staticSearchListDoll(siteRequest_, (JsonArray)o);
-		case "dollCount":
-			return DollGenPage.staticSearchDollCount(siteRequest_, (Integer)o);
-		case "id":
-			return DollGenPage.staticSearchId(siteRequest_, (String)o);
+		case "resultCount":
+			return DollGenPage.staticSearchResultCount(siteRequest_, (Integer)o);
+		case "solrId":
+			return DollGenPage.staticSearchSolrId(siteRequest_, (String)o);
 		case "pageUriDoll":
 			return DollGenPage.staticSearchPageUriDoll(siteRequest_, (String)o);
 			default:
-				return BaseResultPage.staticSearchBaseResultPage(entityVar,  siteRequest_, o);
+				return PageLayout.staticSearchPageLayout(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -619,14 +622,14 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 		switch(entityVar) {
 		case "listDoll":
 			return DollGenPage.staticSearchStrListDoll(siteRequest_, (String)o);
-		case "dollCount":
-			return DollGenPage.staticSearchStrDollCount(siteRequest_, (Integer)o);
-		case "id":
-			return DollGenPage.staticSearchStrId(siteRequest_, (String)o);
+		case "resultCount":
+			return DollGenPage.staticSearchStrResultCount(siteRequest_, (Integer)o);
+		case "solrId":
+			return DollGenPage.staticSearchStrSolrId(siteRequest_, (String)o);
 		case "pageUriDoll":
 			return DollGenPage.staticSearchStrPageUriDoll(siteRequest_, (String)o);
 			default:
-				return BaseResultPage.staticSearchStrBaseResultPage(entityVar,  siteRequest_, o);
+				return PageLayout.staticSearchStrPageLayout(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -641,14 +644,14 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 		switch(entityVar) {
 		case "listDoll":
 			return DollGenPage.staticSearchFqListDoll(siteRequest_, o);
-		case "dollCount":
-			return DollGenPage.staticSearchFqDollCount(siteRequest_, o);
-		case "id":
-			return DollGenPage.staticSearchFqId(siteRequest_, o);
+		case "resultCount":
+			return DollGenPage.staticSearchFqResultCount(siteRequest_, o);
+		case "solrId":
+			return DollGenPage.staticSearchFqSolrId(siteRequest_, o);
 		case "pageUriDoll":
 			return DollGenPage.staticSearchFqPageUriDoll(siteRequest_, o);
 			default:
-				return BaseResultPage.staticSearchFqBaseResultPage(entityVar,  siteRequest_, o);
+				return PageLayout.staticSearchFqPageLayout(entityVar,  siteRequest_, o);
 		}
 	}
 
@@ -663,19 +666,66 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 	}
 
 	public static final String CLASS_SIMPLE_NAME = "DollGenPage";
+	public static final String CLASS_CANONICAL_NAME = "com.coralberryfairy.site.model.doll.DollGenPage";
+	public static final String CLASS_AUTH_RESOURCE = "";
 	public static final String VAR_searchListDoll_ = "searchListDoll_";
 	public static final String VAR_listDoll = "listDoll";
-	public static final String VAR_dollCount = "dollCount";
-	public static final String VAR_doll_ = "doll_";
-	public static final String VAR_id = "id";
+	public static final String VAR_resultCount = "resultCount";
+	public static final String VAR_result = "result";
+	public static final String VAR_solrId = "solrId";
 	public static final String VAR_pageUriDoll = "pageUriDoll";
 
 	public static final String DISPLAY_NAME_searchListDoll_ = "";
 	public static final String DISPLAY_NAME_listDoll = "";
-	public static final String DISPLAY_NAME_dollCount = "";
-	public static final String DISPLAY_NAME_doll_ = "";
-	public static final String DISPLAY_NAME_id = "";
+	public static final String DISPLAY_NAME_resultCount = "";
+	public static final String DISPLAY_NAME_result = "";
+	public static final String DISPLAY_NAME_solrId = "";
 	public static final String DISPLAY_NAME_pageUriDoll = "";
+
+	@Override
+	public String idForClass() {
+		return null;
+	}
+
+	@Override
+	public String titleForClass() {
+		return null;
+	}
+
+	@Override
+	public String nameForClass() {
+		return null;
+	}
+
+	@Override
+	public String classNameAdjectiveSingularForClass() {
+		return null;
+	}
+
+	@Override
+	public String descriptionForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlEditPageForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlDisplayPageForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlUserPageForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlDownloadForClass() {
+		return null;
+	}
 
 	public static String displayNameForClass(String var) {
 		return DollGenPage.displayNameDollGenPage(var);
@@ -686,16 +736,93 @@ public abstract class DollGenPageGen<DEV> extends BaseResultPage {
 			return DISPLAY_NAME_searchListDoll_;
 		case VAR_listDoll:
 			return DISPLAY_NAME_listDoll;
-		case VAR_dollCount:
-			return DISPLAY_NAME_dollCount;
-		case VAR_doll_:
-			return DISPLAY_NAME_doll_;
-		case VAR_id:
-			return DISPLAY_NAME_id;
+		case VAR_resultCount:
+			return DISPLAY_NAME_resultCount;
+		case VAR_result:
+			return DISPLAY_NAME_result;
+		case VAR_solrId:
+			return DISPLAY_NAME_solrId;
 		case VAR_pageUriDoll:
 			return DISPLAY_NAME_pageUriDoll;
 		default:
-			return BaseResultPage.displayNameBaseResultPage(var);
+			return PageLayout.displayNamePageLayout(var);
+		}
+	}
+
+	public static String descriptionDollGenPage(String var) {
+		if(var == null)
+			return null;
+		switch(var) {
+			default:
+				return PageLayout.descriptionPageLayout(var);
+		}
+	}
+
+	public static String classSimpleNameDollGenPage(String var) {
+		switch(var) {
+		case VAR_searchListDoll_:
+			return "SearchList";
+		case VAR_listDoll:
+			return "JsonArray";
+		case VAR_resultCount:
+			return "Integer";
+		case VAR_result:
+			return "Doll";
+		case VAR_solrId:
+			return "String";
+		case VAR_pageUriDoll:
+			return "String";
+			default:
+				return PageLayout.classSimpleNamePageLayout(var);
+		}
+	}
+
+	public static Integer htmColumnDollGenPage(String var) {
+		switch(var) {
+			default:
+				return PageLayout.htmColumnPageLayout(var);
+		}
+	}
+
+	public static Integer htmRowDollGenPage(String var) {
+		switch(var) {
+			default:
+				return PageLayout.htmRowPageLayout(var);
+		}
+	}
+
+	public static Integer htmCellDollGenPage(String var) {
+		switch(var) {
+			default:
+				return PageLayout.htmCellPageLayout(var);
+		}
+	}
+
+	public static Integer lengthMinDollGenPage(String var) {
+		switch(var) {
+			default:
+				return PageLayout.lengthMinPageLayout(var);
+		}
+	}
+
+	public static Integer lengthMaxDollGenPage(String var) {
+		switch(var) {
+			default:
+				return PageLayout.lengthMaxPageLayout(var);
+		}
+	}
+
+	public static Integer maxDollGenPage(String var) {
+		switch(var) {
+			default:
+				return PageLayout.maxPageLayout(var);
+		}
+	}
+
+	public static Integer minDollGenPage(String var) {
+		switch(var) {
+			default:
+				return PageLayout.minPageLayout(var);
 		}
 	}
 }

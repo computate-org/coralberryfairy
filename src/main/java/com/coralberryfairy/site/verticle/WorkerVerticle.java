@@ -36,6 +36,12 @@ import org.computate.vertx.api.ApiCounter;
 import org.computate.vertx.api.ApiRequest;
 import com.coralberryfairy.site.config.ConfigKeys;
 import com.coralberryfairy.site.request.SiteRequest;
+import com.coralberryfairy.site.page.SitePage;
+import com.coralberryfairy.site.page.SitePageEnUSApiServiceImpl;
+import com.coralberryfairy.site.page.SitePageEnUSGenApiService;
+import com.coralberryfairy.site.model.doll.Doll;
+import com.coralberryfairy.site.model.doll.DollEnUSApiServiceImpl;
+import com.coralberryfairy.site.model.doll.DollEnUSGenApiService;
 import org.computate.vertx.api.ApiCounter;
 import org.computate.vertx.api.ApiRequest;
 import org.computate.vertx.config.ComputateConfigKeys;
@@ -546,9 +552,17 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			siteRequest.addScopes("GET");
 			String templatePath = config().getString(ComputateConfigKeys.TEMPLATE_PATH);
 
+			SitePageEnUSApiServiceImpl apiSitePage = new SitePageEnUSApiServiceImpl();
+			initializeApiService(apiSitePage);
+			DollEnUSApiServiceImpl apiDoll = new DollEnUSApiServiceImpl();
+			initializeApiService(apiDoll);
 
-			LOG.info("data import complete");
-			promise.complete();
+			apiSitePage.importTimer(Paths.get(templatePath, "/en-us/view/article"), vertx, siteRequest, SitePage.CLASS_CANONICAL_NAME, SitePage.CLASS_SIMPLE_NAME, SitePage.CLASS_API_ADDRESS_SitePage, SitePage.CLASS_AUTH_RESOURCE, "pageId", "userPage", "download").onSuccess(q1 -> {
+				apiDoll.importTimer(Paths.get(templatePath, "/view/product/doll"), vertx, siteRequest, Doll.CLASS_CANONICAL_NAME, Doll.CLASS_SIMPLE_NAME, Doll.CLASS_API_ADDRESS_Doll, Doll.CLASS_AUTH_RESOURCE, "pageId", "userPage", "download").onSuccess(q2 -> {
+					LOG.info("data import complete");
+					promise.complete();
+				}).onFailure(ex -> promise.fail(ex));
+			}).onFailure(ex -> promise.fail(ex));
 		}
 		else {
 			LOG.info(importDataSkip);

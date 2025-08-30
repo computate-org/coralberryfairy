@@ -58,7 +58,7 @@ data:
     # The main git repository for the project via ssh. 
     SITE_REPO_HTTPS: "{{ SITE_REPO | replace('git@github.com:', 'https://github.com/') }}"
     # The port of the site. 
-    SITE_PORT: 10230
+    SITE_PORT: 10240
     # The host name of the site. 
     SITE_HOST_NAME: "{{ lookup('env', 'SITE_HOST_NAME') | default('localhost', true) }}"
     # The base URL of the site. 

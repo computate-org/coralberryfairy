@@ -69,7 +69,7 @@ spec:
           timeoutSeconds: 10
         name: coralberryfairy
         ports:
-        - containerPort: 10230
+        - containerPort: 10240
           name: http
           protocol: TCP
         - containerPort: 10231

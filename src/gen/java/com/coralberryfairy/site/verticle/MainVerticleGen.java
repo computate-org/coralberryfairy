@@ -41,23 +41,23 @@ import io.vertx.core.json.JsonArray;
 /**
  * <ol>
 <h3>Suggestions that can generate more code for you: </h3> * </ol>
- * <li>You can add a class comment <b>"Api: true"</b> if you wish to GET, POST, PATCH or PUT these WorkerVerticle objects in a RESTful API. 
- * </li><li>You can add a class comment "{@inheritDoc}" if you wish to inherit the helpful inherited class comments from class WorkerVerticleGen into the class WorkerVerticle. 
+ * <li>You can add a class comment <b>"Api: true"</b> if you wish to GET, POST, PATCH or PUT these MainVerticle objects in a RESTful API. 
+ * </li><li>You can add a class comment "{@inheritDoc}" if you wish to inherit the helpful inherited class comments from class MainVerticleGen into the class MainVerticle. 
  * </li>
- * <h3>About the WorkerVerticle class and it's generated class WorkerVerticleGen&lt;AbstractVerticle&gt;: </h3>extends WorkerVerticleGen
+ * <h3>About the MainVerticle class and it's generated class MainVerticleGen&lt;AbstractVerticle&gt;: </h3>extends MainVerticleGen
  * <p>
- * This Java class extends a generated Java class WorkerVerticleGen built by the <a href="https://github.com/computate-org/computate">https://github.com/computate-org/computate</a> project. 
+ * This Java class extends a generated Java class MainVerticleGen built by the <a href="https://github.com/computate-org/computate">https://github.com/computate-org/computate</a> project. 
  * Whenever this Java class is modified or touched, the watch service installed as described in the README, indexes all the information about this Java class in a local Apache Solr Search Engine. 
  * If you are running the service, you can see the indexed data about this Java Class here: 
  * </p>
- * <p><a href="https://solr.apps-crc.testing/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.verticle.WorkerVerticle">Find the class WorkerVerticle in Solr. </a></p>
+ * <p><a href="https://solr.apps-crc.testing/solr/computate/select?q=*:*&fq=partEstClasse_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.verticle.MainVerticle">Find the class MainVerticle in Solr. </a></p>
  * <p>
  * The extended class ending with "Gen" did not exist at first, but was automatically created by the same watch service based on the data retrieved from the local Apache Server search engine. 
  * The extended class contains many generated fields, getters, setters, initialization code, and helper methods to help build a website and API fast, reactive, and scalable. 
  * </p>
- * extends WorkerVerticleGen<AbstractVerticle>
- * <p>This <code>class WorkerVerticle extends WorkerVerticleGen&lt;AbstractVerticle&gt;</code>, which means it extends a newly generated WorkerVerticleGen. 
- * The generated <code>class WorkerVerticleGen extends AbstractVerticle</code> which means that WorkerVerticle extends WorkerVerticleGen which extends AbstractVerticle. 
+ * extends MainVerticleGen<AbstractVerticle>
+ * <p>This <code>class MainVerticle extends MainVerticleGen&lt;AbstractVerticle&gt;</code>, which means it extends a newly generated MainVerticleGen. 
+ * The generated <code>class MainVerticleGen extends AbstractVerticle</code> which means that MainVerticle extends MainVerticleGen which extends AbstractVerticle. 
  * This generated inheritance is a powerful feature that allows a lot of boiler plate code to be created for you automatically while still preserving inheritance through the power of Java Generic classes. 
  * </p>
  * <h2>Api: true</h2>
@@ -66,7 +66,7 @@ import io.vertx.core.json.JsonArray;
  * <h2>Color: null</h2>
  * <h2>Indexed: true</h2>
  * <h2>{@inheritDoc}</h2>
- * <p>By adding a class comment "{@inheritDoc}", the WorkerVerticle class will inherit the helpful inherited class comments from the super class WorkerVerticleGen. 
+ * <p>By adding a class comment "{@inheritDoc}", the MainVerticle class will inherit the helpful inherited class comments from the super class MainVerticleGen. 
  * </p>
  * <h2>Rows: null</h2>
  * <h2>Model: true</h2>
@@ -75,8 +75,8 @@ import io.vertx.core.json.JsonArray;
  * <h2>Promise: true</h2>
  * <h2>AName.enUS: null</h2>
  * <p>
- * Delete the class WorkerVerticle in Solr: 
- * curl -k 'https://solr.apps-crc.testing/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.verticle.WorkerVerticle&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
+ * Delete the class MainVerticle in Solr: 
+ * curl -k 'https://solr.apps-crc.testing/update?commitWithin=1000&overwrite=true&wt=json' -X POST -H 'Content-type: text/xml' --data-raw '&lt;add&gt;&lt;delete&gt;&lt;query&gt;classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.verticle.MainVerticle&lt;/query&gt;&lt;/delete&gt;&lt;/add&gt;'
  * </p>
  * <p>
  * Delete  the package com.coralberryfairy.site.verticle in Solr: 
@@ -88,8 +88,13 @@ import io.vertx.core.json.JsonArray;
  * </p>
  * Generated: true
  **/
-public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
-	protected static final Logger LOG = LoggerFactory.getLogger(WorkerVerticle.class);
+public abstract class MainVerticleGen<DEV> extends AbstractVerticle {
+	protected static final Logger LOG = LoggerFactory.getLogger(MainVerticle.class);
+
+	public static final String SITE_NAME = "coralberryfairy";
+	public static final String authorizeDataFail1 = "Adding Keycloak authorization resources, policies, and permissions failed. ";
+	public static final String authorizeDataFail = authorizeDataFail1;
+
 	public static final String configureI18nFileError1 = "Failed to load internationalization data from file: %s";
 	public static final String configureI18nFileError = configureI18nFileError1;
 	public static final String configureI18nError1 = "Failed to load internationalization data. ";
@@ -99,45 +104,25 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	public static final String configureI18nLoaded1 = "Loaded internationalization data: %s";
 	public static final String configureI18nLoaded = configureI18nLoaded1;
 
-	public static final String configureDataConnectionError1 = "Could not open the database client connection. ";
-	public static final String configureDataConnectionError = configureDataConnectionError1;
-	public static final String configureDataConnectionSuccess1 = "The database client connection was successful. \n";
-	public static final String configureDataConnectionSuccess = configureDataConnectionSuccess1;
-	public static final String configureDataInitError1 = "Could not initialize the database tables. ";
-	public static final String configureDataInitError = configureDataInitError1;
-	public static final String configureDataInitSuccess1 = "The database was initialized successfully. \n";
-	public static final String configureDataInitSuccess = configureDataInitSuccess1;
-
-	public static final String configureSharedWorkerExecutorFail1 = "Could not configure the shared worker executor. ";
-	public static final String configureSharedWorkerExecutorFail = configureSharedWorkerExecutorFail1;
-	public static final String configureSharedWorkerExecutorComplete1 = "The shared worker executor \"{}\" was configured successfully. \n";
-	public static final String configureSharedWorkerExecutorComplete = configureSharedWorkerExecutorComplete1;
-
-	public static final String configureKafkaSuccess1 = "The Kafka producer was initialized successfully. ";
-	public static final String configureKafkaSuccess = configureKafkaSuccess1;
-
-	public static final String importDataSkip1 = "The data import is disabled. ";
-	public static final String importDataSkip = importDataSkip1;
-
 
 	//////////////
 	// initDeep //
 	//////////////
 
-	public WorkerVerticle initDeepWorkerVerticle(SiteRequest siteRequest_) {
-		initDeepWorkerVerticle();
-		return (WorkerVerticle)this;
+	public MainVerticle initDeepMainVerticle(SiteRequest siteRequest_) {
+		initDeepMainVerticle();
+		return (MainVerticle)this;
 	}
 
-	public void initDeepWorkerVerticle() {
-		initWorkerVerticle();
+	public void initDeepMainVerticle() {
+		initMainVerticle();
 	}
 
-	public void initWorkerVerticle() {
+	public void initMainVerticle() {
 	}
 
 	public void initDeepForClass(SiteRequest siteRequest_) {
-		initDeepWorkerVerticle(siteRequest_);
+		initDeepMainVerticle(siteRequest_);
 	}
 
 	/////////////
@@ -149,7 +134,7 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = obtainWorkerVerticle(v);
+				o = obtainMainVerticle(v);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
 				o = baseModel.obtainForClass(v);
@@ -161,8 +146,8 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 		}
 		return o;
 	}
-	public Object obtainWorkerVerticle(String var) {
-		WorkerVerticle oWorkerVerticle = (WorkerVerticle)this;
+	public Object obtainMainVerticle(String var) {
+		MainVerticle oMainVerticle = (MainVerticle)this;
 		switch(var) {
 			default:
 				return null;
@@ -178,7 +163,7 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 		Object o = null;
 		for(String v : vars) {
 			if(o == null)
-				o = relateWorkerVerticle(v, val);
+				o = relateMainVerticle(v, val);
 			else if(o instanceof BaseModel) {
 				BaseModel baseModel = (BaseModel)o;
 				o = baseModel.relateForClass(v, val);
@@ -186,8 +171,8 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 		}
 		return o != null;
 	}
-	public Object relateWorkerVerticle(String var, Object val) {
-		WorkerVerticle oWorkerVerticle = (WorkerVerticle)this;
+	public Object relateMainVerticle(String var, Object val) {
+		MainVerticle oMainVerticle = (MainVerticle)this;
 		switch(var) {
 			default:
 				return null;
@@ -198,10 +183,10 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	// staticSet //
 	///////////////
 
-	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String v, WorkerVerticle o) {
-		return staticSetWorkerVerticle(entityVar,  siteRequest_, v, o);
+	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String v, MainVerticle o) {
+		return staticSetMainVerticle(entityVar,  siteRequest_, v, o);
 	}
-	public static Object staticSetWorkerVerticle(String entityVar, SiteRequest siteRequest_, String v, WorkerVerticle o) {
+	public static Object staticSetMainVerticle(String entityVar, SiteRequest siteRequest_, String v, MainVerticle o) {
 		switch(entityVar) {
 			default:
 				return null;
@@ -213,9 +198,9 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	////////////////
 
 	public static Object staticSearchForClass(String entityVar, SiteRequest siteRequest_, Object o) {
-		return staticSearchWorkerVerticle(entityVar,  siteRequest_, o);
+		return staticSearchMainVerticle(entityVar,  siteRequest_, o);
 	}
-	public static Object staticSearchWorkerVerticle(String entityVar, SiteRequest siteRequest_, Object o) {
+	public static Object staticSearchMainVerticle(String entityVar, SiteRequest siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
 				return null;
@@ -227,9 +212,9 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	///////////////////
 
 	public static String staticSearchStrForClass(String entityVar, SiteRequest siteRequest_, Object o) {
-		return staticSearchStrWorkerVerticle(entityVar,  siteRequest_, o);
+		return staticSearchStrMainVerticle(entityVar,  siteRequest_, o);
 	}
-	public static String staticSearchStrWorkerVerticle(String entityVar, SiteRequest siteRequest_, Object o) {
+	public static String staticSearchStrMainVerticle(String entityVar, SiteRequest siteRequest_, Object o) {
 		switch(entityVar) {
 			default:
 				return null;
@@ -241,9 +226,9 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	//////////////////
 
 	public static String staticSearchFqForClass(String entityVar, SiteRequest siteRequest_, String o) {
-		return staticSearchFqWorkerVerticle(entityVar,  siteRequest_, o);
+		return staticSearchFqMainVerticle(entityVar,  siteRequest_, o);
 	}
-	public static String staticSearchFqWorkerVerticle(String entityVar, SiteRequest siteRequest_, String o) {
+	public static String staticSearchFqMainVerticle(String entityVar, SiteRequest siteRequest_, String o) {
 		switch(entityVar) {
 			default:
 				return null;
@@ -259,10 +244,10 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 		return sb.toString();
 	}
 
-	public static final String[] WorkerVerticleVals = new String[] { configureI18nFileError1, configureI18nError1, configureI18nComplete1, configureI18nLoaded1, configureDataConnectionError1, configureDataConnectionSuccess1, configureDataInitError1, configureDataInitSuccess1, configureSharedWorkerExecutorFail1, configureSharedWorkerExecutorComplete1, configureKafkaSuccess1, importDataSkip1 };
+	public static final String[] MainVerticleVals = new String[] { authorizeDataFail1, configureI18nFileError1, configureI18nError1, configureI18nComplete1, configureI18nLoaded1 };
 
-	public static final String CLASS_SIMPLE_NAME = "WorkerVerticle";
-	public static final String CLASS_CANONICAL_NAME = "com.coralberryfairy.site.verticle.WorkerVerticle";
+	public static final String CLASS_SIMPLE_NAME = "MainVerticle";
+	public static final String CLASS_CANONICAL_NAME = "com.coralberryfairy.site.verticle.MainVerticle";
 	public static final String CLASS_AUTH_RESOURCE = "";
 
 
@@ -303,16 +288,16 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 	}
 
 	public static String displayNameForClass(String var) {
-		return WorkerVerticle.displayNameWorkerVerticle(var);
+		return MainVerticle.displayNameMainVerticle(var);
 	}
-	public static String displayNameWorkerVerticle(String var) {
+	public static String displayNameMainVerticle(String var) {
 		switch(var) {
 		default:
 			return null;
 		}
 	}
 
-	public static String descriptionWorkerVerticle(String var) {
+	public static String descriptionMainVerticle(String var) {
 		if(var == null)
 			return null;
 		switch(var) {
@@ -321,56 +306,56 @@ public abstract class WorkerVerticleGen<DEV> extends AbstractVerticle {
 		}
 	}
 
-	public static String classSimpleNameWorkerVerticle(String var) {
+	public static String classSimpleNameMainVerticle(String var) {
 		switch(var) {
 			default:
 				return null;
 		}
 	}
 
-	public static Integer htmColumnWorkerVerticle(String var) {
+	public static Integer htmColumnMainVerticle(String var) {
 		switch(var) {
 			default:
 				return null;
 		}
 	}
 
-	public static Integer htmRowWorkerVerticle(String var) {
+	public static Integer htmRowMainVerticle(String var) {
 		switch(var) {
 			default:
 				return null;
 		}
 	}
 
-	public static Integer htmCellWorkerVerticle(String var) {
+	public static Integer htmCellMainVerticle(String var) {
 		switch(var) {
 			default:
 				return null;
 		}
 	}
 
-	public static Integer lengthMinWorkerVerticle(String var) {
+	public static Integer lengthMinMainVerticle(String var) {
 		switch(var) {
 			default:
 				return null;
 		}
 	}
 
-	public static Integer lengthMaxWorkerVerticle(String var) {
+	public static Integer lengthMaxMainVerticle(String var) {
 		switch(var) {
 			default:
 				return null;
 		}
 	}
 
-	public static Integer maxWorkerVerticle(String var) {
+	public static Integer maxMainVerticle(String var) {
 		switch(var) {
 			default:
 				return null;
 		}
 	}
 
-	public static Integer minWorkerVerticle(String var) {
+	public static Integer minMainVerticle(String var) {
 		switch(var) {
 			default:
 				return null;

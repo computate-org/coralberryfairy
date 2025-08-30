@@ -80,10 +80,12 @@ import java.net.URLEncoder;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.http.HttpHeaders;
+import io.vertx.core.http.HttpResponseExpectation;
 import java.nio.charset.Charset;
 import io.vertx.ext.auth.authorization.RoleBasedAuthorization;
 import io.vertx.ext.web.api.service.ServiceRequest;
 import io.vertx.ext.web.api.service.ServiceResponse;
+import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.predicate.ResponsePredicate;
 import java.util.HashMap;
 import io.vertx.ext.auth.User;
@@ -112,15 +114,12 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 
 	protected static final Logger LOG = LoggerFactory.getLogger(SitePageEnUSGenApiServiceImpl.class);
 
-	public SitePageEnUSGenApiServiceImpl(Vertx vertx, JsonObject config, WorkerExecutor workerExecutor, ComputateOAuth2AuthHandlerImpl oauth2AuthHandler, PgPool pgPool, KafkaProducer<String, String> kafkaProducer, MqttClient mqttClient, AmqpSender amqpSender, RabbitMQClient rabbitmqClient, WebClient webClient, OAuth2Auth oauth2AuthenticationProvider, AuthorizationProvider authorizationProvider, Jinjava jinjava) {
-		super(vertx, config, workerExecutor, oauth2AuthHandler, pgPool, kafkaProducer, mqttClient, amqpSender, rabbitmqClient, webClient, oauth2AuthenticationProvider, authorizationProvider, jinjava);
-	}
-
 	// Search //
 
 	@Override
 	public void searchSitePage(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
 						searchSitePageList(siteRequest, false, true, false).onSuccess(listSitePage -> {
 							response200SearchSitePage(listSitePage).onSuccess(response -> {
 								eventHandler.handle(Future.succeededFuture(response));
@@ -159,7 +158,6 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		});
 	}
 
-
 	public Future<ServiceResponse> response200SearchSitePage(SearchList<SitePage> listSitePage) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
@@ -193,7 +191,15 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			});
 			json.put("list", l);
 			response200Search(listSitePage.getRequest(), listSitePage.getResponse(), json);
-			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			if(json == null) {
+				String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+				String m = String.format("%s %s not found", "article", pageId);
+				promise.complete(new ServiceResponse(404
+						, m
+						, Buffer.buffer(new JsonObject().put("message", m).encodePrettily()), null));
+			} else {
+				promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			}
 		} catch(Exception ex) {
 			LOG.error(String.format("response200SearchSitePage failed. "), ex);
 			promise.fail(ex);
@@ -239,7 +245,8 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 
 	@Override
 	public void getSitePage(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
 						searchSitePageList(siteRequest, false, true, false).onSuccess(listSitePage -> {
 							response200GETSitePage(listSitePage).onSuccess(response -> {
 								eventHandler.handle(Future.succeededFuture(response));
@@ -278,13 +285,20 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		});
 	}
 
-
 	public Future<ServiceResponse> response200GETSitePage(SearchList<SitePage> listSitePage) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			SiteRequest siteRequest = listSitePage.getSiteRequest_(SiteRequest.class);
 			JsonObject json = JsonObject.mapFrom(listSitePage.getList().stream().findFirst().orElse(null));
-			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			if(json == null) {
+				String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+				String m = String.format("%s %s not found", "article", pageId);
+				promise.complete(new ServiceResponse(404
+						, m
+						, Buffer.buffer(new JsonObject().put("message", m).encodePrettily()), null));
+			} else {
+				promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			}
 		} catch(Exception ex) {
 			LOG.error(String.format("response200GETSitePage failed. "), ex);
 			promise.fail(ex);
@@ -297,7 +311,51 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	@Override
 	public void patchSitePage(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("patchSitePage started. "));
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+			String SITEPAGE = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("SITEPAGE");
+			MultiMap form = MultiMap.caseInsensitiveMultiMap();
+			form.add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket");
+			form.add("audience", config.getString(ComputateConfigKeys.AUTH_CLIENT));
+			form.add("response_mode", "permissions");
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_ADMIN)));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_SUPER_ADMIN)));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "GET"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "POST"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "DELETE"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "PATCH"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "PUT"));
+			if(pageId != null)
+				form.add("permission", String.format("%s#%s", pageId, "PATCH"));
+			webClient.post(
+					config.getInteger(ComputateConfigKeys.AUTH_PORT)
+					, config.getString(ComputateConfigKeys.AUTH_HOST_NAME)
+					, config.getString(ComputateConfigKeys.AUTH_TOKEN_URI)
+					)
+					.ssl(config.getBoolean(ComputateConfigKeys.AUTH_SSL))
+					.putHeader("Authorization", String.format("Bearer %s", Optional.ofNullable(siteRequest.getUser()).map(u -> u.principal().getString("access_token")).orElse("")))
+					.sendForm(form)
+					.expecting(HttpResponseExpectation.SC_OK)
+			.onComplete(authorizationDecisionResponse -> {
+				try {
+					HttpResponse<Buffer> authorizationDecision = authorizationDecisionResponse.result();
+					JsonArray scopes = authorizationDecisionResponse.failed() ? new JsonArray() : authorizationDecision.bodyAsJsonArray().stream().findFirst().map(decision -> ((JsonObject)decision).getJsonArray("scopes")).orElse(new JsonArray());
+					if(authorizationDecisionResponse.failed() && !scopes.contains("PATCH")) {
+						String msg = String.format("403 FORBIDDEN user %s to %s %s", siteRequest.getUser().attributes().getJsonObject("accessToken").getString("preferred_username"), serviceRequest.getExtra().getString("method"), serviceRequest.getExtra().getString("uri"));
+						eventHandler.handle(Future.succeededFuture(
+							new ServiceResponse(403, "FORBIDDEN",
+								Buffer.buffer().appendString(
+									new JsonObject()
+										.put("errorCode", "403")
+										.put("errorMessage", msg)
+										.encodePrettily()
+									), MultiMap.caseInsensitiveMultiMap()
+							)
+						));
+					} else {
+						siteRequest.setScopes(scopes.stream().map(o -> o.toString()).collect(Collectors.toList()));
+						List<String> scopes2 = siteRequest.getScopes();
 						searchSitePageList(siteRequest, true, false, true).onSuccess(listSitePage -> {
 							try {
 								ApiRequest apiRequest = new ApiRequest();
@@ -308,6 +366,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 								siteRequest.setApiRequest_(apiRequest);
 								if(apiRequest.getNumFound() == 1L)
 									apiRequest.setOriginal(listSitePage.first());
+								apiRequest.setId(Optional.ofNullable(listSitePage.first()).map(o2 -> o2.getPageId().toString()).orElse(null));
 								eventBus.publish("websocketSitePage", JsonObject.mapFrom(apiRequest).toString());
 
 								listPATCHSitePage(apiRequest, listSitePage).onSuccess(e -> {
@@ -330,6 +389,12 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							LOG.error(String.format("patchSitePage failed. "), ex);
 							error(siteRequest, eventHandler, ex);
 						});
+					}
+				} catch(Exception ex) {
+					LOG.error(String.format("patchSitePage failed. "), ex);
+					error(null, eventHandler, ex);
+				}
+			});
 		}).onFailure(ex -> {
 			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
@@ -356,17 +421,20 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		});
 	}
 
-
 	public Future<Void> listPATCHSitePage(ApiRequest apiRequest, SearchList<SitePage> listSitePage) {
 		Promise<Void> promise = Promise.promise();
 		List<Future> futures = new ArrayList<>();
 		SiteRequest siteRequest = listSitePage.getSiteRequest_(SiteRequest.class);
 		listSitePage.getList().forEach(o -> {
 			SiteRequest siteRequest2 = generateSiteRequest(siteRequest.getUser(), siteRequest.getUserPrincipal(), siteRequest.getServiceRequest(), siteRequest.getJsonObject(), SiteRequest.class);
+			siteRequest2.setScopes(siteRequest.getScopes());
 			o.setSiteRequest_(siteRequest2);
 			siteRequest2.setApiRequest_(siteRequest.getApiRequest_());
+			JsonObject jsonObject = JsonObject.mapFrom(o);
+			SitePage o2 = jsonObject.mapTo(SitePage.class);
+			o2.setSiteRequest_(siteRequest2);
 			futures.add(Future.future(promise1 -> {
-				patchSitePageFuture(o, false).onSuccess(a -> {
+				patchSitePageFuture(o2, false).onSuccess(a -> {
 					promise1.complete();
 				}).onFailure(ex -> {
 					LOG.error(String.format("listPATCHSitePage failed. "), ex);
@@ -399,10 +467,16 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 
 	@Override
 	public void patchSitePageFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
 			try {
 				siteRequest.setJsonObject(body);
 				serviceRequest.getParams().getJsonObject("query").put("rows", 1);
+				Optional.ofNullable(serviceRequest.getParams().getJsonArray("scopes")).ifPresent(scopes -> {
+					scopes.stream().map(v -> v.toString()).forEach(scope -> {
+						siteRequest.addScopes(scope);
+					});
+				});
 				searchSitePageList(siteRequest, false, true, true).onSuccess(listSitePage -> {
 					try {
 						SitePage o = listSitePage.first();
@@ -418,7 +492,11 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							}
 							if(apiRequest.getNumFound() == 1L)
 								apiRequest.setOriginal(o);
-							patchSitePageFuture(o, false).onSuccess(o2 -> {
+							apiRequest.setId(Optional.ofNullable(listSitePage.first()).map(o2 -> o2.getPageId().toString()).orElse(null));
+							JsonObject jsonObject = JsonObject.mapFrom(o);
+							SitePage o2 = jsonObject.mapTo(SitePage.class);
+							o2.setSiteRequest_(siteRequest);
+							patchSitePageFuture(o2, false).onSuccess(o3 -> {
 								eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(new JsonObject().encodePrettily()))));
 							}).onFailure(ex -> {
 								eventHandler.handle(Future.failedFuture(ex));
@@ -444,7 +522,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		});
 	}
 
-	public Future<SitePage> patchSitePageFuture(SitePage o, Boolean inheritPk) {
+	public Future<SitePage> patchSitePageFuture(SitePage o, Boolean inheritPrimaryKey) {
 		SiteRequest siteRequest = o.getSiteRequest_();
 		Promise<SitePage> promise = Promise.promise();
 
@@ -452,6 +530,14 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			ApiRequest apiRequest = siteRequest.getApiRequest_();
 			persistSitePage(o, true).onSuccess(c -> {
 				indexSitePage(o).onSuccess(e -> {
+					if(apiRequest != null) {
+						apiRequest.setNumPATCH(apiRequest.getNumPATCH() + 1);
+						if(apiRequest.getNumFound() == 1L && Optional.ofNullable(siteRequest.getJsonObject()).map(json -> json.size() > 0).orElse(false)) {
+							o.apiRequestSitePage();
+							if(apiRequest.getVars().size() > 0)
+								eventBus.publish("websocketSitePage", JsonObject.mapFrom(apiRequest).toString());
+						}
+					}
 					promise.complete(o);
 				}).onFailure(ex -> {
 					promise.fail(ex);
@@ -470,7 +556,15 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			JsonObject json = new JsonObject();
-			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			if(json == null) {
+				String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+				String m = String.format("%s %s not found", "article", pageId);
+				promise.complete(new ServiceResponse(404
+						, m
+						, Buffer.buffer(new JsonObject().put("message", m).encodePrettily()), null));
+			} else {
+				promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			}
 		} catch(Exception ex) {
 			LOG.error(String.format("response200PATCHSitePage failed. "), ex);
 			promise.fail(ex);
@@ -483,7 +577,51 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	@Override
 	public void postSitePage(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("postSitePage started. "));
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+			String SITEPAGE = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("SITEPAGE");
+			MultiMap form = MultiMap.caseInsensitiveMultiMap();
+			form.add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket");
+			form.add("audience", config.getString(ComputateConfigKeys.AUTH_CLIENT));
+			form.add("response_mode", "permissions");
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_ADMIN)));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_SUPER_ADMIN)));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "GET"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "POST"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "DELETE"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "PATCH"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "PUT"));
+			if(pageId != null)
+				form.add("permission", String.format("%s#%s", pageId, "POST"));
+			webClient.post(
+					config.getInteger(ComputateConfigKeys.AUTH_PORT)
+					, config.getString(ComputateConfigKeys.AUTH_HOST_NAME)
+					, config.getString(ComputateConfigKeys.AUTH_TOKEN_URI)
+					)
+					.ssl(config.getBoolean(ComputateConfigKeys.AUTH_SSL))
+					.putHeader("Authorization", String.format("Bearer %s", Optional.ofNullable(siteRequest.getUser()).map(u -> u.principal().getString("access_token")).orElse("")))
+					.sendForm(form)
+					.expecting(HttpResponseExpectation.SC_OK)
+			.onComplete(authorizationDecisionResponse -> {
+				try {
+					HttpResponse<Buffer> authorizationDecision = authorizationDecisionResponse.result();
+					JsonArray scopes = authorizationDecisionResponse.failed() ? new JsonArray() : authorizationDecision.bodyAsJsonArray().stream().findFirst().map(decision -> ((JsonObject)decision).getJsonArray("scopes")).orElse(new JsonArray());
+					if(authorizationDecisionResponse.failed() && !scopes.contains("POST")) {
+						String msg = String.format("403 FORBIDDEN user %s to %s %s", siteRequest.getUser().attributes().getJsonObject("accessToken").getString("preferred_username"), serviceRequest.getExtra().getString("method"), serviceRequest.getExtra().getString("uri"));
+						eventHandler.handle(Future.succeededFuture(
+							new ServiceResponse(403, "FORBIDDEN",
+								Buffer.buffer().appendString(
+									new JsonObject()
+										.put("errorCode", "403")
+										.put("errorMessage", msg)
+										.encodePrettily()
+									), MultiMap.caseInsensitiveMultiMap()
+							)
+						));
+					} else {
+						siteRequest.setScopes(scopes.stream().map(o -> o.toString()).collect(Collectors.toList()));
+						List<String> scopes2 = siteRequest.getScopes();
 						ApiRequest apiRequest = new ApiRequest();
 						apiRequest.setRows(1L);
 						apiRequest.setNumFound(1L);
@@ -494,7 +632,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 						JsonObject params = new JsonObject();
 						params.put("body", siteRequest.getJsonObject());
 						params.put("path", new JsonObject());
-						params.put("cookie", new JsonObject());
+						params.put("cookie", siteRequest.getServiceRequest().getParams().getJsonObject("cookie"));
 						params.put("header", siteRequest.getServiceRequest().getParams().getJsonObject("header"));
 						params.put("form", new JsonObject());
 						JsonObject query = new JsonObject();
@@ -518,49 +656,11 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							LOG.error(String.format("postSitePage failed. "), ex);
 							error(siteRequest, eventHandler, ex);
 						});
-		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
-				try {
-					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
-				} catch(Exception ex2) {
-					LOG.error(String.format("postSitePage failed. ", ex2));
-					error(null, eventHandler, ex2);
+					}
+				} catch(Exception ex) {
+					LOG.error(String.format("postSitePage failed. "), ex);
+					error(null, eventHandler, ex);
 				}
-			} else if(StringUtils.startsWith(ex.getMessage(), "401 UNAUTHORIZED ")) {
-				eventHandler.handle(Future.succeededFuture(
-					new ServiceResponse(401, "UNAUTHORIZED",
-						Buffer.buffer().appendString(
-							new JsonObject()
-								.put("errorCode", "401")
-								.put("errorMessage", "SSO Resource Permission check returned DENY")
-								.encodePrettily()
-							), MultiMap.caseInsensitiveMultiMap()
-							)
-					));
-			} else {
-				LOG.error(String.format("postSitePage failed. "), ex);
-				error(null, eventHandler, ex);
-			}
-		});
-	}
-
-
-	@Override
-	public void postSitePageFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
-			ApiRequest apiRequest = new ApiRequest();
-			apiRequest.setRows(1L);
-			apiRequest.setNumFound(1L);
-			apiRequest.setNumPATCH(0L);
-			apiRequest.initDeepApiRequest(siteRequest);
-			siteRequest.setApiRequest_(apiRequest);
-			if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
-				siteRequest.getRequestVars().put( "refresh", "false" );
-			}
-			postSitePageFuture(siteRequest, false).onSuccess(o -> {
-				eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(JsonObject.mapFrom(o).encodePrettily()))));
-			}).onFailure(ex -> {
-				eventHandler.handle(Future.failedFuture(ex));
 			});
 		}).onFailure(ex -> {
 			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
@@ -588,7 +688,61 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		});
 	}
 
-	public Future<SitePage> postSitePageFuture(SiteRequest siteRequest, Boolean inheritPk) {
+	@Override
+	public void postSitePageFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			try {
+				Optional.ofNullable(serviceRequest.getParams().getJsonArray("scopes")).ifPresent(scopes -> {
+					scopes.stream().map(v -> v.toString()).forEach(scope -> {
+						siteRequest.addScopes(scope);
+					});
+				});
+				ApiRequest apiRequest = new ApiRequest();
+				apiRequest.setRows(1L);
+				apiRequest.setNumFound(1L);
+				apiRequest.setNumPATCH(0L);
+				apiRequest.initDeepApiRequest(siteRequest);
+				siteRequest.setApiRequest_(apiRequest);
+				if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
+					siteRequest.getRequestVars().put( "refresh", "false" );
+				}
+				postSitePageFuture(siteRequest, false).onSuccess(o -> {
+					eventHandler.handle(Future.succeededFuture(ServiceResponse.completedWithJson(Buffer.buffer(JsonObject.mapFrom(o).encodePrettily()))));
+				}).onFailure(ex -> {
+					eventHandler.handle(Future.failedFuture(ex));
+				});
+			} catch(Throwable ex) {
+				LOG.error(String.format("postSitePage failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("postSitePage failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else if(StringUtils.startsWith(ex.getMessage(), "401 UNAUTHORIZED ")) {
+				eventHandler.handle(Future.succeededFuture(
+					new ServiceResponse(401, "UNAUTHORIZED",
+						Buffer.buffer().appendString(
+							new JsonObject()
+								.put("errorCode", "401")
+								.put("errorMessage", "SSO Resource Permission check returned DENY")
+								.encodePrettily()
+							), MultiMap.caseInsensitiveMultiMap()
+							)
+					));
+			} else {
+				LOG.error(String.format("postSitePage failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+	public Future<SitePage> postSitePageFuture(SiteRequest siteRequest, Boolean pageId) {
 		Promise<SitePage> promise = Promise.promise();
 
 		try {
@@ -617,7 +771,15 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		try {
 			SiteRequest siteRequest = o.getSiteRequest_();
 			JsonObject json = JsonObject.mapFrom(o);
-			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			if(json == null) {
+				String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+				String m = String.format("%s %s not found", "article", pageId);
+				promise.complete(new ServiceResponse(404
+						, m
+						, Buffer.buffer(new JsonObject().put("message", m).encodePrettily()), null));
+			} else {
+				promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			}
 		} catch(Exception ex) {
 			LOG.error(String.format("response200POSTSitePage failed. "), ex);
 			promise.fail(ex);
@@ -630,7 +792,51 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	@Override
 	public void putimportSitePage(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
 		LOG.debug(String.format("putimportSitePage started. "));
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+			String SITEPAGE = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("SITEPAGE");
+			MultiMap form = MultiMap.caseInsensitiveMultiMap();
+			form.add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket");
+			form.add("audience", config.getString(ComputateConfigKeys.AUTH_CLIENT));
+			form.add("response_mode", "permissions");
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_ADMIN)));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_SUPER_ADMIN)));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "GET"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "POST"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "DELETE"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "PATCH"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "PUT"));
+			if(pageId != null)
+				form.add("permission", String.format("%s#%s", pageId, "PUT"));
+			webClient.post(
+					config.getInteger(ComputateConfigKeys.AUTH_PORT)
+					, config.getString(ComputateConfigKeys.AUTH_HOST_NAME)
+					, config.getString(ComputateConfigKeys.AUTH_TOKEN_URI)
+					)
+					.ssl(config.getBoolean(ComputateConfigKeys.AUTH_SSL))
+					.putHeader("Authorization", String.format("Bearer %s", Optional.ofNullable(siteRequest.getUser()).map(u -> u.principal().getString("access_token")).orElse("")))
+					.sendForm(form)
+					.expecting(HttpResponseExpectation.SC_OK)
+			.onComplete(authorizationDecisionResponse -> {
+				try {
+					HttpResponse<Buffer> authorizationDecision = authorizationDecisionResponse.result();
+					JsonArray scopes = authorizationDecisionResponse.failed() ? new JsonArray() : authorizationDecision.bodyAsJsonArray().stream().findFirst().map(decision -> ((JsonObject)decision).getJsonArray("scopes")).orElse(new JsonArray());
+					if(authorizationDecisionResponse.failed() && !scopes.contains("PUT")) {
+						String msg = String.format("403 FORBIDDEN user %s to %s %s", siteRequest.getUser().attributes().getJsonObject("accessToken").getString("preferred_username"), serviceRequest.getExtra().getString("method"), serviceRequest.getExtra().getString("uri"));
+						eventHandler.handle(Future.succeededFuture(
+							new ServiceResponse(403, "FORBIDDEN",
+								Buffer.buffer().appendString(
+									new JsonObject()
+										.put("errorCode", "403")
+										.put("errorMessage", msg)
+										.encodePrettily()
+									), MultiMap.caseInsensitiveMultiMap()
+							)
+						));
+					} else {
+						siteRequest.setScopes(scopes.stream().map(o -> o.toString()).collect(Collectors.toList()));
+						List<String> scopes2 = siteRequest.getScopes();
 						ApiRequest apiRequest = new ApiRequest();
 						JsonArray jsonArray = Optional.ofNullable(siteRequest.getJsonObject()).map(o -> o.getJsonArray("list")).orElse(new JsonArray());
 						apiRequest.setRows(Long.valueOf(jsonArray.size()));
@@ -656,6 +862,12 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 							LOG.error(String.format("putimportSitePage failed. "), ex);
 							error(siteRequest, eventHandler, ex);
 						});
+					}
+				} catch(Exception ex) {
+					LOG.error(String.format("putimportSitePage failed. "), ex);
+					error(null, eventHandler, ex);
+				}
+			});
 		}).onFailure(ex -> {
 			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
 				try {
@@ -682,7 +894,6 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		});
 	}
 
-
 	public Future<Void> listPUTImportSitePage(ApiRequest apiRequest, SiteRequest siteRequest) {
 		Promise<Void> promise = Promise.promise();
 		List<Future> futures = new ArrayList<>();
@@ -693,7 +904,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 					JsonObject params = new JsonObject();
 					params.put("body", obj);
 					params.put("path", new JsonObject());
-					params.put("cookie", new JsonObject());
+					params.put("cookie", siteRequest.getServiceRequest().getParams().getJsonObject("cookie"));
 					params.put("header", siteRequest.getServiceRequest().getParams().getJsonObject("header"));
 					params.put("form", new JsonObject());
 					JsonObject query = new JsonObject();
@@ -732,17 +943,21 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 
 	@Override
 	public void putimportSitePageFuture(JsonObject body, ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
 			try {
+				Optional.ofNullable(serviceRequest.getParams().getJsonArray("scopes")).ifPresent(scopes -> {
+					scopes.stream().map(v -> v.toString()).forEach(scope -> {
+						siteRequest.addScopes(scope);
+					});
+				});
 				ApiRequest apiRequest = new ApiRequest();
 				apiRequest.setRows(1L);
 				apiRequest.setNumFound(1L);
 				apiRequest.setNumPATCH(0L);
 				apiRequest.initDeepApiRequest(siteRequest);
 				siteRequest.setApiRequest_(apiRequest);
-				String inheritPk = Optional.ofNullable(body.getString(SitePage.VAR_id)).orElse(body.getString(SitePage.VAR_id));
-				body.put("inheritPk", inheritPk);
-				body.put("inheritPk", body.getValue("id"));
+				String pageId = Optional.ofNullable(body.getString(SitePage.VAR_pageId)).orElse(body.getString(SitePage.VAR_solrId));
 				if(Optional.ofNullable(serviceRequest.getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getJsonArray("var")).orElse(new JsonArray()).stream().filter(s -> "refresh:false".equals(s)).count() > 0L) {
 					siteRequest.getRequestVars().put( "refresh", "false" );
 				}
@@ -752,7 +967,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				searchList.q("*:*");
 				searchList.setC(SitePage.class);
 				searchList.fq("archived_docvalues_boolean:false");
-				searchList.fq("inheritPk_docvalues_string:" + SearchTool.escapeQueryChars(inheritPk));
+				searchList.fq("pageId_docvalues_string:" + SearchTool.escapeQueryChars(pageId));
 				searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
 					try {
 						if(searchList.size() >= 1) {
@@ -766,7 +981,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 									JsonArray bodyVals = (JsonArray)bodyVal;
 									Object valsObj = o.obtainForClass(f);
 									Collection<?> vals = valsObj instanceof JsonArray ? ((JsonArray)valsObj).getList() : (Collection<?>)valsObj;
-									if(bodyVals.size() == vals.size()) {
+									if(vals != null && bodyVals.size() == vals.size()) {
 										Boolean match = true;
 										for(Object val : vals) {
 											if(val != null) {
@@ -782,40 +997,38 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 										vals.clear();
 										body2.put("set" + StringUtils.capitalize(f), bodyVal);
 									} else {
-										vals.clear();
+										if(vals != null)
+											vals.clear();
 										body2.put("set" + StringUtils.capitalize(f), bodyVal);
 									}
 								} else {
 									o2.persistForClass(f, bodyVal);
 									o2.relateForClass(f, bodyVal);
-									if(!StringUtils.containsAny(f, "id", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
+									if(!StringUtils.containsAny(f, "pageId", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
 										body2.put("set" + StringUtils.capitalize(f), bodyVal);
 								}
 							}
 							for(String f : Optional.ofNullable(o.getSaves()).orElse(new ArrayList<>())) {
 								if(!body.fieldNames().contains(f)) {
-									if(!StringUtils.containsAny(f, "id", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
+									if(!StringUtils.containsAny(f, "pageId", "created", "setCreated") && !Objects.equals(o.obtainForClass(f), o2.obtainForClass(f)))
 										body2.putNull("set" + StringUtils.capitalize(f));
 								}
 							}
-							if(body2.size() > 0) {
-								if(searchList.size() == 1) {
-									apiRequest.setOriginal(o);
-								}
-								siteRequest.setJsonObject(body2);
-								patchSitePageFuture(o2, true).onSuccess(b -> {
-									LOG.debug("Import SitePage {} succeeded, modified SitePage. ", body.getValue(SitePage.VAR_id));
-									eventHandler.handle(Future.succeededFuture());
-								}).onFailure(ex -> {
-									LOG.error(String.format("putimportSitePageFuture failed. "), ex);
-									eventHandler.handle(Future.failedFuture(ex));
-								});
-							} else {
-								eventHandler.handle(Future.succeededFuture());
+							if(searchList.size() == 1) {
+								apiRequest.setOriginal(o);
+								apiRequest.setId(Optional.ofNullable(o.getPageId()).map(v -> v.toString()).orElse(null));
 							}
+							siteRequest.setJsonObject(body2);
+							patchSitePageFuture(o2, true).onSuccess(b -> {
+								LOG.debug("Import SitePage {} succeeded, modified SitePage. ", body.getValue(SitePage.VAR_pageId));
+								eventHandler.handle(Future.succeededFuture());
+							}).onFailure(ex -> {
+								LOG.error(String.format("putimportSitePageFuture failed. "), ex);
+								eventHandler.handle(Future.failedFuture(ex));
+							});
 						} else {
 							postSitePageFuture(siteRequest, true).onSuccess(b -> {
-								LOG.debug("Import SitePage {} succeeded, created new SitePage. ", body.getValue(SitePage.VAR_id));
+								LOG.debug("Import SitePage {} succeeded, created new SitePage. ", body.getValue(SitePage.VAR_pageId));
 								eventHandler.handle(Future.succeededFuture());
 							}).onFailure(ex -> {
 								LOG.error(String.format("putimportSitePageFuture failed. "), ex);
@@ -864,7 +1077,15 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			JsonObject json = new JsonObject();
-			promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			if(json == null) {
+				String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+				String m = String.format("%s %s not found", "article", pageId);
+				promise.complete(new ServiceResponse(404
+						, m
+						, Buffer.buffer(new JsonObject().put("message", m).encodePrettily()), null));
+			} else {
+				promise.complete(ServiceResponse.completedWithJson(Buffer.buffer(Optional.ofNullable(json).orElse(new JsonObject()).encodePrettily())));
+			}
 		} catch(Exception ex) {
 			LOG.error(String.format("response200PUTImportSitePage failed. "), ex);
 			promise.fail(ex);
@@ -875,49 +1096,9 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	// SearchPage //
 
 	@Override
-	public void searchpageSitePageId(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
-						searchSitePageList(siteRequest, false, true, false).onSuccess(listSitePage -> {
-							response200SearchPageSitePage(listSitePage).onSuccess(response -> {
-								eventHandler.handle(Future.succeededFuture(response));
-								LOG.debug(String.format("searchpageSitePage succeeded. "));
-							}).onFailure(ex -> {
-								LOG.error(String.format("searchpageSitePage failed. "), ex);
-								error(siteRequest, eventHandler, ex);
-							});
-						}).onFailure(ex -> {
-							LOG.error(String.format("searchpageSitePage failed. "), ex);
-							error(siteRequest, eventHandler, ex);
-						});
-		}).onFailure(ex -> {
-			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
-				try {
-					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
-				} catch(Exception ex2) {
-					LOG.error(String.format("searchpageSitePage failed. ", ex2));
-					error(null, eventHandler, ex2);
-				}
-			} else if(StringUtils.startsWith(ex.getMessage(), "401 UNAUTHORIZED ")) {
-				eventHandler.handle(Future.succeededFuture(
-					new ServiceResponse(401, "UNAUTHORIZED",
-						Buffer.buffer().appendString(
-							new JsonObject()
-								.put("errorCode", "401")
-								.put("errorMessage", "SSO Resource Permission check returned DENY")
-								.encodePrettily()
-							), MultiMap.caseInsensitiveMultiMap()
-							)
-					));
-			} else {
-				LOG.error(String.format("searchpageSitePage failed. "), ex);
-				error(null, eventHandler, ex);
-			}
-		});
-	}
-
-	@Override
 	public void searchpageSitePage(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
-		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture").onSuccess(siteRequest -> {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
 						searchSitePageList(siteRequest, false, true, false).onSuccess(listSitePage -> {
 							response200SearchPageSitePage(listSitePage).onSuccess(response -> {
 								eventHandler.handle(Future.succeededFuture(response));
@@ -955,19 +1136,18 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			}
 		});
 	}
-
 
 	public void searchpageSitePagePageInit(SitePagePage page, SearchList<SitePage> listSitePage) {
 	}
 
-	public String templateSearchPageSitePage() {
-		return "en-us/SitePagePage.htm";
+	public String templateSearchPageSitePage(ServiceRequest serviceRequest) {
+		return "en-us/search/article/SitePageSearchPage.htm";
 	}
 	public Future<ServiceResponse> response200SearchPageSitePage(SearchList<SitePage> listSitePage) {
 		Promise<ServiceResponse> promise = Promise.promise();
 		try {
 			SiteRequest siteRequest = listSitePage.getSiteRequest_(SiteRequest.class);
-			String pageTemplateUri = templateSearchPageSitePage();
+			String pageTemplateUri = templateSearchPageSitePage(siteRequest.getServiceRequest());
 			String siteTemplatePath = config.getString(ComputateConfigKeys.TEMPLATE_PATH);
 			Path resourceTemplatePath = Path.of(siteTemplatePath, pageTemplateUri);
 			String template = siteTemplatePath == null ? Resources.toString(Resources.getResource(resourceTemplatePath.toString()), StandardCharsets.UTF_8) : Files.readString(resourceTemplatePath, Charset.forName("UTF-8"));
@@ -978,9 +1158,11 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			page.setSearchListSitePage_(listSitePage);
 			page.setSiteRequest_(siteRequest);
 			page.setServiceRequest(siteRequest.getServiceRequest());
+			page.setWebClient(webClient);
+			page.setVertx(vertx);
 			page.promiseDeepSitePagePage(siteRequest).onSuccess(a -> {
 				try {
-					JsonObject ctx = ComputateConfigKeys.getPageContext(config);
+					JsonObject ctx = ConfigKeys.getPageContext(config);
 					ctx.mergeIn(JsonObject.mapFrom(page));
 					String renderedTemplate = jinjava.render(template, ctx.getMap());
 					Buffer buffer = Buffer.buffer(renderedTemplate);
@@ -997,6 +1179,321 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			promise.fail(ex);
 		}
 		return promise.future();
+	}
+	public void responsePivotSearchPageSitePage(List<SolrResponse.Pivot> pivots, JsonArray pivotArray) {
+		if(pivots != null) {
+			for(SolrResponse.Pivot pivotField : pivots) {
+				String entityIndexed = pivotField.getField();
+				String entityVar = StringUtils.substringBefore(entityIndexed, "_docvalues_");
+				JsonObject pivotJson = new JsonObject();
+				pivotArray.add(pivotJson);
+				pivotJson.put("field", entityVar);
+				pivotJson.put("value", pivotField.getValue());
+				pivotJson.put("count", pivotField.getCount());
+				Collection<SolrResponse.PivotRange> pivotRanges = pivotField.getRanges().values();
+				List<SolrResponse.Pivot> pivotFields2 = pivotField.getPivotList();
+				if(pivotRanges != null) {
+					JsonObject rangeJson = new JsonObject();
+					pivotJson.put("ranges", rangeJson);
+					for(SolrResponse.PivotRange rangeFacet : pivotRanges) {
+						JsonObject rangeFacetJson = new JsonObject();
+						String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
+						rangeJson.put(rangeFacetVar, rangeFacetJson);
+						JsonObject rangeFacetCountsObject = new JsonObject();
+						rangeFacetJson.put("counts", rangeFacetCountsObject);
+						rangeFacet.getCounts().forEach((value, count) -> {
+							rangeFacetCountsObject.put(value, count);
+						});
+					}
+				}
+				if(pivotFields2 != null) {
+					JsonArray pivotArray2 = new JsonArray();
+					pivotJson.put("pivot", pivotArray2);
+					responsePivotSearchPageSitePage(pivotFields2, pivotArray2);
+				}
+			}
+		}
+	}
+
+	// EditPage //
+
+	@Override
+	public void editpageSitePage(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+			String pageId = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("pageId");
+			String SITEPAGE = siteRequest.getServiceRequest().getParams().getJsonObject("path").getString("SITEPAGE");
+			MultiMap form = MultiMap.caseInsensitiveMultiMap();
+			form.add("grant_type", "urn:ietf:params:oauth:grant-type:uma-ticket");
+			form.add("audience", config.getString(ComputateConfigKeys.AUTH_CLIENT));
+			form.add("response_mode", "permissions");
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_ADMIN)));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, config.getString(ComputateConfigKeys.AUTH_SCOPE_SUPER_ADMIN)));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "GET"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "POST"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "DELETE"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "PATCH"));
+			form.add("permission", String.format("%s#%s", SitePage.CLASS_AUTH_RESOURCE, "PUT"));
+			if(pageId != null)
+				form.add("permission", String.format("%s#%s", pageId, "GET"));
+			webClient.post(
+					config.getInteger(ComputateConfigKeys.AUTH_PORT)
+					, config.getString(ComputateConfigKeys.AUTH_HOST_NAME)
+					, config.getString(ComputateConfigKeys.AUTH_TOKEN_URI)
+					)
+					.ssl(config.getBoolean(ComputateConfigKeys.AUTH_SSL))
+					.putHeader("Authorization", String.format("Bearer %s", Optional.ofNullable(siteRequest.getUser()).map(u -> u.principal().getString("access_token")).orElse("")))
+					.sendForm(form)
+					.expecting(HttpResponseExpectation.SC_OK)
+			.onComplete(authorizationDecisionResponse -> {
+				try {
+					HttpResponse<Buffer> authorizationDecision = authorizationDecisionResponse.result();
+					JsonArray scopes = authorizationDecisionResponse.failed() ? new JsonArray() : authorizationDecision.bodyAsJsonArray().stream().findFirst().map(decision -> ((JsonObject)decision).getJsonArray("scopes")).orElse(new JsonArray());
+					{
+						siteRequest.setScopes(scopes.stream().map(o -> o.toString()).collect(Collectors.toList()));
+						List<String> scopes2 = siteRequest.getScopes();
+						searchSitePageList(siteRequest, false, true, false).onSuccess(listSitePage -> {
+							response200EditPageSitePage(listSitePage).onSuccess(response -> {
+								eventHandler.handle(Future.succeededFuture(response));
+								LOG.debug(String.format("editpageSitePage succeeded. "));
+							}).onFailure(ex -> {
+								LOG.error(String.format("editpageSitePage failed. "), ex);
+								error(siteRequest, eventHandler, ex);
+							});
+						}).onFailure(ex -> {
+							LOG.error(String.format("editpageSitePage failed. "), ex);
+							error(siteRequest, eventHandler, ex);
+						});
+					}
+				} catch(Exception ex) {
+					LOG.error(String.format("editpageSitePage failed. "), ex);
+					error(null, eventHandler, ex);
+				}
+			});
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("editpageSitePage failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else if(StringUtils.startsWith(ex.getMessage(), "401 UNAUTHORIZED ")) {
+				eventHandler.handle(Future.succeededFuture(
+					new ServiceResponse(401, "UNAUTHORIZED",
+						Buffer.buffer().appendString(
+							new JsonObject()
+								.put("errorCode", "401")
+								.put("errorMessage", "SSO Resource Permission check returned DENY")
+								.encodePrettily()
+							), MultiMap.caseInsensitiveMultiMap()
+							)
+					));
+			} else {
+				LOG.error(String.format("editpageSitePage failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+	public void editpageSitePagePageInit(SitePagePage page, SearchList<SitePage> listSitePage) {
+	}
+
+	public String templateEditPageSitePage(ServiceRequest serviceRequest) {
+		return "en-us/edit/article/SitePageEditPage.htm";
+	}
+	public Future<ServiceResponse> response200EditPageSitePage(SearchList<SitePage> listSitePage) {
+		Promise<ServiceResponse> promise = Promise.promise();
+		try {
+			SiteRequest siteRequest = listSitePage.getSiteRequest_(SiteRequest.class);
+			String pageTemplateUri = templateEditPageSitePage(siteRequest.getServiceRequest());
+			String siteTemplatePath = config.getString(ComputateConfigKeys.TEMPLATE_PATH);
+			Path resourceTemplatePath = Path.of(siteTemplatePath, pageTemplateUri);
+			String template = siteTemplatePath == null ? Resources.toString(Resources.getResource(resourceTemplatePath.toString()), StandardCharsets.UTF_8) : Files.readString(resourceTemplatePath, Charset.forName("UTF-8"));
+			SitePagePage page = new SitePagePage();
+			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
+			siteRequest.setRequestHeaders(requestHeaders);
+
+			page.setSearchListSitePage_(listSitePage);
+			page.setSiteRequest_(siteRequest);
+			page.setServiceRequest(siteRequest.getServiceRequest());
+			page.setWebClient(webClient);
+			page.setVertx(vertx);
+			page.promiseDeepSitePagePage(siteRequest).onSuccess(a -> {
+				try {
+					JsonObject ctx = ConfigKeys.getPageContext(config);
+					ctx.mergeIn(JsonObject.mapFrom(page));
+					String renderedTemplate = jinjava.render(template, ctx.getMap());
+					Buffer buffer = Buffer.buffer(renderedTemplate);
+					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+				} catch(Exception ex) {
+					LOG.error(String.format("response200EditPageSitePage failed. "), ex);
+					promise.fail(ex);
+				}
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("response200EditPageSitePage failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+	public void responsePivotEditPageSitePage(List<SolrResponse.Pivot> pivots, JsonArray pivotArray) {
+		if(pivots != null) {
+			for(SolrResponse.Pivot pivotField : pivots) {
+				String entityIndexed = pivotField.getField();
+				String entityVar = StringUtils.substringBefore(entityIndexed, "_docvalues_");
+				JsonObject pivotJson = new JsonObject();
+				pivotArray.add(pivotJson);
+				pivotJson.put("field", entityVar);
+				pivotJson.put("value", pivotField.getValue());
+				pivotJson.put("count", pivotField.getCount());
+				Collection<SolrResponse.PivotRange> pivotRanges = pivotField.getRanges().values();
+				List<SolrResponse.Pivot> pivotFields2 = pivotField.getPivotList();
+				if(pivotRanges != null) {
+					JsonObject rangeJson = new JsonObject();
+					pivotJson.put("ranges", rangeJson);
+					for(SolrResponse.PivotRange rangeFacet : pivotRanges) {
+						JsonObject rangeFacetJson = new JsonObject();
+						String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
+						rangeJson.put(rangeFacetVar, rangeFacetJson);
+						JsonObject rangeFacetCountsObject = new JsonObject();
+						rangeFacetJson.put("counts", rangeFacetCountsObject);
+						rangeFacet.getCounts().forEach((value, count) -> {
+							rangeFacetCountsObject.put(value, count);
+						});
+					}
+				}
+				if(pivotFields2 != null) {
+					JsonArray pivotArray2 = new JsonArray();
+					pivotJson.put("pivot", pivotArray2);
+					responsePivotEditPageSitePage(pivotFields2, pivotArray2);
+				}
+			}
+		}
+	}
+
+	// DisplayPage //
+
+	@Override
+	public void displaypageSitePage(ServiceRequest serviceRequest, Handler<AsyncResult<ServiceResponse>> eventHandler) {
+		Boolean classPublicRead = true;
+		user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.getClassApiAddress(), "postSiteUserFuture", "patchSiteUserFuture", classPublicRead).onSuccess(siteRequest -> {
+						searchSitePageList(siteRequest, false, true, false).onSuccess(listSitePage -> {
+							response200DisplayPageSitePage(listSitePage).onSuccess(response -> {
+								eventHandler.handle(Future.succeededFuture(response));
+								LOG.debug(String.format("displaypageSitePage succeeded. "));
+							}).onFailure(ex -> {
+								LOG.error(String.format("displaypageSitePage failed. "), ex);
+								error(siteRequest, eventHandler, ex);
+							});
+						}).onFailure(ex -> {
+							LOG.error(String.format("displaypageSitePage failed. "), ex);
+							error(siteRequest, eventHandler, ex);
+						});
+		}).onFailure(ex -> {
+			if("Inactive Token".equals(ex.getMessage()) || StringUtils.startsWith(ex.getMessage(), "invalid_grant:")) {
+				try {
+					eventHandler.handle(Future.succeededFuture(new ServiceResponse(302, "Found", null, MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.LOCATION, "/logout?redirect_uri=" + URLEncoder.encode(serviceRequest.getExtra().getString("uri"), "UTF-8")))));
+				} catch(Exception ex2) {
+					LOG.error(String.format("displaypageSitePage failed. ", ex2));
+					error(null, eventHandler, ex2);
+				}
+			} else if(StringUtils.startsWith(ex.getMessage(), "401 UNAUTHORIZED ")) {
+				eventHandler.handle(Future.succeededFuture(
+					new ServiceResponse(401, "UNAUTHORIZED",
+						Buffer.buffer().appendString(
+							new JsonObject()
+								.put("errorCode", "401")
+								.put("errorMessage", "SSO Resource Permission check returned DENY")
+								.encodePrettily()
+							), MultiMap.caseInsensitiveMultiMap()
+							)
+					));
+			} else {
+				LOG.error(String.format("displaypageSitePage failed. "), ex);
+				error(null, eventHandler, ex);
+			}
+		});
+	}
+
+	public void displaypageSitePagePageInit(SitePagePage page, SearchList<SitePage> listSitePage) {
+	}
+
+	public String templateDisplayPageSitePage(ServiceRequest serviceRequest) {
+		return String.format("%s.htm", serviceRequest.getExtra().getString("uri").substring(1));
+	}
+	public Future<ServiceResponse> response200DisplayPageSitePage(SearchList<SitePage> listSitePage) {
+		Promise<ServiceResponse> promise = Promise.promise();
+		try {
+			SiteRequest siteRequest = listSitePage.getSiteRequest_(SiteRequest.class);
+			String pageTemplateUri = templateDisplayPageSitePage(siteRequest.getServiceRequest());
+			String siteTemplatePath = config.getString(ComputateConfigKeys.TEMPLATE_PATH);
+			Path resourceTemplatePath = Path.of(siteTemplatePath, pageTemplateUri);
+			String template = siteTemplatePath == null ? Resources.toString(Resources.getResource(resourceTemplatePath.toString()), StandardCharsets.UTF_8) : Files.readString(resourceTemplatePath, Charset.forName("UTF-8"));
+			SitePagePage page = new SitePagePage();
+			MultiMap requestHeaders = MultiMap.caseInsensitiveMultiMap();
+			siteRequest.setRequestHeaders(requestHeaders);
+
+			page.setSearchListSitePage_(listSitePage);
+			page.setSiteRequest_(siteRequest);
+			page.setServiceRequest(siteRequest.getServiceRequest());
+			page.setWebClient(webClient);
+			page.setVertx(vertx);
+			page.promiseDeepSitePagePage(siteRequest).onSuccess(a -> {
+				try {
+					JsonObject ctx = ConfigKeys.getPageContext(config);
+					ctx.mergeIn(JsonObject.mapFrom(page));
+					String renderedTemplate = jinjava.render(template, ctx.getMap());
+					Buffer buffer = Buffer.buffer(renderedTemplate);
+					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+				} catch(Exception ex) {
+					LOG.error(String.format("response200DisplayPageSitePage failed. "), ex);
+					promise.fail(ex);
+				}
+			}).onFailure(ex -> {
+				promise.fail(ex);
+			});
+		} catch(Exception ex) {
+			LOG.error(String.format("response200DisplayPageSitePage failed. "), ex);
+			promise.fail(ex);
+		}
+		return promise.future();
+	}
+	public void responsePivotDisplayPageSitePage(List<SolrResponse.Pivot> pivots, JsonArray pivotArray) {
+		if(pivots != null) {
+			for(SolrResponse.Pivot pivotField : pivots) {
+				String entityIndexed = pivotField.getField();
+				String entityVar = StringUtils.substringBefore(entityIndexed, "_docvalues_");
+				JsonObject pivotJson = new JsonObject();
+				pivotArray.add(pivotJson);
+				pivotJson.put("field", entityVar);
+				pivotJson.put("value", pivotField.getValue());
+				pivotJson.put("count", pivotField.getCount());
+				Collection<SolrResponse.PivotRange> pivotRanges = pivotField.getRanges().values();
+				List<SolrResponse.Pivot> pivotFields2 = pivotField.getPivotList();
+				if(pivotRanges != null) {
+					JsonObject rangeJson = new JsonObject();
+					pivotJson.put("ranges", rangeJson);
+					for(SolrResponse.PivotRange rangeFacet : pivotRanges) {
+						JsonObject rangeFacetJson = new JsonObject();
+						String rangeFacetVar = StringUtils.substringBefore(rangeFacet.getName(), "_docvalues_");
+						rangeJson.put(rangeFacetVar, rangeFacetJson);
+						JsonObject rangeFacetCountsObject = new JsonObject();
+						rangeFacetJson.put("counts", rangeFacetCountsObject);
+						rangeFacet.getCounts().forEach((value, count) -> {
+							rangeFacetCountsObject.put(value, count);
+						});
+					}
+				}
+				if(pivotFields2 != null) {
+					JsonArray pivotArray2 = new JsonArray();
+					pivotJson.put("pivot", pivotArray2);
+					responsePivotDisplayPageSitePage(pivotFields2, pivotArray2);
+				}
+			}
+		}
 	}
 
 	// General //
@@ -1111,11 +1608,9 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				}
 			}
 
-			String id = serviceRequest.getParams().getJsonObject("path").getString("id");
-			if(id != null && NumberUtils.isCreatable(id)) {
-				searchList.fq("(_docvalues_long:" + SearchTool.escapeQueryChars(id) + " OR objectId_docvalues_string:" + SearchTool.escapeQueryChars(id) + ")");
-			} else if(id != null) {
-				searchList.fq("objectId_docvalues_string:" + SearchTool.escapeQueryChars(id));
+			String pageId = serviceRequest.getParams().getJsonObject("path").getString("pageId");
+			if(pageId != null) {
+				searchList.fq("pageId_docvalues_string:" + SearchTool.escapeQueryChars(pageId));
 			}
 
 			for(String paramName : serviceRequest.getParams().getJsonObject("query").fieldNames()) {
@@ -1132,8 +1627,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				try {
 					if(paramValuesObject != null && "facet.pivot".equals(paramName)) {
 						Matcher mFacetPivot = Pattern.compile("(?:(\\{![^\\}]+\\}))?(.*)").matcher(StringUtils.join(paramObjects.getList().toArray(), ","));
-						boolean foundFacetPivot = mFacetPivot.find();
-						if(foundFacetPivot) {
+						if(mFacetPivot.find()) {
 							String solrLocalParams = mFacetPivot.group(1);
 							String[] entityVars = mFacetPivot.group(2).trim().split(",");
 							String[] varsIndexed = new String[entityVars.length];
@@ -1147,33 +1641,29 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 						for(Object paramObject : paramObjects) {
 							if(paramName.equals("q")) {
 								Matcher mQ = Pattern.compile("(\\w+):(.+?(?=(\\)|\\s+OR\\s+|\\s+AND\\s+|\\^|$)))").matcher((String)paramObject);
-								boolean foundQ = mQ.find();
-								if(foundQ) {
-									StringBuffer sb = new StringBuffer();
-									while(foundQ) {
-										entityVar = mQ.group(1).trim();
-										valueIndexed = mQ.group(2).trim();
-										varIndexed = SitePage.varIndexedSitePage(entityVar);
-										String entityQ = searchSitePageFq(searchList, entityVar, valueIndexed, varIndexed);
-										mQ.appendReplacement(sb, entityQ);
-										foundQ = mQ.find();
-									}
+								StringBuffer sb = new StringBuffer();
+								while(mQ.find()) {
+									entityVar = mQ.group(1).trim();
+									valueIndexed = mQ.group(2).trim();
+									varIndexed = SitePage.varIndexedSitePage(entityVar);
+									String entityQ = searchSitePageFq(searchList, entityVar, valueIndexed, varIndexed);
+									mQ.appendReplacement(sb, entityQ);
+								}
+								if(!sb.isEmpty()) {
 									mQ.appendTail(sb);
 									searchList.q(sb.toString());
 								}
 							} else if(paramName.equals("fq")) {
 								Matcher mFq = Pattern.compile("(\\w+):(.+?(?=(\\)|\\s+OR\\s+|\\s+AND\\s+|$)))").matcher((String)paramObject);
-								boolean foundFq = mFq.find();
-								if(foundFq) {
 									StringBuffer sb = new StringBuffer();
-									while(foundFq) {
-										entityVar = mFq.group(1).trim();
-										valueIndexed = mFq.group(2).trim();
-										varIndexed = SitePage.varIndexedSitePage(entityVar);
-										String entityFq = searchSitePageFq(searchList, entityVar, valueIndexed, varIndexed);
-										mFq.appendReplacement(sb, entityFq);
-										foundFq = mFq.find();
-									}
+								while(mFq.find()) {
+									entityVar = mFq.group(1).trim();
+									valueIndexed = mFq.group(2).trim();
+									varIndexed = SitePage.varIndexedSitePage(entityVar);
+									String entityFq = searchSitePageFq(searchList, entityVar, valueIndexed, varIndexed);
+									mFq.appendReplacement(sb, entityFq);
+								}
+								if(!sb.isEmpty()) {
 									mFq.appendTail(sb);
 									searchList.fq(sb.toString());
 								}
@@ -1192,8 +1682,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 								searchList.stats((Boolean)paramObject);
 							} else if(paramName.equals("stats.field")) {
 								Matcher mStats = Pattern.compile("(?:(\\{![^\\}]+\\}))?(.*)").matcher((String)paramObject);
-								boolean foundStats = mStats.find();
-								if(foundStats) {
+								if(mStats.find()) {
 									String solrLocalParams = mStats.group(1);
 									entityVar = mStats.group(2).trim();
 									varIndexed = SitePage.varIndexedSitePage(entityVar);
@@ -1219,8 +1708,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 								facetRangeGap = gap;
 							} else if(paramName.equals("facet.range")) {
 								Matcher mFacetRange = Pattern.compile("(?:(\\{![^\\}]+\\}))?(.*)").matcher((String)paramObject);
-								boolean foundFacetRange = mFacetRange.find();
-								if(foundFacetRange) {
+								if(mFacetRange.find()) {
 									String solrLocalParams = mFacetRange.group(1);
 									entityVar = mFacetRange.group(2).trim();
 									varIndexed = SitePage.varIndexedSitePage(entityVar);
@@ -1250,6 +1738,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			if("*:*".equals(searchList.getQuery()) && searchList.getSorts().size() == 0) {
 				searchList.sort("courseNum_docvalues_int", "desc");
 				searchList.sort("lessonNum_docvalues_int", "desc");
+				searchList.setDefaultSort(true);
 			}
 			String facetRange2 = facetRange;
 			Date facetRangeStart2 = facetRangeStart;
@@ -1258,7 +1747,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			String statsField2 = statsField;
 			String statsFieldIndexed2 = statsFieldIndexed;
 			searchSitePage2(siteRequest, populate, store, modify, searchList);
-			searchList.promiseDeepForClass(siteRequest).onSuccess(a -> {
+			searchList.promiseDeepForClass(siteRequest).onSuccess(searchList2 -> {
 				if(facetRange2 != null && statsField2 != null && facetRange2.equals(statsField2)) {
 					StatsField stats = searchList.getResponse().getStats().getStatsFields().get(statsFieldIndexed2);
 					Instant min = Optional.ofNullable(stats.getMin()).map(val -> Instant.parse(val.toString())).orElse(Instant.now());
@@ -1268,7 +1757,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 						max = max.plus(2, ChronoUnit.DAYS);
 					}
 					Duration duration = Duration.between(min, max);
-					String gap = "DAY";
+					String gap = "HOUR";
 					if(duration.toDays() >= 365)
 						gap = "YEAR";
 					else if(duration.toDays() >= 28)
@@ -1376,9 +1865,9 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 			String solrUsername = siteRequest.getConfig().getString(ConfigKeys.SOLR_USERNAME);
 			String solrPassword = siteRequest.getConfig().getString(ConfigKeys.SOLR_PASSWORD);
 			String solrHostName = siteRequest.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
-			Integer solrPort = siteRequest.getConfig().getInteger(ConfigKeys.SOLR_PORT);
+			Integer solrPort = Integer.parseInt(siteRequest.getConfig().getString(ConfigKeys.SOLR_PORT));
 			String solrCollection = siteRequest.getConfig().getString(ConfigKeys.SOLR_COLLECTION);
-			Boolean solrSsl = siteRequest.getConfig().getBoolean(ConfigKeys.SOLR_SSL);
+			Boolean solrSsl = Boolean.parseBoolean(siteRequest.getConfig().getString(ConfigKeys.SOLR_SSL));
 			Boolean softCommit = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getBoolean("softCommit")).orElse(null);
 			Integer commitWithin = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getInteger("commitWithin")).orElse(null);
 				if(softCommit == null && commitWithin == null)
@@ -1386,7 +1875,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				else if(softCommit == null)
 					softCommit = false;
 			String solrRequestUri = String.format("/solr/%s/update%s%s%s", solrCollection, "?overwrite=true&wt=json", softCommit ? "&softCommit=true" : "", commitWithin != null ? ("&commitWithin=" + commitWithin) : "");
-			webClient.post(solrPort, solrHostName, solrRequestUri).ssl(solrSsl).authentication(new UsernamePasswordCredentials(solrUsername, solrPassword)).putHeader("Content-Type", "application/json").expect(ResponsePredicate.SC_OK).sendBuffer(json.toBuffer()).onSuccess(b -> {
+			webClient.post(solrPort, solrHostName, solrRequestUri).ssl(solrSsl).authentication(new UsernamePasswordCredentials(solrUsername, solrPassword)).putHeader("Content-Type", "application/json").sendBuffer(json.toBuffer()).expecting(HttpResponseExpectation.SC_OK).onSuccess(b -> {
 				promise.complete(o);
 			}).onFailure(ex -> {
 				LOG.error(String.format("indexSitePage failed. "), new RuntimeException(ex));
@@ -1408,14 +1897,14 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 				JsonObject json = new JsonObject();
 				JsonObject delete = new JsonObject();
 				json.put("delete", delete);
-				String query = String.format("filter(id_docvalues_string:%s)", o.obtainForClass("id"));
+				String query = String.format("filter(%s:%s)", SitePage.VAR_solrId, o.obtainForClass(SitePage.VAR_solrId));
 				delete.put("query", query);
 				String solrUsername = siteRequest.getConfig().getString(ConfigKeys.SOLR_USERNAME);
 				String solrPassword = siteRequest.getConfig().getString(ConfigKeys.SOLR_PASSWORD);
 				String solrHostName = siteRequest.getConfig().getString(ConfigKeys.SOLR_HOST_NAME);
-				Integer solrPort = siteRequest.getConfig().getInteger(ConfigKeys.SOLR_PORT);
+				Integer solrPort = Integer.parseInt(siteRequest.getConfig().getString(ConfigKeys.SOLR_PORT));
 				String solrCollection = siteRequest.getConfig().getString(ConfigKeys.SOLR_COLLECTION);
-				Boolean solrSsl = siteRequest.getConfig().getBoolean(ConfigKeys.SOLR_SSL);
+				Boolean solrSsl = Boolean.parseBoolean(siteRequest.getConfig().getString(ConfigKeys.SOLR_SSL));
 				Boolean softCommit = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getBoolean("softCommit")).orElse(null);
 				Integer commitWithin = Optional.ofNullable(siteRequest.getServiceRequest().getParams()).map(p -> p.getJsonObject("query")).map( q -> q.getInteger("commitWithin")).orElse(null);
 					if(softCommit == null && commitWithin == null)
@@ -1423,7 +1912,7 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 					else if(softCommit == null)
 						softCommit = false;
 				String solrRequestUri = String.format("/solr/%s/update%s%s%s", solrCollection, "?overwrite=true&wt=json", softCommit ? "&softCommit=true" : "", commitWithin != null ? ("&commitWithin=" + commitWithin) : "");
-				webClient.post(solrPort, solrHostName, solrRequestUri).ssl(solrSsl).authentication(new UsernamePasswordCredentials(solrUsername, solrPassword)).putHeader("Content-Type", "application/json").expect(ResponsePredicate.SC_OK).sendBuffer(json.toBuffer()).onSuccess(b -> {
+				webClient.post(solrPort, solrHostName, solrRequestUri).ssl(solrSsl).authentication(new UsernamePasswordCredentials(solrUsername, solrPassword)).putHeader("Content-Type", "application/json").sendBuffer(json.toBuffer()).expecting(HttpResponseExpectation.SC_OK).onSuccess(b -> {
 					promise.complete(o);
 				}).onFailure(ex -> {
 					LOG.error(String.format("unindexSitePage failed. "), new RuntimeException(ex));
@@ -1441,42 +1930,38 @@ public class SitePageEnUSGenApiServiceImpl extends BaseApiServiceImpl implements
 	}
 
 	@Override
-	public Future<JsonObject> generatePageBody(ComputateSiteRequest siteRequest, JsonObject ctx, String resourceUri, String templateUri, String classSimpleName) {
+	public Future<JsonObject> generatePageBody(ComputateSiteRequest siteRequest, Map<String, Object> ctx, String templatePath, String classSimpleName) {
 		Promise<JsonObject> promise = Promise.promise();
 		try {
+			Map<String, Object> result = (Map<String, Object>)ctx.get("result");
 			SiteRequest siteRequest2 = (SiteRequest)siteRequest;
 			String siteBaseUrl = config.getString(ComputateConfigKeys.SITE_BASE_URL);
-			String uri = ctx.getString(SitePage.VAR_uri);
-			String url = String.format("%s%s", siteBaseUrl, uri);
 			SitePage page = new SitePage();
 			page.setSiteRequest_((SiteRequest)siteRequest);
-			page.persistForClass(SitePage.VAR_resourceUri, resourceUri);
-			page.persistForClass(SitePage.VAR_templateUri, templateUri);
 
-			page.persistForClass(SitePage.VAR_inheritPk, SitePage.staticSetInheritPk(siteRequest2, ctx.getString(SitePage.VAR_inheritPk)));
-			page.persistForClass(SitePage.VAR_created, SitePage.staticSetCreated(siteRequest2, ctx.getString(SitePage.VAR_created)));
-			page.persistForClass(SitePage.VAR_archived, SitePage.staticSetArchived(siteRequest2, ctx.getString(SitePage.VAR_archived)));
-			page.persistForClass(SitePage.VAR_sessionId, SitePage.staticSetSessionId(siteRequest2, ctx.getString(SitePage.VAR_sessionId)));
-			page.persistForClass(SitePage.VAR_userKey, SitePage.staticSetUserKey(siteRequest2, ctx.getString(SitePage.VAR_userKey)));
-			page.persistForClass(SitePage.VAR_objectId, SitePage.staticSetObjectId(siteRequest2, ctx.getString(SitePage.VAR_objectId)));
-			page.persistForClass(SitePage.VAR_id, SitePage.staticSetId(siteRequest2, ctx.getString(SitePage.VAR_id)));
-			page.persistForClass(SitePage.VAR_courseNum, SitePage.staticSetCourseNum(siteRequest2, ctx.getString(SitePage.VAR_courseNum)));
-			page.persistForClass(SitePage.VAR_lessonNum, SitePage.staticSetLessonNum(siteRequest2, ctx.getString(SitePage.VAR_lessonNum)));
-			page.persistForClass(SitePage.VAR_title, SitePage.staticSetTitle(siteRequest2, ctx.getString(SitePage.VAR_title)));
-			page.persistForClass(SitePage.VAR_author, SitePage.staticSetAuthor(siteRequest2, ctx.getString(SitePage.VAR_author)));
-			page.persistForClass(SitePage.VAR_pageId, SitePage.staticSetPageId(siteRequest2, ctx.getString(SitePage.VAR_pageId)));
-			page.persistForClass(SitePage.VAR_resourceUri, SitePage.staticSetResourceUri(siteRequest2, ctx.getString(SitePage.VAR_resourceUri)));
-			page.persistForClass(SitePage.VAR_templateUri, SitePage.staticSetTemplateUri(siteRequest2, ctx.getString(SitePage.VAR_templateUri)));
-			page.persistForClass(SitePage.VAR_uri, SitePage.staticSetUri(siteRequest2, ctx.getString(SitePage.VAR_uri)));
-			page.persistForClass(SitePage.VAR_url, SitePage.staticSetUrl(siteRequest2, ctx.getString(SitePage.VAR_url)));
-			page.persistForClass(SitePage.VAR_h1, SitePage.staticSetH1(siteRequest2, ctx.getString(SitePage.VAR_h1)));
-			page.persistForClass(SitePage.VAR_h2, SitePage.staticSetH2(siteRequest2, ctx.getString(SitePage.VAR_h2)));
-			page.persistForClass(SitePage.VAR_pageImageUri, SitePage.staticSetPageImageUri(siteRequest2, ctx.getString(SitePage.VAR_pageImageUri)));
+			page.persistForClass(SitePage.VAR_created, SitePage.staticSetCreated(siteRequest2, (String)result.get(SitePage.VAR_created), Optional.ofNullable(siteRequest).map(r -> r.getConfig()).map(config -> config.getString(ConfigKeys.SITE_ZONE)).map(z -> ZoneId.of(z)).orElse(ZoneId.of("UTC"))));
+			page.persistForClass(SitePage.VAR_archived, SitePage.staticSetArchived(siteRequest2, (String)result.get(SitePage.VAR_archived)));
+			page.persistForClass(SitePage.VAR_objectTitle, SitePage.staticSetObjectTitle(siteRequest2, (String)result.get(SitePage.VAR_objectTitle)));
+			page.persistForClass(SitePage.VAR_displayPage, SitePage.staticSetDisplayPage(siteRequest2, (String)result.get(SitePage.VAR_displayPage)));
+			page.persistForClass(SitePage.VAR_courseNum, SitePage.staticSetCourseNum(siteRequest2, (String)result.get(SitePage.VAR_courseNum)));
+			page.persistForClass(SitePage.VAR_lessonNum, SitePage.staticSetLessonNum(siteRequest2, (String)result.get(SitePage.VAR_lessonNum)));
+			page.persistForClass(SitePage.VAR_name, SitePage.staticSetName(siteRequest2, (String)result.get(SitePage.VAR_name)));
+			page.persistForClass(SitePage.VAR_description, SitePage.staticSetDescription(siteRequest2, (String)result.get(SitePage.VAR_description)));
+			page.persistForClass(SitePage.VAR_authorName, SitePage.staticSetAuthorName(siteRequest2, (String)result.get(SitePage.VAR_authorName)));
+			page.persistForClass(SitePage.VAR_solrId, SitePage.staticSetSolrId(siteRequest2, (String)result.get(SitePage.VAR_solrId)));
+			page.persistForClass(SitePage.VAR_authorUrl, SitePage.staticSetAuthorUrl(siteRequest2, (String)result.get(SitePage.VAR_authorUrl)));
+			page.persistForClass(SitePage.VAR_pageId, SitePage.staticSetPageId(siteRequest2, (String)result.get(SitePage.VAR_pageId)));
+			page.persistForClass(SitePage.VAR_h1, SitePage.staticSetH1(siteRequest2, (String)result.get(SitePage.VAR_h1)));
+			page.persistForClass(SitePage.VAR_h2, SitePage.staticSetH2(siteRequest2, (String)result.get(SitePage.VAR_h2)));
+			page.persistForClass(SitePage.VAR_pageImageUri, SitePage.staticSetPageImageUri(siteRequest2, (String)result.get(SitePage.VAR_pageImageUri)));
+			page.persistForClass(SitePage.VAR_pageImageAlt, SitePage.staticSetPageImageAlt(siteRequest2, (String)result.get(SitePage.VAR_pageImageAlt)));
+			page.persistForClass(SitePage.VAR_prerequisiteArticleIds, SitePage.staticSetPrerequisiteArticleIds(siteRequest2, (String)result.get(SitePage.VAR_prerequisiteArticleIds)));
+			page.persistForClass(SitePage.VAR_nextArticleIds, SitePage.staticSetNextArticleIds(siteRequest2, (String)result.get(SitePage.VAR_nextArticleIds)));
+			page.persistForClass(SitePage.VAR_relatedArticleIds, SitePage.staticSetRelatedArticleIds(siteRequest2, (String)result.get(SitePage.VAR_relatedArticleIds)));
 
 			page.promiseDeepForClass((SiteRequest)siteRequest).onSuccess(a -> {
 				try {
-					JsonObject data = JsonObject.mapFrom(page);
-					data.put(SitePage.VAR_id, uri);
+					JsonObject data = JsonObject.mapFrom(result);
 					promise.complete(data);
 				} catch(Exception ex) {
 					LOG.error(String.format(importModelFail, classSimpleName), ex);

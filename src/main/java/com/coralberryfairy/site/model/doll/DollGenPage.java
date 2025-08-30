@@ -1,7 +1,10 @@
 package com.coralberryfairy.site.model.doll;
 
+import com.coralberryfairy.site.model.doll.Doll;
+import java.lang.String;
+import java.math.BigDecimal;
+import java.lang.Integer;
 import com.coralberryfairy.site.page.PageLayout;
-import com.coralberryfairy.site.result.BaseResultPage;
 import com.coralberryfairy.site.request.SiteRequest;
 import com.coralberryfairy.site.user.SiteUser;
 import java.io.IOException;
@@ -30,7 +33,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 import java.util.Arrays;
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.math.MathContext;
 import java.util.Objects;
@@ -41,13 +43,14 @@ import java.util.HashMap;
 import org.computate.search.tool.TimeTool;
 import org.computate.search.tool.SearchTool;
 import java.time.ZoneId;
+import io.vertx.pgclient.data.Point;
 
 
 /**
  * Translate: false
  * Generated: true
  **/
-public class DollGenPage extends DollGenPageGen<BaseResultPage> {
+public class DollGenPage extends DollGenPageGen<PageLayout> {
 
   /**
    * {@inheritDoc}
@@ -59,17 +62,17 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
   @Override
   protected void _pageResponse(Wrap<String> w) {
     if(searchListDoll_ != null)
-      w.o(JsonObject.mapFrom(searchListDoll_.getResponse()).toString());
+      w.o(Optional.ofNullable(searchListDoll_.getResponse()).map(response -> JsonObject.mapFrom(response).toString()).orElse(null));
   }
 
   @Override
   protected void _stats(Wrap<SolrResponse.Stats> w) {
-    w.o(searchListDoll_.getResponse().getStats());
+    w.o(Optional.ofNullable(searchListDoll_.getResponse()).map(response -> response.getStats()).orElse(null));
   }
 
   @Override
   protected void _facetCounts(Wrap<SolrResponse.FacetCounts> w) {
-    w.o(searchListDoll_.getResponse().getFacetCounts());
+    w.o(Optional.ofNullable(searchListDoll_.getResponse()).map(response -> response.getFacetCounts()).orElse(null));
   }
 
   @Override
@@ -77,7 +80,7 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
     JsonArray pages = new JsonArray();
     Long start = searchListDoll_.getStart().longValue();
     Long rows = searchListDoll_.getRows().longValue();
-    Long foundNum = searchListDoll_.getResponse().getResponse().getNumFound().longValue();
+    Long foundNum = Optional.ofNullable(searchListDoll_.getResponse()).map(response -> response.getResponse().getNumFound().longValue()).orElse(Long.valueOf(searchListDoll_.getList().size()));
     Long startNum = start + 1L;
     Long endNum = start + rows;
     Long floorMod = (rows == 0L ? 0L : Math.floorMod(foundNum, rows));
@@ -130,9 +133,14 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
   }
 
   @Override
+  protected void _varsFqCount(Wrap<Integer> w) {
+  }
+
+  @Override
   protected void _varsFq(JsonObject vars) {
     Map<String, SolrResponse.FacetField> facetFields = Optional.ofNullable(facetCounts).map(c -> c.getFacetFields()).map(f -> f.getFacets()).orElse(new HashMap<String,SolrResponse.FacetField>());
-    Doll.varsFqForClass().forEach(var -> {
+    varsFqCount = 0;
+    for(String var : Doll.varsFqForClass()) {
       String varIndexed = Doll.varIndexedDoll(var);
       String varStored = Doll.varStoredDoll(var);
       JsonObject json = new JsonObject();
@@ -142,7 +150,11 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
       String type = StringUtils.substringAfterLast(varIndexed, "_");
       json.put("displayName", Optional.ofNullable(Doll.displayNameDoll(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
       json.put("classSimpleName", Optional.ofNullable(Doll.classSimpleNameDoll(var)).map(d -> StringUtils.isBlank(d) ? var : d).orElse(var));
-      json.put("val", searchListDoll_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(Doll.varIndexedDoll(var) + ":")).findFirst().map(s -> SearchTool.unescapeQueryChars(StringUtils.substringAfter(s, ":"))).orElse(null));
+      Object v = searchListDoll_.getRequest().getFilterQueries().stream().filter(fq -> fq.startsWith(Doll.varIndexedDoll(var) + ":")).findFirst().map(s -> SearchTool.unescapeQueryChars(StringUtils.substringAfter(s, ":"))).orElse(null);
+      if(v != null) {
+        json.put("val", v);
+        varsFqCount++;
+      }
       Optional.ofNullable(stats).map(s -> s.get(varIndexed)).ifPresent(stat -> {
         json.put("stats", JsonObject.mapFrom(stat));
       });
@@ -198,8 +210,13 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
       if(defaultPivotVars.contains(var)) {
         json.put("pivot", true);
       }
+      if(defaultSortVars.contains(String.format("%s asc", var))) {
+        json.put("sort", "asc");
+      } else if(defaultSortVars.contains(String.format("%s desc", var))) {
+        json.put("sort", "desc");
+      }
       vars.put(var, json);
-    });
+    }
   }
 
   @Override
@@ -221,7 +238,7 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
     JsonObject params = serviceRequest.getParams();
 
     JsonObject queryParams = Optional.ofNullable(serviceRequest).map(ServiceRequest::getParams).map(or -> or.getJsonObject("query")).orElse(new JsonObject());
-    Long num = searchListDoll_.getResponse().getResponse().getNumFound().longValue();
+    Long num = Optional.ofNullable(searchListDoll_.getResponse()).map(response -> response.getResponse().getNumFound().longValue()).orElse(Long.valueOf(searchListDoll_.getList().size()));
     String q = "*:*";
     String q1 = "objectText";
     String q2 = "";
@@ -333,7 +350,7 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
 
   @Override
   protected void _defaultRangeGap(Wrap<String> w) {
-    w.o(Optional.ofNullable(rangeGap).orElse(Optional.ofNullable(defaultRangeStats).map(s -> s.getString("defaultRangeGap")).orElse("+1DAY")));
+    w.o(Optional.ofNullable(rangeGap).orElse(Optional.ofNullable(defaultRangeStats).map(s -> s.getString("defaultRangeGap")).orElse("+1HOUR")));
   }
 
   @Override
@@ -373,12 +390,6 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
 
   @Override
   protected void _DEFAULT_MAP_LOCATION(Wrap<JsonObject> w) {
-    String pointStr = Optional.ofNullable(siteRequest_.getRequestVars().get(VAR_DEFAULT_MAP_LOCATION)).orElse(siteRequest_.getConfig().getString(ConfigKeys.DEFAULT_MAP_LOCATION));
-    if(pointStr != null) {
-      String[] parts = pointStr.replace("[", "").replace("]", "").replace("\"", "").split(",");
-      JsonObject point = new JsonObject().put("lat", Double.parseDouble(parts[0])).put("lon", Double.parseDouble(parts[1]));
-      w.o(point);
-    }
   }
 
   @Override
@@ -386,6 +397,18 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
     String s = Optional.ofNullable(siteRequest_.getRequestVars().get(VAR_DEFAULT_MAP_ZOOM)).orElse(siteRequest_.getConfig().getString(ConfigKeys.DEFAULT_MAP_ZOOM));
     if(s != null)
       w.o(new BigDecimal(s));
+  }
+
+  @Override
+  protected void _defaultSortVars(List<String> l) {
+    if(!searchListDoll_.getDefaultSort()) {
+      Optional.ofNullable(searchListDoll_.getSorts()).orElse(Arrays.asList()).forEach(varSortStr -> {
+        String varSortParts[] = varSortStr.split(" ");
+        String varSort = Doll.searchVarDoll(varSortParts[0]);
+        String varSortDirection = varSortParts[1];
+        l.add(String.format("%s %s", varSort, varSortDirection));
+      });
+    }
   }
 
   @Override
@@ -446,18 +469,21 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
     Optional.ofNullable(searchListDoll_).map(o -> o.getList()).orElse(Arrays.asList()).stream().map(o -> JsonObject.mapFrom(o)).forEach(o -> l.add(o));
   }
 
-  protected void _dollCount(Wrap<Integer> w) {
+  protected void _resultCount(Wrap<Integer> w) {
     w.o(searchListDoll_ == null ? 0 : searchListDoll_.size());
   }
 
-  protected void _doll_(Wrap<Doll> w) {
-    if(dollCount == 1 && Optional.ofNullable(siteRequest_.getServiceRequest().getParams().getJsonObject("path")).map(o -> o.getString("id")).orElse(null) != null)
+  /**
+   * Initialized: false
+  **/
+  protected void _result(Wrap<Doll> w) {
+    if(resultCount >= 1 && Optional.ofNullable(siteRequest_.getServiceRequest().getParams().getJsonObject("path")).map(o -> o.getString("pageId")).orElse(null) != null)
       w.o(searchListDoll_.get(0));
   }
 
-  protected void _id(Wrap<String> w) {
-    if(doll_ != null)
-      w.o(doll_.getId());
+  protected void _solrId(Wrap<String> w) {
+    if(result != null)
+      w.o(result.getSolrId());
   }
 
   @Override
@@ -472,11 +498,11 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
 
   @Override
   protected void _pageTitle(Wrap<String> c) {
-    if(doll_ != null && doll_.getObjectTitle() != null)
-      c.o(doll_.getObjectTitle());
-    else if(doll_ != null)
+    if(result != null && result.getObjectTitle() != null)
+      c.o(result.getObjectTitle());
+    else if(result != null)
       c.o("dolls");
-    else if(searchListDoll_ == null || dollCount == 0)
+    else if(searchListDoll_ == null || resultCount == 0)
       c.o("no doll found");
     else
       c.o("dolls");
@@ -484,7 +510,7 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
 
   @Override
   protected void _pageUri(Wrap<String> c) {
-    c.o("/edit/doll");
+    c.o("/product/doll");
   }
 
   @Override
@@ -504,7 +530,7 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
 
   @Override
   protected void _pageImageUri(Wrap<String> c) {
-      c.o("/png/edit/doll-999.png");
+      c.o("/png/product/doll-999.png");
   }
 
   @Override
@@ -513,6 +539,6 @@ public class DollGenPage extends DollGenPageGen<BaseResultPage> {
   }
 
   protected void _pageUriDoll(Wrap<String> c) {
-      c.o("/edit/doll");
+      c.o("/product/doll");
   }
 }

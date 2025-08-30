@@ -9,9 +9,9 @@ metadata:
 spec:
   ports:
   - name: http
-    port: 10230
+    port: 10240
     protocol: TCP
-    targetPort: 10230
+    targetPort: 10240
   - name: cluster
     port: 10231
     protocol: TCP

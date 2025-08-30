@@ -117,18 +117,18 @@ public abstract class DollPageGen<DEV> extends DollGenPage {
 	// initDeep //
 	//////////////
 
-	public Future<Void> promiseDeepDollPage(SiteRequest siteRequest_) {
+	public Future<DollPageGen<DEV>> promiseDeepDollPage(SiteRequest siteRequest_) {
 		setSiteRequest_(siteRequest_);
 		return promiseDeepDollPage();
 	}
 
-	public Future<Void> promiseDeepDollPage() {
-		Promise<Void> promise = Promise.promise();
+	public Future<DollPageGen<DEV>> promiseDeepDollPage() {
+		Promise<DollPageGen<DEV>> promise = Promise.promise();
 		Promise<Void> promise2 = Promise.promise();
 		promiseDollPage(promise2);
 		promise2.future().onSuccess(a -> {
 			super.promiseDeepDollGenPage(siteRequest_).onSuccess(b -> {
-				promise.complete();
+				promise.complete(this);
 			}).onFailure(ex -> {
 				promise.fail(ex);
 			});
@@ -155,7 +155,7 @@ public abstract class DollPageGen<DEV> extends DollGenPage {
 		return promise.future();
 	}
 
-	@Override public Future<Void> promiseDeepForClass(SiteRequest siteRequest_) {
+	@Override public Future<? extends DollPageGen<DEV>> promiseDeepForClass(SiteRequest siteRequest_) {
 		return promiseDeepDollPage(siteRequest_);
 	}
 
@@ -229,13 +229,13 @@ public abstract class DollPageGen<DEV> extends DollGenPage {
 	// staticSet //
 	///////////////
 
-	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String o) {
-		return staticSetDollPage(entityVar,  siteRequest_, o);
+	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String v, DollPage o) {
+		return staticSetDollPage(entityVar,  siteRequest_, v, o);
 	}
-	public static Object staticSetDollPage(String entityVar, SiteRequest siteRequest_, String o) {
+	public static Object staticSetDollPage(String entityVar, SiteRequest siteRequest_, String v, DollPage o) {
 		switch(entityVar) {
 			default:
-				return DollGenPage.staticSetDollGenPage(entityVar,  siteRequest_, o);
+				return DollGenPage.staticSetDollGenPage(entityVar,  siteRequest_, v, o);
 		}
 	}
 
@@ -292,7 +292,54 @@ public abstract class DollPageGen<DEV> extends DollGenPage {
 	}
 
 	public static final String CLASS_SIMPLE_NAME = "DollPage";
+	public static final String CLASS_CANONICAL_NAME = "com.coralberryfairy.site.model.doll.DollPage";
+	public static final String CLASS_AUTH_RESOURCE = "";
 
+
+	@Override
+	public String idForClass() {
+		return null;
+	}
+
+	@Override
+	public String titleForClass() {
+		return null;
+	}
+
+	@Override
+	public String nameForClass() {
+		return null;
+	}
+
+	@Override
+	public String classNameAdjectiveSingularForClass() {
+		return null;
+	}
+
+	@Override
+	public String descriptionForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlEditPageForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlDisplayPageForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlUserPageForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlDownloadForClass() {
+		return null;
+	}
 
 	public static String displayNameForClass(String var) {
 		return DollPage.displayNameDollPage(var);
@@ -301,6 +348,71 @@ public abstract class DollPageGen<DEV> extends DollGenPage {
 		switch(var) {
 		default:
 			return DollGenPage.displayNameDollGenPage(var);
+		}
+	}
+
+	public static String descriptionDollPage(String var) {
+		if(var == null)
+			return null;
+		switch(var) {
+			default:
+				return DollGenPage.descriptionDollGenPage(var);
+		}
+	}
+
+	public static String classSimpleNameDollPage(String var) {
+		switch(var) {
+			default:
+				return DollGenPage.classSimpleNameDollGenPage(var);
+		}
+	}
+
+	public static Integer htmColumnDollPage(String var) {
+		switch(var) {
+			default:
+				return DollGenPage.htmColumnDollGenPage(var);
+		}
+	}
+
+	public static Integer htmRowDollPage(String var) {
+		switch(var) {
+			default:
+				return DollGenPage.htmRowDollGenPage(var);
+		}
+	}
+
+	public static Integer htmCellDollPage(String var) {
+		switch(var) {
+			default:
+				return DollGenPage.htmCellDollGenPage(var);
+		}
+	}
+
+	public static Integer lengthMinDollPage(String var) {
+		switch(var) {
+			default:
+				return DollGenPage.lengthMinDollGenPage(var);
+		}
+	}
+
+	public static Integer lengthMaxDollPage(String var) {
+		switch(var) {
+			default:
+				return DollGenPage.lengthMaxDollGenPage(var);
+		}
+	}
+
+	public static Integer maxDollPage(String var) {
+		switch(var) {
+			default:
+				return DollGenPage.maxDollGenPage(var);
+		}
+	}
+
+	public static Integer minDollPage(String var) {
+		switch(var) {
+			default:
+				return DollGenPage.minDollGenPage(var);
 		}
 	}
 }

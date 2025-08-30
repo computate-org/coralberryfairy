@@ -5,46 +5,45 @@ import java.math.BigDecimal;
 import org.computate.search.wrap.Wrap;
 import org.computate.vertx.config.ComputateConfigKeys;
 
+import com.coralberryfairy.site.model.BaseModel;
 import com.coralberryfairy.site.result.BaseResult;
 
 /**
- * Order: 0
- * 
- * Api: true
- * Page: true
- * SuperPage: BaseResultPage
- * Indexed: true
+ * Order: 5
  * Description: See the available dolls
+ * PublicRead: true
+ * AName: a doll
+ * Icon: <i class="fa-solid fa-reel"></i>
+ * Rows: 100
+ * Sort.asc: name
  * 
- * ApiTag: product
- * 
+ * SearchPageUri: /product/doll
+ * EditPageUri: /edit/product/doll/{pageId}
  * ApiUri: /api/product/doll
- * PageListUri: /product/doll
- * PageEditUri: /edit/product/doll
- * PageDisplayUri: /product/doll
- * 
+ * DisplayPageUri: /view/product/doll/{pageId}
  * ApiMethod:
  *   Search:
  *   GET:
  *   PATCH:
  *   POST:
+ *   DELETE:
  *   PUTImport:
- *   SearchPage:
- *     Page: DollPage
- *     ApiUri: /edit/doll
+ * AuthGroup:
+ *   Admin:
+ *     POST:
+ *     PATCH:
+ *     GET:
+ *     PUT:
+ *     DELETE:
+ *     Admin:
  * AuthGroup:
  *   SuperAdmin:
  *     POST:
  *     PATCH:
  *     GET:
  *     DELETE:
+ *     Admin:
  *     SuperAdmin:
- * 
- * PublicRead: true
- * 
- * AName: a doll
- * Icon: <i class="fa-solid fa-reel"></i>
- * Sort.asc: name
  */
 public class Doll extends DollGen<BaseResult> {
 
@@ -59,6 +58,7 @@ public class Doll extends DollGen<BaseResult> {
    * HtmCell: 1
    * HtmColumn: 1
    * Facet: true
+   * VarName: true
    */
   protected void _name(Wrap<String> w) {
   }
@@ -73,6 +73,7 @@ public class Doll extends DollGen<BaseResult> {
    * HtmCell: 2
    * HtmColumn: 2
    * Facet: true
+   * VarDescription: true
    */
   protected void _description(Wrap<String> w) {
   }
@@ -94,12 +95,16 @@ public class Doll extends DollGen<BaseResult> {
 	 * {@inheritDoc}
 	 * DocValues: true
 	 * Persist: true
+	 * HtmRowTitleOpen: Useful URLs
+	 * HtmRow: 99
+	 * HtmCell: 1
 	 * Facet: true
 	 * DisplayName: Page ID
 	 * Description: The ID for this page. 
+	 * VarId: true
 	 */
 	protected void _pageId(Wrap<String> w) {
-		toId(name);
+		w.o(toId(name));
 	}
 
 	/**
@@ -133,35 +138,6 @@ public class Doll extends DollGen<BaseResult> {
 	 * Description: The HTML email template for this product. 
 	 */
 	protected void _emailTemplate(Wrap<String> w) {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * HtmRow: 3
-	 * HtmCell: 3
-	 * Facet: true
-	 * DisplayName: URI
-	 * Description: The relative URI for this page. 
-	 */
-	protected void _uri(Wrap<String> w) {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * HtmRow: 4
-	 * HtmRowTitleOpen: Useful URLs
-	 * HtmCell: 1
-	 * Facet: true
-	 * DisplayName: product page
-	 * Description: Visit this product's landing page. 
-	 * Link: true
-	 */
-	protected void _url(Wrap<String> w) {
-		w.o(String.format("%s%s", siteRequest_.getConfig().getString(ComputateConfigKeys.SITE_BASE_URL), uri));
 	}
 
 	/**
@@ -209,34 +185,8 @@ public class Doll extends DollGen<BaseResult> {
 	protected void _productNum(Wrap<Integer> w) {
 	}
 
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * DisplayName: title
-	 * Description: The title of this page. 
-	 * UrlVar: pageUrlId
-	 */
-	protected void _imageUri(Wrap<String> w) {
-	}
-
 	@Override
-	protected void _objectTitle(Wrap<String> w) {
-		w.o(String.format("%s — %s", Doll_NameAdjectiveSingular_enUS, title));
-	}
-
-	@Override
-	protected void _objectId(Wrap<String> w) {
-		w.o(pageId);
-	}
-
-	@Override
-	protected void _id(Wrap<String> w) {
-		w.o(String.format("%s_%s", CLASS_SIMPLE_NAME, pageId));
-	}
-
-	@Override
-	protected void _pageUrlId(Wrap<String> w) {
-		w.o(url);
+	public String idForClass() {
+		return pageId;
 	}
 }

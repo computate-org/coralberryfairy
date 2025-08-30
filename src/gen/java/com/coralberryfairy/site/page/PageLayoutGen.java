@@ -33,14 +33,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.math.RoundingMode;
 import java.util.Map;
+import io.vertx.ext.web.client.WebClient;
+import io.vertx.core.Vertx;
 import java.lang.String;
 import io.vertx.ext.web.api.service.ServiceRequest;
 import io.vertx.core.json.JsonObject;
+import org.computate.vertx.serialize.vertx.JsonObjectDeserializer;
 import java.lang.Long;
-import java.lang.Void;
 import io.vertx.core.json.JsonArray;
+import java.lang.Boolean;
+import java.lang.Void;
 import org.computate.search.response.solr.SolrResponse.Stats;
 import org.computate.search.response.solr.SolrResponse.FacetCounts;
+import java.lang.Integer;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.time.ZonedDateTime;
@@ -52,7 +57,6 @@ import java.util.Date;
 import java.time.format.DateTimeFormatter;
 import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.lang.Integer;
 import java.math.BigDecimal;
 import org.computate.search.wrap.Wrap;
 import io.vertx.core.Promise;
@@ -132,6 +136,88 @@ import io.vertx.core.Future;
  **/
 public abstract class PageLayoutGen<DEV> extends Object {
 	protected static final Logger LOG = LoggerFactory.getLogger(PageLayout.class);
+
+	///////////////
+	// webClient //
+	///////////////
+
+
+	/**	 The entity webClient
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonIgnore
+	@JsonInclude(Include.NON_NULL)
+	protected WebClient webClient;
+
+	/**	<br> The entity webClient
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.page.PageLayout&fq=entiteVar_enUS_indexed_string:webClient">Find the entity webClient in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _webClient(Wrap<WebClient> w);
+
+	public WebClient getWebClient() {
+		return webClient;
+	}
+
+	public void setWebClient(WebClient webClient) {
+		this.webClient = webClient;
+	}
+	public static WebClient staticSetWebClient(SiteRequest siteRequest_, String o) {
+		return null;
+	}
+	protected PageLayout webClientInit() {
+		Wrap<WebClient> webClientWrap = new Wrap<WebClient>().var("webClient");
+		if(webClient == null) {
+			_webClient(webClientWrap);
+			Optional.ofNullable(webClientWrap.getO()).ifPresent(o -> {
+				setWebClient(o);
+			});
+		}
+		return (PageLayout)this;
+	}
+
+	///////////
+	// vertx //
+	///////////
+
+
+	/**	 The entity vertx
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonIgnore
+	@JsonInclude(Include.NON_NULL)
+	protected Vertx vertx;
+
+	/**	<br> The entity vertx
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.page.PageLayout&fq=entiteVar_enUS_indexed_string:vertx">Find the entity vertx in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _vertx(Wrap<Vertx> w);
+
+	public Vertx getVertx() {
+		return vertx;
+	}
+
+	public void setVertx(Vertx vertx) {
+		this.vertx = vertx;
+	}
+	public static Vertx staticSetVertx(SiteRequest siteRequest_, String o) {
+		return null;
+	}
+	protected PageLayout vertxInit() {
+		Wrap<Vertx> vertxWrap = new Wrap<Vertx>().var("vertx");
+		if(vertx == null) {
+			_vertx(vertxWrap);
+			Optional.ofNullable(vertxWrap.getO()).ifPresent(o -> {
+				setVertx(o);
+			});
+		}
+		return (PageLayout)this;
+	}
 
 	//////////////////
 	// siteRequest_ //
@@ -889,6 +975,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonObjectDeserializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject params;
 
@@ -1104,6 +1191,58 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return PageLayout.staticSearchUserName(siteRequest_, PageLayout.staticSetUserName(siteRequest_, o)).toString();
 	}
 
+	////////////
+	// userId //
+	////////////
+
+
+	/**	 The entity userId
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String userId;
+
+	/**	<br> The entity userId
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.page.PageLayout&fq=entiteVar_enUS_indexed_string:userId">Find the entity userId in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _userId(Wrap<String> w);
+
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String o) {
+		this.userId = PageLayout.staticSetUserId(siteRequest_, o);
+	}
+	public static String staticSetUserId(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	protected PageLayout userIdInit() {
+		Wrap<String> userIdWrap = new Wrap<String>().var("userId");
+		if(userId == null) {
+			_userId(userIdWrap);
+			Optional.ofNullable(userIdWrap.getO()).ifPresent(o -> {
+				setUserId(o);
+			});
+		}
+		return (PageLayout)this;
+	}
+
+	public static String staticSearchUserId(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrUserId(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqUserId(SiteRequest siteRequest_, String o) {
+		return PageLayout.staticSearchUserId(siteRequest_, PageLayout.staticSetUserId(siteRequest_, o)).toString();
+	}
+
 	///////////////
 	// userEmail //
 	///////////////
@@ -1154,6 +1293,300 @@ public abstract class PageLayoutGen<DEV> extends Object {
 
 	public static String staticSearchFqUserEmail(SiteRequest siteRequest_, String o) {
 		return PageLayout.staticSearchUserEmail(siteRequest_, PageLayout.staticSetUserEmail(siteRequest_, o)).toString();
+	}
+
+	////////////////
+	// userGroups //
+	////////////////
+
+
+	/**	 The entity userGroups
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+	@JsonInclude(Include.NON_NULL)
+	protected List<String> userGroups;
+
+	/**	<br> The entity userGroups
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.page.PageLayout&fq=entiteVar_enUS_indexed_string:userGroups">Find the entity userGroups in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _userGroups(Wrap<List<String>> w);
+
+	public List<String> getUserGroups() {
+		return userGroups;
+	}
+
+	public void setUserGroups(List<String> userGroups) {
+		this.userGroups = userGroups;
+	}
+	@JsonIgnore
+	public void setUserGroups(String o) {
+		String l = PageLayout.staticSetUserGroups(siteRequest_, o);
+		if(l != null)
+			addUserGroups(l);
+	}
+	public static String staticSetUserGroups(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	public PageLayout addUserGroups(String...objects) {
+		for(String o : objects) {
+			addUserGroups(o);
+		}
+		return (PageLayout)this;
+	}
+	public PageLayout addUserGroups(String o) {
+		if(o != null)
+			this.userGroups.add(o);
+		return (PageLayout)this;
+	}
+	@JsonIgnore
+	public void setUserGroups(JsonArray objects) {
+		userGroups.clear();
+		if(objects == null)
+			return;
+		for(int i = 0; i < objects.size(); i++) {
+			String o = objects.getString(i);
+			addUserGroups(o);
+		}
+	}
+	protected PageLayout userGroupsInit() {
+		Wrap<List<String>> userGroupsWrap = new Wrap<List<String>>().var("userGroups");
+		if(userGroups == null) {
+			_userGroups(userGroupsWrap);
+			Optional.ofNullable(userGroupsWrap.getO()).ifPresent(o -> {
+				setUserGroups(o);
+			});
+		}
+		return (PageLayout)this;
+	}
+
+	public static String staticSearchUserGroups(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrUserGroups(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqUserGroups(SiteRequest siteRequest_, String o) {
+		return PageLayout.staticSearchUserGroups(siteRequest_, PageLayout.staticSetUserGroups(siteRequest_, o)).toString();
+	}
+
+	//////////////////
+	// userFontSize //
+	//////////////////
+
+
+	/**	 The entity userFontSize
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String userFontSize;
+
+	/**	<br> The entity userFontSize
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.page.PageLayout&fq=entiteVar_enUS_indexed_string:userFontSize">Find the entity userFontSize in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _userFontSize(Wrap<String> w);
+
+	public String getUserFontSize() {
+		return userFontSize;
+	}
+	public void setUserFontSize(String o) {
+		this.userFontSize = PageLayout.staticSetUserFontSize(siteRequest_, o);
+	}
+	public static String staticSetUserFontSize(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	protected PageLayout userFontSizeInit() {
+		Wrap<String> userFontSizeWrap = new Wrap<String>().var("userFontSize");
+		if(userFontSize == null) {
+			_userFontSize(userFontSizeWrap);
+			Optional.ofNullable(userFontSizeWrap.getO()).ifPresent(o -> {
+				setUserFontSize(o);
+			});
+		}
+		return (PageLayout)this;
+	}
+
+	public static String staticSearchUserFontSize(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrUserFontSize(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqUserFontSize(SiteRequest siteRequest_, String o) {
+		return PageLayout.staticSearchUserFontSize(siteRequest_, PageLayout.staticSetUserFontSize(siteRequest_, o)).toString();
+	}
+
+	////////////////////////////
+	// userWebComponentsTheme //
+	////////////////////////////
+
+
+	/**	 The entity userWebComponentsTheme
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String userWebComponentsTheme;
+
+	/**	<br> The entity userWebComponentsTheme
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.page.PageLayout&fq=entiteVar_enUS_indexed_string:userWebComponentsTheme">Find the entity userWebComponentsTheme in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _userWebComponentsTheme(Wrap<String> w);
+
+	public String getUserWebComponentsTheme() {
+		return userWebComponentsTheme;
+	}
+	public void setUserWebComponentsTheme(String o) {
+		this.userWebComponentsTheme = PageLayout.staticSetUserWebComponentsTheme(siteRequest_, o);
+	}
+	public static String staticSetUserWebComponentsTheme(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	protected PageLayout userWebComponentsThemeInit() {
+		Wrap<String> userWebComponentsThemeWrap = new Wrap<String>().var("userWebComponentsTheme");
+		if(userWebComponentsTheme == null) {
+			_userWebComponentsTheme(userWebComponentsThemeWrap);
+			Optional.ofNullable(userWebComponentsThemeWrap.getO()).ifPresent(o -> {
+				setUserWebComponentsTheme(o);
+			});
+		}
+		return (PageLayout)this;
+	}
+
+	public static String staticSearchUserWebComponentsTheme(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrUserWebComponentsTheme(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqUserWebComponentsTheme(SiteRequest siteRequest_, String o) {
+		return PageLayout.staticSearchUserWebComponentsTheme(siteRequest_, PageLayout.staticSetUserWebComponentsTheme(siteRequest_, o)).toString();
+	}
+
+	///////////////////
+	// userSiteTheme //
+	///////////////////
+
+
+	/**	 The entity userSiteTheme
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String userSiteTheme;
+
+	/**	<br> The entity userSiteTheme
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.page.PageLayout&fq=entiteVar_enUS_indexed_string:userSiteTheme">Find the entity userSiteTheme in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _userSiteTheme(Wrap<String> w);
+
+	public String getUserSiteTheme() {
+		return userSiteTheme;
+	}
+	public void setUserSiteTheme(String o) {
+		this.userSiteTheme = PageLayout.staticSetUserSiteTheme(siteRequest_, o);
+	}
+	public static String staticSetUserSiteTheme(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	protected PageLayout userSiteThemeInit() {
+		Wrap<String> userSiteThemeWrap = new Wrap<String>().var("userSiteTheme");
+		if(userSiteTheme == null) {
+			_userSiteTheme(userSiteThemeWrap);
+			Optional.ofNullable(userSiteThemeWrap.getO()).ifPresent(o -> {
+				setUserSiteTheme(o);
+			});
+		}
+		return (PageLayout)this;
+	}
+
+	public static String staticSearchUserSiteTheme(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrUserSiteTheme(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqUserSiteTheme(SiteRequest siteRequest_, String o) {
+		return PageLayout.staticSearchUserSiteTheme(siteRequest_, PageLayout.staticSetUserSiteTheme(siteRequest_, o)).toString();
+	}
+
+	///////////////////////
+	// userAwesomeEffect //
+	///////////////////////
+
+
+	/**	 The entity userAwesomeEffect
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected Boolean userAwesomeEffect;
+
+	/**	<br> The entity userAwesomeEffect
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.page.PageLayout&fq=entiteVar_enUS_indexed_string:userAwesomeEffect">Find the entity userAwesomeEffect in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _userAwesomeEffect(Wrap<Boolean> w);
+
+	public Boolean getUserAwesomeEffect() {
+		return userAwesomeEffect;
+	}
+
+	public void setUserAwesomeEffect(Boolean userAwesomeEffect) {
+		this.userAwesomeEffect = userAwesomeEffect;
+	}
+	@JsonIgnore
+	public void setUserAwesomeEffect(String o) {
+		this.userAwesomeEffect = PageLayout.staticSetUserAwesomeEffect(siteRequest_, o);
+	}
+	public static Boolean staticSetUserAwesomeEffect(SiteRequest siteRequest_, String o) {
+		return Boolean.parseBoolean(o);
+	}
+	protected PageLayout userAwesomeEffectInit() {
+		Wrap<Boolean> userAwesomeEffectWrap = new Wrap<Boolean>().var("userAwesomeEffect");
+		if(userAwesomeEffect == null) {
+			_userAwesomeEffect(userAwesomeEffectWrap);
+			Optional.ofNullable(userAwesomeEffectWrap.getO()).ifPresent(o -> {
+				setUserAwesomeEffect(o);
+			});
+		}
+		return (PageLayout)this;
+	}
+
+	public static Boolean staticSearchUserAwesomeEffect(SiteRequest siteRequest_, Boolean o) {
+		return o;
+	}
+
+	public static String staticSearchStrUserAwesomeEffect(SiteRequest siteRequest_, Boolean o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqUserAwesomeEffect(SiteRequest siteRequest_, String o) {
+		return PageLayout.staticSearchUserAwesomeEffect(siteRequest_, PageLayout.staticSetUserAwesomeEffect(siteRequest_, o)).toString();
 	}
 
 	///////////////
@@ -1383,6 +1816,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public void setScopes(List<String> scopes) {
 		this.scopes = scopes;
 	}
+	@JsonIgnore
 	public void setScopes(String o) {
 		String l = PageLayout.staticSetScopes(siteRequest_, o);
 		if(l != null)
@@ -1457,6 +1891,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public void setRoleForWrite(List<String> roleForWrite) {
 		this.roleForWrite = roleForWrite;
 	}
+	@JsonIgnore
 	public void setRoleForWrite(String o) {
 		String l = PageLayout.staticSetRoleForWrite(siteRequest_, o);
 		if(l != null)
@@ -1531,6 +1966,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public void setRoleForRead(List<String> roleForRead) {
 		this.roleForRead = roleForRead;
 	}
+	@JsonIgnore
 	public void setRoleForRead(String o) {
 		String l = PageLayout.staticSetRoleForRead(siteRequest_, o);
 		if(l != null)
@@ -1668,6 +2104,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonObjectDeserializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject pagination = new JsonObject();
 
@@ -1741,6 +2178,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public void setDefaultFieldListVars(List<String> defaultFieldListVars) {
 		this.defaultFieldListVars = defaultFieldListVars;
 	}
+	@JsonIgnore
 	public void setDefaultFieldListVars(String o) {
 		String l = PageLayout.staticSetDefaultFieldListVars(siteRequest_, o);
 		if(l != null)
@@ -1787,6 +2225,81 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return PageLayout.staticSearchDefaultFieldListVars(siteRequest_, PageLayout.staticSetDefaultFieldListVars(siteRequest_, o)).toString();
 	}
 
+	/////////////////////
+	// defaultSortVars //
+	/////////////////////
+
+
+	/**	 The entity defaultSortVars
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+	@JsonInclude(Include.NON_NULL)
+	protected List<String> defaultSortVars = new ArrayList<String>();
+
+	/**	<br> The entity defaultSortVars
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.page.PageLayout&fq=entiteVar_enUS_indexed_string:defaultSortVars">Find the entity defaultSortVars in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
+	 **/
+	protected abstract void _defaultSortVars(List<String> l);
+
+	public List<String> getDefaultSortVars() {
+		return defaultSortVars;
+	}
+
+	public void setDefaultSortVars(List<String> defaultSortVars) {
+		this.defaultSortVars = defaultSortVars;
+	}
+	@JsonIgnore
+	public void setDefaultSortVars(String o) {
+		String l = PageLayout.staticSetDefaultSortVars(siteRequest_, o);
+		if(l != null)
+			addDefaultSortVars(l);
+	}
+	public static String staticSetDefaultSortVars(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	public PageLayout addDefaultSortVars(String...objects) {
+		for(String o : objects) {
+			addDefaultSortVars(o);
+		}
+		return (PageLayout)this;
+	}
+	public PageLayout addDefaultSortVars(String o) {
+		if(o != null)
+			this.defaultSortVars.add(o);
+		return (PageLayout)this;
+	}
+	@JsonIgnore
+	public void setDefaultSortVars(JsonArray objects) {
+		defaultSortVars.clear();
+		if(objects == null)
+			return;
+		for(int i = 0; i < objects.size(); i++) {
+			String o = objects.getString(i);
+			addDefaultSortVars(o);
+		}
+	}
+	protected PageLayout defaultSortVarsInit() {
+		_defaultSortVars(defaultSortVars);
+		return (PageLayout)this;
+	}
+
+	public static String staticSearchDefaultSortVars(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrDefaultSortVars(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqDefaultSortVars(SiteRequest siteRequest_, String o) {
+		return PageLayout.staticSearchDefaultSortVars(siteRequest_, PageLayout.staticSetDefaultSortVars(siteRequest_, o)).toString();
+	}
+
 	//////////////////////
 	// defaultStatsVars //
 	//////////////////////
@@ -1815,6 +2328,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public void setDefaultStatsVars(List<String> defaultStatsVars) {
 		this.defaultStatsVars = defaultStatsVars;
 	}
+	@JsonIgnore
 	public void setDefaultStatsVars(String o) {
 		String l = PageLayout.staticSetDefaultStatsVars(siteRequest_, o);
 		if(l != null)
@@ -1889,6 +2403,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public void setDefaultPivotVars(List<String> defaultPivotVars) {
 		this.defaultPivotVars = defaultPivotVars;
 	}
+	@JsonIgnore
 	public void setDefaultPivotVars(String o) {
 		String l = PageLayout.staticSetDefaultPivotVars(siteRequest_, o);
 		if(l != null)
@@ -1944,6 +2459,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonObjectDeserializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject varsQ = new JsonObject();
 
@@ -1989,6 +2505,66 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return PageLayout.staticSearchVarsQ(siteRequest_, PageLayout.staticSetVarsQ(siteRequest_, o)).toString();
 	}
 
+	/////////////////
+	// varsFqCount //
+	/////////////////
+
+
+	/**	 The entity varsFqCount
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonSerialize(using = ToStringSerializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected Integer varsFqCount;
+
+	/**	<br> The entity varsFqCount
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.page.PageLayout&fq=entiteVar_enUS_indexed_string:varsFqCount">Find the entity varsFqCount in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _varsFqCount(Wrap<Integer> w);
+
+	public Integer getVarsFqCount() {
+		return varsFqCount;
+	}
+
+	public void setVarsFqCount(Integer varsFqCount) {
+		this.varsFqCount = varsFqCount;
+	}
+	@JsonIgnore
+	public void setVarsFqCount(String o) {
+		this.varsFqCount = PageLayout.staticSetVarsFqCount(siteRequest_, o);
+	}
+	public static Integer staticSetVarsFqCount(SiteRequest siteRequest_, String o) {
+		if(NumberUtils.isParsable(o))
+			return Integer.parseInt(o);
+		return null;
+	}
+	protected PageLayout varsFqCountInit() {
+		Wrap<Integer> varsFqCountWrap = new Wrap<Integer>().var("varsFqCount");
+		if(varsFqCount == null) {
+			_varsFqCount(varsFqCountWrap);
+			Optional.ofNullable(varsFqCountWrap.getO()).ifPresent(o -> {
+				setVarsFqCount(o);
+			});
+		}
+		return (PageLayout)this;
+	}
+
+	public static Integer staticSearchVarsFqCount(SiteRequest siteRequest_, Integer o) {
+		return o;
+	}
+
+	public static String staticSearchStrVarsFqCount(SiteRequest siteRequest_, Integer o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqVarsFqCount(SiteRequest siteRequest_, String o) {
+		return PageLayout.staticSearchVarsFqCount(siteRequest_, PageLayout.staticSetVarsFqCount(siteRequest_, o)).toString();
+	}
+
 	////////////
 	// varsFq //
 	////////////
@@ -1998,6 +2574,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonObjectDeserializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject varsFq = new JsonObject();
 
@@ -2052,6 +2629,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonObjectDeserializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject varsRange = new JsonObject();
 
@@ -2106,6 +2684,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	 *	 It is constructed before being initialized with the constructor by default. 
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonObjectDeserializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject query = new JsonObject();
 
@@ -2598,21 +3177,22 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	/** Example: 2011-12-03T10:15:30+01:00 **/
 	@JsonIgnore
 	public void setRangeEnd(String o) {
-		this.rangeEnd = PageLayout.staticSetRangeEnd(siteRequest_, o);
-	}
-	public static ZonedDateTime staticSetRangeEnd(SiteRequest siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
-		else if(StringUtils.endsWith(o, "Z"))
-			return o == null ? null : Instant.parse(o).atZone(Optional.ofNullable(siteRequest_).map(r -> r.getConfig()).map(config -> config.getString(ConfigKeys.SITE_ZONE)).map(z -> ZoneId.of(z)).orElse(ZoneId.of("UTC"))).truncatedTo(ChronoUnit.MILLIS);
-		else if(StringUtils.contains(o, "T"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.UTC_DATE_TIME_FORMATTER).truncatedTo(ChronoUnit.MILLIS);
-		else
-			return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE).atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
+		ZoneId zoneId = Optional.ofNullable(siteRequest_).map(r -> r.getConfig()).map(config -> config.getString(ConfigKeys.SITE_ZONE)).map(z -> ZoneId.of(z)).orElse(ZoneId.of("UTC"));
+		this.rangeEnd = PageLayout.staticSetRangeEnd(siteRequest_, o, zoneId);
 	}
 	@JsonIgnore
 	public void setRangeEnd(Date o) {
 		this.rangeEnd = o == null ? null : ZonedDateTime.ofInstant(o.toInstant(), ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
+	}
+	public static ZonedDateTime staticSetRangeEnd(SiteRequest siteRequest_, String o, ZoneId zoneId) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
+		else if(StringUtils.endsWith(o, "Z"))
+			return o == null ? null : Instant.parse(o).atZone(zoneId).truncatedTo(ChronoUnit.MILLIS);
+		else if(StringUtils.contains(o, "T"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.UTC_DATE_TIME_FORMATTER).truncatedTo(ChronoUnit.MILLIS);
+		else
+			return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE).atStartOfDay(zoneId).truncatedTo(ChronoUnit.MILLIS);
 	}
 	protected PageLayout rangeEndInit() {
 		Wrap<ZonedDateTime> rangeEndWrap = new Wrap<ZonedDateTime>().var("rangeEnd");
@@ -2630,11 +3210,13 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	}
 
 	public static String staticSearchStrRangeEnd(SiteRequest siteRequest_, String o) {
-		return PageLayout.staticSearchRangeEnd(siteRequest_, PageLayout.staticSetRangeEnd(siteRequest_, o));
+		ZoneId zoneId = ZoneId.of("UTC");
+		return PageLayout.staticSearchRangeEnd(siteRequest_, PageLayout.staticSetRangeEnd(siteRequest_, o, zoneId));
 	}
 
 	public static String staticSearchFqRangeEnd(SiteRequest siteRequest_, String o) {
-		return PageLayout.staticSearchRangeEnd(siteRequest_, PageLayout.staticSetRangeEnd(siteRequest_, o)).toString();
+		ZoneId zoneId = ZoneId.of("UTC");
+		return PageLayout.staticSearchRangeEnd(siteRequest_, PageLayout.staticSetRangeEnd(siteRequest_, o, zoneId)).toString();
 	}
 
 	////////////////
@@ -2674,21 +3256,22 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	/** Example: 2011-12-03T10:15:30+01:00 **/
 	@JsonIgnore
 	public void setRangeStart(String o) {
-		this.rangeStart = PageLayout.staticSetRangeStart(siteRequest_, o);
-	}
-	public static ZonedDateTime staticSetRangeStart(SiteRequest siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
-		else if(StringUtils.endsWith(o, "Z"))
-			return o == null ? null : Instant.parse(o).atZone(Optional.ofNullable(siteRequest_).map(r -> r.getConfig()).map(config -> config.getString(ConfigKeys.SITE_ZONE)).map(z -> ZoneId.of(z)).orElse(ZoneId.of("UTC"))).truncatedTo(ChronoUnit.MILLIS);
-		else if(StringUtils.contains(o, "T"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.UTC_DATE_TIME_FORMATTER).truncatedTo(ChronoUnit.MILLIS);
-		else
-			return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE).atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
+		ZoneId zoneId = Optional.ofNullable(siteRequest_).map(r -> r.getConfig()).map(config -> config.getString(ConfigKeys.SITE_ZONE)).map(z -> ZoneId.of(z)).orElse(ZoneId.of("UTC"));
+		this.rangeStart = PageLayout.staticSetRangeStart(siteRequest_, o, zoneId);
 	}
 	@JsonIgnore
 	public void setRangeStart(Date o) {
 		this.rangeStart = o == null ? null : ZonedDateTime.ofInstant(o.toInstant(), ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
+	}
+	public static ZonedDateTime staticSetRangeStart(SiteRequest siteRequest_, String o, ZoneId zoneId) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
+		else if(StringUtils.endsWith(o, "Z"))
+			return o == null ? null : Instant.parse(o).atZone(zoneId).truncatedTo(ChronoUnit.MILLIS);
+		else if(StringUtils.contains(o, "T"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.UTC_DATE_TIME_FORMATTER).truncatedTo(ChronoUnit.MILLIS);
+		else
+			return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE).atStartOfDay(zoneId).truncatedTo(ChronoUnit.MILLIS);
 	}
 	protected PageLayout rangeStartInit() {
 		Wrap<ZonedDateTime> rangeStartWrap = new Wrap<ZonedDateTime>().var("rangeStart");
@@ -2706,11 +3289,13 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	}
 
 	public static String staticSearchStrRangeStart(SiteRequest siteRequest_, String o) {
-		return PageLayout.staticSearchRangeStart(siteRequest_, PageLayout.staticSetRangeStart(siteRequest_, o));
+		ZoneId zoneId = ZoneId.of("UTC");
+		return PageLayout.staticSearchRangeStart(siteRequest_, PageLayout.staticSetRangeStart(siteRequest_, o, zoneId));
 	}
 
 	public static String staticSearchFqRangeStart(SiteRequest siteRequest_, String o) {
-		return PageLayout.staticSearchRangeStart(siteRequest_, PageLayout.staticSetRangeStart(siteRequest_, o)).toString();
+		ZoneId zoneId = ZoneId.of("UTC");
+		return PageLayout.staticSearchRangeStart(siteRequest_, PageLayout.staticSetRangeStart(siteRequest_, o, zoneId)).toString();
 	}
 
 	///////////////////////
@@ -2722,6 +3307,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonObjectDeserializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject defaultRangeStats;
 
@@ -2862,21 +3448,22 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	/** Example: 2011-12-03T10:15:30+01:00 **/
 	@JsonIgnore
 	public void setDefaultRangeEnd(String o) {
-		this.defaultRangeEnd = PageLayout.staticSetDefaultRangeEnd(siteRequest_, o);
-	}
-	public static ZonedDateTime staticSetDefaultRangeEnd(SiteRequest siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
-		else if(StringUtils.endsWith(o, "Z"))
-			return o == null ? null : Instant.parse(o).atZone(Optional.ofNullable(siteRequest_).map(r -> r.getConfig()).map(config -> config.getString(ConfigKeys.SITE_ZONE)).map(z -> ZoneId.of(z)).orElse(ZoneId.of("UTC"))).truncatedTo(ChronoUnit.MILLIS);
-		else if(StringUtils.contains(o, "T"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.UTC_DATE_TIME_FORMATTER).truncatedTo(ChronoUnit.MILLIS);
-		else
-			return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE).atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
+		ZoneId zoneId = Optional.ofNullable(siteRequest_).map(r -> r.getConfig()).map(config -> config.getString(ConfigKeys.SITE_ZONE)).map(z -> ZoneId.of(z)).orElse(ZoneId.of("UTC"));
+		this.defaultRangeEnd = PageLayout.staticSetDefaultRangeEnd(siteRequest_, o, zoneId);
 	}
 	@JsonIgnore
 	public void setDefaultRangeEnd(Date o) {
 		this.defaultRangeEnd = o == null ? null : ZonedDateTime.ofInstant(o.toInstant(), ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
+	}
+	public static ZonedDateTime staticSetDefaultRangeEnd(SiteRequest siteRequest_, String o, ZoneId zoneId) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
+		else if(StringUtils.endsWith(o, "Z"))
+			return o == null ? null : Instant.parse(o).atZone(zoneId).truncatedTo(ChronoUnit.MILLIS);
+		else if(StringUtils.contains(o, "T"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.UTC_DATE_TIME_FORMATTER).truncatedTo(ChronoUnit.MILLIS);
+		else
+			return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE).atStartOfDay(zoneId).truncatedTo(ChronoUnit.MILLIS);
 	}
 	protected PageLayout defaultRangeEndInit() {
 		Wrap<ZonedDateTime> defaultRangeEndWrap = new Wrap<ZonedDateTime>().var("defaultRangeEnd");
@@ -2894,11 +3481,13 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	}
 
 	public static String staticSearchStrDefaultRangeEnd(SiteRequest siteRequest_, String o) {
-		return PageLayout.staticSearchDefaultRangeEnd(siteRequest_, PageLayout.staticSetDefaultRangeEnd(siteRequest_, o));
+		ZoneId zoneId = ZoneId.of("UTC");
+		return PageLayout.staticSearchDefaultRangeEnd(siteRequest_, PageLayout.staticSetDefaultRangeEnd(siteRequest_, o, zoneId));
 	}
 
 	public static String staticSearchFqDefaultRangeEnd(SiteRequest siteRequest_, String o) {
-		return PageLayout.staticSearchDefaultRangeEnd(siteRequest_, PageLayout.staticSetDefaultRangeEnd(siteRequest_, o)).toString();
+		ZoneId zoneId = ZoneId.of("UTC");
+		return PageLayout.staticSearchDefaultRangeEnd(siteRequest_, PageLayout.staticSetDefaultRangeEnd(siteRequest_, o, zoneId)).toString();
 	}
 
 	///////////////////////
@@ -2938,21 +3527,22 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	/** Example: 2011-12-03T10:15:30+01:00 **/
 	@JsonIgnore
 	public void setDefaultRangeStart(String o) {
-		this.defaultRangeStart = PageLayout.staticSetDefaultRangeStart(siteRequest_, o);
-	}
-	public static ZonedDateTime staticSetDefaultRangeStart(SiteRequest siteRequest_, String o) {
-		if(StringUtils.endsWith(o, "]"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
-		else if(StringUtils.endsWith(o, "Z"))
-			return o == null ? null : Instant.parse(o).atZone(Optional.ofNullable(siteRequest_).map(r -> r.getConfig()).map(config -> config.getString(ConfigKeys.SITE_ZONE)).map(z -> ZoneId.of(z)).orElse(ZoneId.of("UTC"))).truncatedTo(ChronoUnit.MILLIS);
-		else if(StringUtils.contains(o, "T"))
-			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.UTC_DATE_TIME_FORMATTER).truncatedTo(ChronoUnit.MILLIS);
-		else
-			return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE).atStartOfDay(ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
+		ZoneId zoneId = Optional.ofNullable(siteRequest_).map(r -> r.getConfig()).map(config -> config.getString(ConfigKeys.SITE_ZONE)).map(z -> ZoneId.of(z)).orElse(ZoneId.of("UTC"));
+		this.defaultRangeStart = PageLayout.staticSetDefaultRangeStart(siteRequest_, o, zoneId);
 	}
 	@JsonIgnore
 	public void setDefaultRangeStart(Date o) {
 		this.defaultRangeStart = o == null ? null : ZonedDateTime.ofInstant(o.toInstant(), ZoneId.of(siteRequest_.getConfig().getString(ConfigKeys.SITE_ZONE))).truncatedTo(ChronoUnit.MILLIS);
+	}
+	public static ZonedDateTime staticSetDefaultRangeStart(SiteRequest siteRequest_, String o, ZoneId zoneId) {
+		if(StringUtils.endsWith(o, "]"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.ZONED_DATE_TIME_FORMATTER);
+		else if(StringUtils.endsWith(o, "Z"))
+			return o == null ? null : Instant.parse(o).atZone(zoneId).truncatedTo(ChronoUnit.MILLIS);
+		else if(StringUtils.contains(o, "T"))
+			return o == null ? null : ZonedDateTime.parse(o, ComputateZonedDateTimeSerializer.UTC_DATE_TIME_FORMATTER).truncatedTo(ChronoUnit.MILLIS);
+		else
+			return o == null ? null : LocalDate.parse(o, DateTimeFormatter.ISO_DATE).atStartOfDay(zoneId).truncatedTo(ChronoUnit.MILLIS);
 	}
 	protected PageLayout defaultRangeStartInit() {
 		Wrap<ZonedDateTime> defaultRangeStartWrap = new Wrap<ZonedDateTime>().var("defaultRangeStart");
@@ -2970,11 +3560,13 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	}
 
 	public static String staticSearchStrDefaultRangeStart(SiteRequest siteRequest_, String o) {
-		return PageLayout.staticSearchDefaultRangeStart(siteRequest_, PageLayout.staticSetDefaultRangeStart(siteRequest_, o));
+		ZoneId zoneId = ZoneId.of("UTC");
+		return PageLayout.staticSearchDefaultRangeStart(siteRequest_, PageLayout.staticSetDefaultRangeStart(siteRequest_, o, zoneId));
 	}
 
 	public static String staticSearchFqDefaultRangeStart(SiteRequest siteRequest_, String o) {
-		return PageLayout.staticSearchDefaultRangeStart(siteRequest_, PageLayout.staticSetDefaultRangeStart(siteRequest_, o)).toString();
+		ZoneId zoneId = ZoneId.of("UTC");
+		return PageLayout.staticSearchDefaultRangeStart(siteRequest_, PageLayout.staticSetDefaultRangeStart(siteRequest_, o, zoneId)).toString();
 	}
 
 	/////////////////////
@@ -3270,6 +3862,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonObjectDeserializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject DEFAULT_MAP_LOCATION;
 
@@ -3821,17 +4414,17 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	// initDeep //
 	//////////////
 
-	public Future<Void> promiseDeepPageLayout(SiteRequest siteRequest_) {
+	public Future<PageLayoutGen<DEV>> promiseDeepPageLayout(SiteRequest siteRequest_) {
 		setSiteRequest_(siteRequest_);
 		return promiseDeepPageLayout();
 	}
 
-	public Future<Void> promiseDeepPageLayout() {
-		Promise<Void> promise = Promise.promise();
+	public Future<PageLayoutGen<DEV>> promiseDeepPageLayout() {
+		Promise<PageLayoutGen<DEV>> promise = Promise.promise();
 		Promise<Void> promise2 = Promise.promise();
 		promisePageLayout(promise2);
 		promise2.future().onSuccess(a -> {
-			promise.complete();
+			promise.complete(this);
 		}).onFailure(ex -> {
 			promise.fail(ex);
 		});
@@ -3842,6 +4435,8 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		Future.future(a -> a.complete()).compose(a -> {
 			Promise<Void> promise2 = Promise.promise();
 			try {
+				webClientInit();
+				vertxInit();
 				siteRequest_Init();
 				langInit();
 				requestVarsInit();
@@ -3861,7 +4456,13 @@ public abstract class PageLayoutGen<DEV> extends Object {
 				userKeyInit();
 				userFullNameInit();
 				userNameInit();
+				userIdInit();
 				userEmailInit();
+				userGroupsInit();
+				userFontSizeInit();
+				userWebComponentsThemeInit();
+				userSiteThemeInit();
+				userAwesomeEffectInit();
 				logoutUrlInit();
 				promise2.complete();
 			} catch(Exception ex) {
@@ -3888,9 +4489,11 @@ public abstract class PageLayoutGen<DEV> extends Object {
 				facetCountsInit();
 				paginationInit();
 				defaultFieldListVarsInit();
+				defaultSortVarsInit();
 				defaultStatsVarsInit();
 				defaultPivotVarsInit();
 				varsQInit();
+				varsFqCountInit();
 				varsFqInit();
 				varsRangeInit();
 				queryInit();
@@ -3951,7 +4554,7 @@ public abstract class PageLayoutGen<DEV> extends Object {
 		return promise.future();
 	}
 
-	public Future<Void> promiseDeepForClass(SiteRequest siteRequest_) {
+	public Future<? extends PageLayoutGen<DEV>> promiseDeepForClass(SiteRequest siteRequest_) {
 		return promiseDeepPageLayout(siteRequest_);
 	}
 
@@ -3990,6 +4593,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public Object obtainPageLayout(String var) {
 		PageLayout oPageLayout = (PageLayout)this;
 		switch(var) {
+			case "webClient":
+				return oPageLayout.webClient;
+			case "vertx":
+				return oPageLayout.vertx;
 			case "siteRequest_":
 				return oPageLayout.siteRequest_;
 			case "lang":
@@ -4028,8 +4635,20 @@ public abstract class PageLayoutGen<DEV> extends Object {
 				return oPageLayout.userFullName;
 			case "userName":
 				return oPageLayout.userName;
+			case "userId":
+				return oPageLayout.userId;
 			case "userEmail":
 				return oPageLayout.userEmail;
+			case "userGroups":
+				return oPageLayout.userGroups;
+			case "userFontSize":
+				return oPageLayout.userFontSize;
+			case "userWebComponentsTheme":
+				return oPageLayout.userWebComponentsTheme;
+			case "userSiteTheme":
+				return oPageLayout.userSiteTheme;
+			case "userAwesomeEffect":
+				return oPageLayout.userAwesomeEffect;
 			case "logoutUrl":
 				return oPageLayout.logoutUrl;
 			case "promiseBefore":
@@ -4052,12 +4671,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 				return oPageLayout.pagination;
 			case "defaultFieldListVars":
 				return oPageLayout.defaultFieldListVars;
+			case "defaultSortVars":
+				return oPageLayout.defaultSortVars;
 			case "defaultStatsVars":
 				return oPageLayout.defaultStatsVars;
 			case "defaultPivotVars":
 				return oPageLayout.defaultPivotVars;
 			case "varsQ":
 				return oPageLayout.varsQ;
+			case "varsFqCount":
+				return oPageLayout.varsFqCount;
 			case "varsFq":
 				return oPageLayout.varsFq;
 			case "varsRange":
@@ -4156,125 +4779,137 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	// staticSet //
 	///////////////
 
-	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String o) {
-		return staticSetPageLayout(entityVar,  siteRequest_, o);
+	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String v, PageLayout o) {
+		return staticSetPageLayout(entityVar,  siteRequest_, v, o);
 	}
-	public static Object staticSetPageLayout(String entityVar, SiteRequest siteRequest_, String o) {
+	public static Object staticSetPageLayout(String entityVar, SiteRequest siteRequest_, String v, PageLayout o) {
 		switch(entityVar) {
 		case "lang":
-			return PageLayout.staticSetLang(siteRequest_, o);
+			return PageLayout.staticSetLang(siteRequest_, v);
 		case "staticBaseUrl":
-			return PageLayout.staticSetStaticBaseUrl(siteRequest_, o);
+			return PageLayout.staticSetStaticBaseUrl(siteRequest_, v);
 		case "siteBaseUrl":
-			return PageLayout.staticSetSiteBaseUrl(siteRequest_, o);
+			return PageLayout.staticSetSiteBaseUrl(siteRequest_, v);
 		case "siteAuthUrl":
-			return PageLayout.staticSetSiteAuthUrl(siteRequest_, o);
+			return PageLayout.staticSetSiteAuthUrl(siteRequest_, v);
 		case "siteAuthRealm":
-			return PageLayout.staticSetSiteAuthRealm(siteRequest_, o);
+			return PageLayout.staticSetSiteAuthRealm(siteRequest_, v);
 		case "fontAwesomeKit":
-			return PageLayout.staticSetFontAwesomeKit(siteRequest_, o);
+			return PageLayout.staticSetFontAwesomeKit(siteRequest_, v);
 		case "facebookGraphVersion":
-			return PageLayout.staticSetFacebookGraphVersion(siteRequest_, o);
+			return PageLayout.staticSetFacebookGraphVersion(siteRequest_, v);
 		case "facebookAppId":
-			return PageLayout.staticSetFacebookAppId(siteRequest_, o);
+			return PageLayout.staticSetFacebookAppId(siteRequest_, v);
 		case "pageUri":
-			return PageLayout.staticSetPageUri(siteRequest_, o);
+			return PageLayout.staticSetPageUri(siteRequest_, v);
 		case "pageId":
-			return PageLayout.staticSetPageId(siteRequest_, o);
+			return PageLayout.staticSetPageId(siteRequest_, v);
 		case "apiUri":
-			return PageLayout.staticSetApiUri(siteRequest_, o);
+			return PageLayout.staticSetApiUri(siteRequest_, v);
 		case "pageMethod":
-			return PageLayout.staticSetPageMethod(siteRequest_, o);
+			return PageLayout.staticSetPageMethod(siteRequest_, v);
 		case "params":
-			return PageLayout.staticSetParams(siteRequest_, o);
+			return PageLayout.staticSetParams(siteRequest_, v);
 		case "userKey":
-			return PageLayout.staticSetUserKey(siteRequest_, o);
+			return PageLayout.staticSetUserKey(siteRequest_, v);
 		case "userFullName":
-			return PageLayout.staticSetUserFullName(siteRequest_, o);
+			return PageLayout.staticSetUserFullName(siteRequest_, v);
 		case "userName":
-			return PageLayout.staticSetUserName(siteRequest_, o);
+			return PageLayout.staticSetUserName(siteRequest_, v);
+		case "userId":
+			return PageLayout.staticSetUserId(siteRequest_, v);
 		case "userEmail":
-			return PageLayout.staticSetUserEmail(siteRequest_, o);
+			return PageLayout.staticSetUserEmail(siteRequest_, v);
+		case "userGroups":
+			return PageLayout.staticSetUserGroups(siteRequest_, v);
+		case "userFontSize":
+			return PageLayout.staticSetUserFontSize(siteRequest_, v);
+		case "userWebComponentsTheme":
+			return PageLayout.staticSetUserWebComponentsTheme(siteRequest_, v);
+		case "userSiteTheme":
+			return PageLayout.staticSetUserSiteTheme(siteRequest_, v);
+		case "userAwesomeEffect":
+			return PageLayout.staticSetUserAwesomeEffect(siteRequest_, v);
 		case "logoutUrl":
-			return PageLayout.staticSetLogoutUrl(siteRequest_, o);
+			return PageLayout.staticSetLogoutUrl(siteRequest_, v);
 		case "classSimpleName":
-			return PageLayout.staticSetClassSimpleName(siteRequest_, o);
+			return PageLayout.staticSetClassSimpleName(siteRequest_, v);
 		case "pageTitle":
-			return PageLayout.staticSetPageTitle(siteRequest_, o);
+			return PageLayout.staticSetPageTitle(siteRequest_, v);
 		case "scopes":
-			return PageLayout.staticSetScopes(siteRequest_, o);
+			return PageLayout.staticSetScopes(siteRequest_, v);
 		case "roleForWrite":
-			return PageLayout.staticSetRoleForWrite(siteRequest_, o);
+			return PageLayout.staticSetRoleForWrite(siteRequest_, v);
 		case "roleForRead":
-			return PageLayout.staticSetRoleForRead(siteRequest_, o);
+			return PageLayout.staticSetRoleForRead(siteRequest_, v);
 		case "pagination":
-			return PageLayout.staticSetPagination(siteRequest_, o);
+			return PageLayout.staticSetPagination(siteRequest_, v);
 		case "defaultFieldListVars":
-			return PageLayout.staticSetDefaultFieldListVars(siteRequest_, o);
+			return PageLayout.staticSetDefaultFieldListVars(siteRequest_, v);
+		case "defaultSortVars":
+			return PageLayout.staticSetDefaultSortVars(siteRequest_, v);
 		case "defaultStatsVars":
-			return PageLayout.staticSetDefaultStatsVars(siteRequest_, o);
+			return PageLayout.staticSetDefaultStatsVars(siteRequest_, v);
 		case "defaultPivotVars":
-			return PageLayout.staticSetDefaultPivotVars(siteRequest_, o);
+			return PageLayout.staticSetDefaultPivotVars(siteRequest_, v);
 		case "varsQ":
-			return PageLayout.staticSetVarsQ(siteRequest_, o);
+			return PageLayout.staticSetVarsQ(siteRequest_, v);
+		case "varsFqCount":
+			return PageLayout.staticSetVarsFqCount(siteRequest_, v);
 		case "varsFq":
-			return PageLayout.staticSetVarsFq(siteRequest_, o);
+			return PageLayout.staticSetVarsFq(siteRequest_, v);
 		case "varsRange":
-			return PageLayout.staticSetVarsRange(siteRequest_, o);
+			return PageLayout.staticSetVarsRange(siteRequest_, v);
 		case "query":
-			return PageLayout.staticSetQuery(siteRequest_, o);
+			return PageLayout.staticSetQuery(siteRequest_, v);
 		case "pageResponse":
-			return PageLayout.staticSetPageResponse(siteRequest_, o);
+			return PageLayout.staticSetPageResponse(siteRequest_, v);
 		case "defaultZoneId":
-			return PageLayout.staticSetDefaultZoneId(siteRequest_, o);
+			return PageLayout.staticSetDefaultZoneId(siteRequest_, v);
 		case "defaultLocaleId":
-			return PageLayout.staticSetDefaultLocaleId(siteRequest_, o);
+			return PageLayout.staticSetDefaultLocaleId(siteRequest_, v);
 		case "rows":
-			return PageLayout.staticSetRows(siteRequest_, o);
+			return PageLayout.staticSetRows(siteRequest_, v);
 		case "start":
-			return PageLayout.staticSetStart(siteRequest_, o);
+			return PageLayout.staticSetStart(siteRequest_, v);
 		case "rangeGap":
-			return PageLayout.staticSetRangeGap(siteRequest_, o);
+			return PageLayout.staticSetRangeGap(siteRequest_, v);
 		case "rangeEnd":
-			return PageLayout.staticSetRangeEnd(siteRequest_, o);
 		case "rangeStart":
-			return PageLayout.staticSetRangeStart(siteRequest_, o);
 		case "defaultRangeStats":
-			return PageLayout.staticSetDefaultRangeStats(siteRequest_, o);
+			return PageLayout.staticSetDefaultRangeStats(siteRequest_, v);
 		case "defaultRangeGap":
-			return PageLayout.staticSetDefaultRangeGap(siteRequest_, o);
+			return PageLayout.staticSetDefaultRangeGap(siteRequest_, v);
 		case "defaultRangeEnd":
-			return PageLayout.staticSetDefaultRangeEnd(siteRequest_, o);
 		case "defaultRangeStart":
-			return PageLayout.staticSetDefaultRangeStart(siteRequest_, o);
 		case "defaultRangeVar":
-			return PageLayout.staticSetDefaultRangeVar(siteRequest_, o);
+			return PageLayout.staticSetDefaultRangeVar(siteRequest_, v);
 		case "defaultFacetSort":
-			return PageLayout.staticSetDefaultFacetSort(siteRequest_, o);
+			return PageLayout.staticSetDefaultFacetSort(siteRequest_, v);
 		case "defaultFacetLimit":
-			return PageLayout.staticSetDefaultFacetLimit(siteRequest_, o);
+			return PageLayout.staticSetDefaultFacetLimit(siteRequest_, v);
 		case "defaultFacetMinCount":
-			return PageLayout.staticSetDefaultFacetMinCount(siteRequest_, o);
+			return PageLayout.staticSetDefaultFacetMinCount(siteRequest_, v);
 		case "defaultPivotMinCount":
-			return PageLayout.staticSetDefaultPivotMinCount(siteRequest_, o);
+			return PageLayout.staticSetDefaultPivotMinCount(siteRequest_, v);
 		case "DEFAULT_MAP_LOCATION":
-			return PageLayout.staticSetDEFAULT_MAP_LOCATION(siteRequest_, o);
+			return PageLayout.staticSetDEFAULT_MAP_LOCATION(siteRequest_, v);
 		case "DEFAULT_MAP_ZOOM":
-			return PageLayout.staticSetDEFAULT_MAP_ZOOM(siteRequest_, o);
+			return PageLayout.staticSetDEFAULT_MAP_ZOOM(siteRequest_, v);
 		case "queryStr":
-			return PageLayout.staticSetQueryStr(siteRequest_, o);
+			return PageLayout.staticSetQueryStr(siteRequest_, v);
 		case "pageImageUri":
-			return PageLayout.staticSetPageImageUri(siteRequest_, o);
+			return PageLayout.staticSetPageImageUri(siteRequest_, v);
 		case "pageImageWidth":
-			return PageLayout.staticSetPageImageWidth(siteRequest_, o);
+			return PageLayout.staticSetPageImageWidth(siteRequest_, v);
 		case "pageImageHeight":
-			return PageLayout.staticSetPageImageHeight(siteRequest_, o);
+			return PageLayout.staticSetPageImageHeight(siteRequest_, v);
 		case "pageVideoId":
-			return PageLayout.staticSetPageVideoId(siteRequest_, o);
+			return PageLayout.staticSetPageVideoId(siteRequest_, v);
 		case "classIcon":
-			return PageLayout.staticSetClassIcon(siteRequest_, o);
+			return PageLayout.staticSetClassIcon(siteRequest_, v);
 		case "pageDescription":
-			return PageLayout.staticSetPageDescription(siteRequest_, o);
+			return PageLayout.staticSetPageDescription(siteRequest_, v);
 			default:
 				return null;
 		}
@@ -4321,8 +4956,20 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSearchUserFullName(siteRequest_, (String)o);
 		case "userName":
 			return PageLayout.staticSearchUserName(siteRequest_, (String)o);
+		case "userId":
+			return PageLayout.staticSearchUserId(siteRequest_, (String)o);
 		case "userEmail":
 			return PageLayout.staticSearchUserEmail(siteRequest_, (String)o);
+		case "userGroups":
+			return PageLayout.staticSearchUserGroups(siteRequest_, (String)o);
+		case "userFontSize":
+			return PageLayout.staticSearchUserFontSize(siteRequest_, (String)o);
+		case "userWebComponentsTheme":
+			return PageLayout.staticSearchUserWebComponentsTheme(siteRequest_, (String)o);
+		case "userSiteTheme":
+			return PageLayout.staticSearchUserSiteTheme(siteRequest_, (String)o);
+		case "userAwesomeEffect":
+			return PageLayout.staticSearchUserAwesomeEffect(siteRequest_, (Boolean)o);
 		case "logoutUrl":
 			return PageLayout.staticSearchLogoutUrl(siteRequest_, (String)o);
 		case "classSimpleName":
@@ -4339,12 +4986,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSearchPagination(siteRequest_, (JsonObject)o);
 		case "defaultFieldListVars":
 			return PageLayout.staticSearchDefaultFieldListVars(siteRequest_, (String)o);
+		case "defaultSortVars":
+			return PageLayout.staticSearchDefaultSortVars(siteRequest_, (String)o);
 		case "defaultStatsVars":
 			return PageLayout.staticSearchDefaultStatsVars(siteRequest_, (String)o);
 		case "defaultPivotVars":
 			return PageLayout.staticSearchDefaultPivotVars(siteRequest_, (String)o);
 		case "varsQ":
 			return PageLayout.staticSearchVarsQ(siteRequest_, (JsonObject)o);
+		case "varsFqCount":
+			return PageLayout.staticSearchVarsFqCount(siteRequest_, (Integer)o);
 		case "varsFq":
 			return PageLayout.staticSearchVarsFq(siteRequest_, (JsonObject)o);
 		case "varsRange":
@@ -4449,8 +5100,20 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSearchStrUserFullName(siteRequest_, (String)o);
 		case "userName":
 			return PageLayout.staticSearchStrUserName(siteRequest_, (String)o);
+		case "userId":
+			return PageLayout.staticSearchStrUserId(siteRequest_, (String)o);
 		case "userEmail":
 			return PageLayout.staticSearchStrUserEmail(siteRequest_, (String)o);
+		case "userGroups":
+			return PageLayout.staticSearchStrUserGroups(siteRequest_, (String)o);
+		case "userFontSize":
+			return PageLayout.staticSearchStrUserFontSize(siteRequest_, (String)o);
+		case "userWebComponentsTheme":
+			return PageLayout.staticSearchStrUserWebComponentsTheme(siteRequest_, (String)o);
+		case "userSiteTheme":
+			return PageLayout.staticSearchStrUserSiteTheme(siteRequest_, (String)o);
+		case "userAwesomeEffect":
+			return PageLayout.staticSearchStrUserAwesomeEffect(siteRequest_, (Boolean)o);
 		case "logoutUrl":
 			return PageLayout.staticSearchStrLogoutUrl(siteRequest_, (String)o);
 		case "classSimpleName":
@@ -4467,12 +5130,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSearchStrPagination(siteRequest_, (String)o);
 		case "defaultFieldListVars":
 			return PageLayout.staticSearchStrDefaultFieldListVars(siteRequest_, (String)o);
+		case "defaultSortVars":
+			return PageLayout.staticSearchStrDefaultSortVars(siteRequest_, (String)o);
 		case "defaultStatsVars":
 			return PageLayout.staticSearchStrDefaultStatsVars(siteRequest_, (String)o);
 		case "defaultPivotVars":
 			return PageLayout.staticSearchStrDefaultPivotVars(siteRequest_, (String)o);
 		case "varsQ":
 			return PageLayout.staticSearchStrVarsQ(siteRequest_, (String)o);
+		case "varsFqCount":
+			return PageLayout.staticSearchStrVarsFqCount(siteRequest_, (Integer)o);
 		case "varsFq":
 			return PageLayout.staticSearchStrVarsFq(siteRequest_, (String)o);
 		case "varsRange":
@@ -4577,8 +5244,20 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSearchFqUserFullName(siteRequest_, o);
 		case "userName":
 			return PageLayout.staticSearchFqUserName(siteRequest_, o);
+		case "userId":
+			return PageLayout.staticSearchFqUserId(siteRequest_, o);
 		case "userEmail":
 			return PageLayout.staticSearchFqUserEmail(siteRequest_, o);
+		case "userGroups":
+			return PageLayout.staticSearchFqUserGroups(siteRequest_, o);
+		case "userFontSize":
+			return PageLayout.staticSearchFqUserFontSize(siteRequest_, o);
+		case "userWebComponentsTheme":
+			return PageLayout.staticSearchFqUserWebComponentsTheme(siteRequest_, o);
+		case "userSiteTheme":
+			return PageLayout.staticSearchFqUserSiteTheme(siteRequest_, o);
+		case "userAwesomeEffect":
+			return PageLayout.staticSearchFqUserAwesomeEffect(siteRequest_, o);
 		case "logoutUrl":
 			return PageLayout.staticSearchFqLogoutUrl(siteRequest_, o);
 		case "classSimpleName":
@@ -4595,12 +5274,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return PageLayout.staticSearchFqPagination(siteRequest_, o);
 		case "defaultFieldListVars":
 			return PageLayout.staticSearchFqDefaultFieldListVars(siteRequest_, o);
+		case "defaultSortVars":
+			return PageLayout.staticSearchFqDefaultSortVars(siteRequest_, o);
 		case "defaultStatsVars":
 			return PageLayout.staticSearchFqDefaultStatsVars(siteRequest_, o);
 		case "defaultPivotVars":
 			return PageLayout.staticSearchFqDefaultPivotVars(siteRequest_, o);
 		case "varsQ":
 			return PageLayout.staticSearchFqVarsQ(siteRequest_, o);
+		case "varsFqCount":
+			return PageLayout.staticSearchFqVarsFqCount(siteRequest_, o);
 		case "varsFq":
 			return PageLayout.staticSearchFqVarsFq(siteRequest_, o);
 		case "varsRange":
@@ -4674,6 +5357,10 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	}
 
 	public static final String CLASS_SIMPLE_NAME = "PageLayout";
+	public static final String CLASS_CANONICAL_NAME = "com.coralberryfairy.site.page.PageLayout";
+	public static final String CLASS_AUTH_RESOURCE = "";
+	public static final String VAR_webClient = "webClient";
+	public static final String VAR_vertx = "vertx";
 	public static final String VAR_siteRequest_ = "siteRequest_";
 	public static final String VAR_lang = "lang";
 	public static final String VAR_requestVars = "requestVars";
@@ -4693,7 +5380,13 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public static final String VAR_userKey = "userKey";
 	public static final String VAR_userFullName = "userFullName";
 	public static final String VAR_userName = "userName";
+	public static final String VAR_userId = "userId";
 	public static final String VAR_userEmail = "userEmail";
+	public static final String VAR_userGroups = "userGroups";
+	public static final String VAR_userFontSize = "userFontSize";
+	public static final String VAR_userWebComponentsTheme = "userWebComponentsTheme";
+	public static final String VAR_userSiteTheme = "userSiteTheme";
+	public static final String VAR_userAwesomeEffect = "userAwesomeEffect";
 	public static final String VAR_logoutUrl = "logoutUrl";
 	public static final String VAR_promiseBefore = "promiseBefore";
 	public static final String VAR_classSimpleName = "classSimpleName";
@@ -4705,9 +5398,11 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public static final String VAR_facetCounts = "facetCounts";
 	public static final String VAR_pagination = "pagination";
 	public static final String VAR_defaultFieldListVars = "defaultFieldListVars";
+	public static final String VAR_defaultSortVars = "defaultSortVars";
 	public static final String VAR_defaultStatsVars = "defaultStatsVars";
 	public static final String VAR_defaultPivotVars = "defaultPivotVars";
 	public static final String VAR_varsQ = "varsQ";
+	public static final String VAR_varsFqCount = "varsFqCount";
 	public static final String VAR_varsFq = "varsFq";
 	public static final String VAR_varsRange = "varsRange";
 	public static final String VAR_query = "query";
@@ -4741,6 +5436,8 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public static final String VAR_classIcon = "classIcon";
 	public static final String VAR_pageDescription = "pageDescription";
 
+	public static final String DISPLAY_NAME_webClient = "";
+	public static final String DISPLAY_NAME_vertx = "";
 	public static final String DISPLAY_NAME_siteRequest_ = "";
 	public static final String DISPLAY_NAME_lang = "";
 	public static final String DISPLAY_NAME_requestVars = "";
@@ -4760,7 +5457,13 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_userKey = "";
 	public static final String DISPLAY_NAME_userFullName = "";
 	public static final String DISPLAY_NAME_userName = "";
+	public static final String DISPLAY_NAME_userId = "";
 	public static final String DISPLAY_NAME_userEmail = "";
+	public static final String DISPLAY_NAME_userGroups = "";
+	public static final String DISPLAY_NAME_userFontSize = "";
+	public static final String DISPLAY_NAME_userWebComponentsTheme = "";
+	public static final String DISPLAY_NAME_userSiteTheme = "";
+	public static final String DISPLAY_NAME_userAwesomeEffect = "";
 	public static final String DISPLAY_NAME_logoutUrl = "";
 	public static final String DISPLAY_NAME_promiseBefore = "";
 	public static final String DISPLAY_NAME_classSimpleName = "";
@@ -4772,9 +5475,11 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_facetCounts = "";
 	public static final String DISPLAY_NAME_pagination = "";
 	public static final String DISPLAY_NAME_defaultFieldListVars = "";
+	public static final String DISPLAY_NAME_defaultSortVars = "";
 	public static final String DISPLAY_NAME_defaultStatsVars = "";
 	public static final String DISPLAY_NAME_defaultPivotVars = "";
 	public static final String DISPLAY_NAME_varsQ = "";
+	public static final String DISPLAY_NAME_varsFqCount = "";
 	public static final String DISPLAY_NAME_varsFq = "";
 	public static final String DISPLAY_NAME_varsRange = "";
 	public static final String DISPLAY_NAME_query = "";
@@ -4808,11 +5513,51 @@ public abstract class PageLayoutGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_classIcon = "";
 	public static final String DISPLAY_NAME_pageDescription = "";
 
+	public String idForClass() {
+		return null;
+	}
+
+	public String titleForClass() {
+		return null;
+	}
+
+	public String nameForClass() {
+		return null;
+	}
+
+	public String classNameAdjectiveSingularForClass() {
+		return null;
+	}
+
+	public String descriptionForClass() {
+		return null;
+	}
+
+	public String classStringFormatUrlEditPageForClass() {
+		return null;
+	}
+
+	public String classStringFormatUrlDisplayPageForClass() {
+		return null;
+	}
+
+	public String classStringFormatUrlUserPageForClass() {
+		return null;
+	}
+
+	public String classStringFormatUrlDownloadForClass() {
+		return null;
+	}
+
 	public static String displayNameForClass(String var) {
 		return PageLayout.displayNamePageLayout(var);
 	}
 	public static String displayNamePageLayout(String var) {
 		switch(var) {
+		case VAR_webClient:
+			return DISPLAY_NAME_webClient;
+		case VAR_vertx:
+			return DISPLAY_NAME_vertx;
 		case VAR_siteRequest_:
 			return DISPLAY_NAME_siteRequest_;
 		case VAR_lang:
@@ -4851,8 +5596,20 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return DISPLAY_NAME_userFullName;
 		case VAR_userName:
 			return DISPLAY_NAME_userName;
+		case VAR_userId:
+			return DISPLAY_NAME_userId;
 		case VAR_userEmail:
 			return DISPLAY_NAME_userEmail;
+		case VAR_userGroups:
+			return DISPLAY_NAME_userGroups;
+		case VAR_userFontSize:
+			return DISPLAY_NAME_userFontSize;
+		case VAR_userWebComponentsTheme:
+			return DISPLAY_NAME_userWebComponentsTheme;
+		case VAR_userSiteTheme:
+			return DISPLAY_NAME_userSiteTheme;
+		case VAR_userAwesomeEffect:
+			return DISPLAY_NAME_userAwesomeEffect;
 		case VAR_logoutUrl:
 			return DISPLAY_NAME_logoutUrl;
 		case VAR_promiseBefore:
@@ -4875,12 +5632,16 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return DISPLAY_NAME_pagination;
 		case VAR_defaultFieldListVars:
 			return DISPLAY_NAME_defaultFieldListVars;
+		case VAR_defaultSortVars:
+			return DISPLAY_NAME_defaultSortVars;
 		case VAR_defaultStatsVars:
 			return DISPLAY_NAME_defaultStatsVars;
 		case VAR_defaultPivotVars:
 			return DISPLAY_NAME_defaultPivotVars;
 		case VAR_varsQ:
 			return DISPLAY_NAME_varsQ;
+		case VAR_varsFqCount:
+			return DISPLAY_NAME_varsFqCount;
 		case VAR_varsFq:
 			return DISPLAY_NAME_varsFq;
 		case VAR_varsRange:
@@ -4947,6 +5708,299 @@ public abstract class PageLayoutGen<DEV> extends Object {
 			return DISPLAY_NAME_pageDescription;
 		default:
 			return null;
+		}
+	}
+
+	public static String descriptionPageLayout(String var) {
+		if(var == null)
+			return null;
+		switch(var) {
+		case VAR_webClient:
+			return "The current request object";
+		case VAR_vertx:
+			return "The current request object";
+		case VAR_siteRequest_:
+			return "The current request object";
+		case VAR_lang:
+			return "The current request language";
+		case VAR_requestVars:
+			return "The current request vars";
+		case VAR_serviceRequest:
+			return "The current Vert.x service request";
+		case VAR_pageUri:
+			return "The current request URI";
+		case VAR_pageId:
+			return "The current page name";
+		case VAR_apiUri:
+			return "The API request URI";
+		case VAR_pageMethod:
+			return "The current request HTTP method";
+		case VAR_params:
+			return "The current request parameters";
+		case VAR_userKey:
+			return "The current user's primary key";
+		case VAR_userFullName:
+			return "The current user's full name";
+		case VAR_userName:
+			return "The current user's username";
+		case VAR_userId:
+			return "The current user's id";
+		case VAR_userEmail:
+			return "The current user's email";
+		case VAR_userGroups:
+			return "The current user's groups";
+		case VAR_userFontSize:
+			return "The user's default font size. ";
+		case VAR_userWebComponentsTheme:
+			return "The user's web components theme";
+		case VAR_userSiteTheme:
+			return "The user's siteTheme";
+		case VAR_userAwesomeEffect:
+			return "The user's awesome effect setting";
+		case VAR_logoutUrl:
+			return "The logout URL";
+		case VAR_promiseBefore:
+			return "A method that can be overridden at the start of the request that makes this main template be initialized with a Vert.x promise for reactive initialization";
+		case VAR_classSimpleName:
+			return "The simple name of this Java class";
+		case VAR_pageTitle:
+			return "The page title to override";
+		case VAR_scopes:
+			return "The user request scopes";
+		case VAR_roleForWrite:
+			return "The required roles to access this page";
+		case VAR_roleForRead:
+			return "The required roles to access this page";
+		case VAR_pagination:
+			return "The pagination data about this request";
+		case VAR_query:
+			return "The query data about this request";
+		case VAR_queryStr:
+			return "The query String for this request";
+		case VAR_promiseAfter:
+			return "A method that can be overridden at the end of the request that makes this main template be initialized with a Vert.x promise for reactive initialization";
+		case VAR_pageImageUri:
+			return "The image URI for this page";
+		case VAR_pageImageWidth:
+			return "The image width";
+		case VAR_pageImageHeight:
+			return "The image height";
+		case VAR_pageVideoId:
+			return "The video ID for this page";
+		case VAR_classIcon:
+			return "The icon for this page";
+		case VAR_pageDescription:
+			return "An optional description field for the page";
+			default:
+				return null;
+		}
+	}
+
+	public static String classSimpleNamePageLayout(String var) {
+		switch(var) {
+		case VAR_webClient:
+			return "WebClient";
+		case VAR_vertx:
+			return "Vertx";
+		case VAR_siteRequest_:
+			return "SiteRequest";
+		case VAR_lang:
+			return "String";
+		case VAR_requestVars:
+			return "Map";
+		case VAR_serviceRequest:
+			return "ServiceRequest";
+		case VAR_staticBaseUrl:
+			return "String";
+		case VAR_siteBaseUrl:
+			return "String";
+		case VAR_siteAuthUrl:
+			return "String";
+		case VAR_siteAuthRealm:
+			return "String";
+		case VAR_fontAwesomeKit:
+			return "String";
+		case VAR_facebookGraphVersion:
+			return "String";
+		case VAR_facebookAppId:
+			return "String";
+		case VAR_pageUri:
+			return "String";
+		case VAR_pageId:
+			return "String";
+		case VAR_apiUri:
+			return "String";
+		case VAR_pageMethod:
+			return "String";
+		case VAR_params:
+			return "JsonObject";
+		case VAR_userKey:
+			return "Long";
+		case VAR_userFullName:
+			return "String";
+		case VAR_userName:
+			return "String";
+		case VAR_userId:
+			return "String";
+		case VAR_userEmail:
+			return "String";
+		case VAR_userGroups:
+			return "List";
+		case VAR_userFontSize:
+			return "String";
+		case VAR_userWebComponentsTheme:
+			return "String";
+		case VAR_userSiteTheme:
+			return "String";
+		case VAR_userAwesomeEffect:
+			return "Boolean";
+		case VAR_logoutUrl:
+			return "String";
+		case VAR_promiseBefore:
+			return "Void";
+		case VAR_classSimpleName:
+			return "String";
+		case VAR_pageTitle:
+			return "String";
+		case VAR_scopes:
+			return "List";
+		case VAR_roleForWrite:
+			return "List";
+		case VAR_roleForRead:
+			return "List";
+		case VAR_stats:
+			return "Stats";
+		case VAR_facetCounts:
+			return "FacetCounts";
+		case VAR_pagination:
+			return "JsonObject";
+		case VAR_defaultFieldListVars:
+			return "List";
+		case VAR_defaultSortVars:
+			return "List";
+		case VAR_defaultStatsVars:
+			return "List";
+		case VAR_defaultPivotVars:
+			return "List";
+		case VAR_varsQ:
+			return "JsonObject";
+		case VAR_varsFqCount:
+			return "Integer";
+		case VAR_varsFq:
+			return "JsonObject";
+		case VAR_varsRange:
+			return "JsonObject";
+		case VAR_query:
+			return "JsonObject";
+		case VAR_pageResponse:
+			return "String";
+		case VAR_defaultZoneId:
+			return "String";
+		case VAR_defaultTimeZone:
+			return "ZoneId";
+		case VAR_defaultLocaleId:
+			return "String";
+		case VAR_rows:
+			return "Long";
+		case VAR_start:
+			return "Long";
+		case VAR_defaultLocale:
+			return "Locale";
+		case VAR_rangeGap:
+			return "String";
+		case VAR_rangeEnd:
+			return "ZonedDateTime";
+		case VAR_rangeStart:
+			return "ZonedDateTime";
+		case VAR_defaultRangeStats:
+			return "JsonObject";
+		case VAR_defaultRangeGap:
+			return "String";
+		case VAR_defaultRangeEnd:
+			return "ZonedDateTime";
+		case VAR_defaultRangeStart:
+			return "ZonedDateTime";
+		case VAR_defaultRangeVar:
+			return "String";
+		case VAR_defaultFacetSort:
+			return "String";
+		case VAR_defaultFacetLimit:
+			return "Integer";
+		case VAR_defaultFacetMinCount:
+			return "Integer";
+		case VAR_defaultPivotMinCount:
+			return "Integer";
+		case VAR_DEFAULT_MAP_LOCATION:
+			return "JsonObject";
+		case VAR_DEFAULT_MAP_ZOOM:
+			return "BigDecimal";
+		case VAR_queryStr:
+			return "String";
+		case VAR_promiseAfter:
+			return "Void";
+		case VAR_pageImageUri:
+			return "String";
+		case VAR_pageImageWidth:
+			return "Integer";
+		case VAR_pageImageHeight:
+			return "Integer";
+		case VAR_pageVideoId:
+			return "String";
+		case VAR_classIcon:
+			return "String";
+		case VAR_pageDescription:
+			return "String";
+			default:
+				return null;
+		}
+	}
+
+	public static Integer htmColumnPageLayout(String var) {
+		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	public static Integer htmRowPageLayout(String var) {
+		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	public static Integer htmCellPageLayout(String var) {
+		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	public static Integer lengthMinPageLayout(String var) {
+		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	public static Integer lengthMaxPageLayout(String var) {
+		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	public static Integer maxPageLayout(String var) {
+		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	public static Integer minPageLayout(String var) {
+		switch(var) {
+			default:
+				return null;
 		}
 	}
 }

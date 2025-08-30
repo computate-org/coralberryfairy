@@ -34,12 +34,14 @@ import org.slf4j.LoggerFactory;
 import java.math.RoundingMode;
 import java.util.Map;
 import io.vertx.core.json.JsonObject;
+import org.computate.vertx.serialize.vertx.JsonObjectDeserializer;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.api.service.ServiceRequest;
 import io.vertx.ext.auth.User;
 import java.lang.String;
 import java.lang.Long;
 import io.vertx.core.json.JsonArray;
+import java.lang.Boolean;
 import com.coralberryfairy.site.user.SiteUser;
 import io.vertx.sqlclient.SqlConnection;
 import io.vertx.core.MultiMap;
@@ -109,6 +111,7 @@ public abstract class SiteRequestGen<DEV> extends Object {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonObjectDeserializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject config;
 
@@ -158,6 +161,67 @@ public abstract class SiteRequestGen<DEV> extends Object {
 
 	public static String staticSearchFqConfig(SiteRequest siteRequest_, String o) {
 		return SiteRequest.staticSearchConfig(siteRequest_, SiteRequest.staticSetConfig(siteRequest_, o)).toString();
+	}
+
+	//////////
+	// i18n //
+	//////////
+
+
+	/**	 The entity i18n
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonDeserialize(using = JsonObjectDeserializer.class)
+	@JsonInclude(Include.NON_NULL)
+	protected JsonObject i18n;
+
+	/**	<br> The entity i18n
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.request.SiteRequest&fq=entiteVar_enUS_indexed_string:i18n">Find the entity i18n in Solr</a>
+	 * <br>
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _i18n(Wrap<JsonObject> c);
+
+	public JsonObject getI18n() {
+		return i18n;
+	}
+
+	public void setI18n(JsonObject i18n) {
+		this.i18n = i18n;
+	}
+	@JsonIgnore
+	public void setI18n(String o) {
+		this.i18n = SiteRequest.staticSetI18n(siteRequest_, o);
+	}
+	public static JsonObject staticSetI18n(SiteRequest siteRequest_, String o) {
+		if(o != null) {
+				return new JsonObject(o);
+		}
+		return null;
+	}
+	protected SiteRequest i18nInit() {
+		Wrap<JsonObject> i18nWrap = new Wrap<JsonObject>().var("i18n");
+		if(i18n == null) {
+			_i18n(i18nWrap);
+			Optional.ofNullable(i18nWrap.getO()).ifPresent(o -> {
+				setI18n(o);
+			});
+		}
+		return (SiteRequest)this;
+	}
+
+	public static String staticSearchI18n(SiteRequest siteRequest_, JsonObject o) {
+		return o.toString();
+	}
+
+	public static String staticSearchStrI18n(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqI18n(SiteRequest siteRequest_, String o) {
+		return SiteRequest.staticSearchI18n(siteRequest_, SiteRequest.staticSetI18n(siteRequest_, o)).toString();
 	}
 
 	//////////////////
@@ -292,6 +356,7 @@ public abstract class SiteRequestGen<DEV> extends Object {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonObjectDeserializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject jsonObject;
 
@@ -434,6 +499,7 @@ public abstract class SiteRequestGen<DEV> extends Object {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonObjectDeserializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject userPrincipal;
 
@@ -989,6 +1055,7 @@ public abstract class SiteRequestGen<DEV> extends Object {
 	public void setScopes(List<String> scopes) {
 		this.scopes = scopes;
 	}
+	@JsonIgnore
 	public void setScopes(String o) {
 		String l = SiteRequest.staticSetScopes(siteRequest_, o);
 		if(l != null)
@@ -1035,6 +1102,138 @@ public abstract class SiteRequestGen<DEV> extends Object {
 		return SiteRequest.staticSearchScopes(siteRequest_, SiteRequest.staticSetScopes(siteRequest_, o)).toString();
 	}
 
+	////////////
+	// groups //
+	////////////
+
+
+	/**	 The entity groups
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+	@JsonInclude(Include.NON_NULL)
+	protected List<String> groups = new ArrayList<String>();
+
+	/**	<br> The entity groups
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.request.SiteRequest&fq=entiteVar_enUS_indexed_string:groups">Find the entity groups in Solr</a>
+	 * <br>
+	 * @param o is the entity already constructed. 
+	 **/
+	protected abstract void _groups(List<String> o);
+
+	public List<String> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<String> groups) {
+		this.groups = groups;
+	}
+	@JsonIgnore
+	public void setGroups(String o) {
+		String l = SiteRequest.staticSetGroups(siteRequest_, o);
+		if(l != null)
+			addGroups(l);
+	}
+	public static String staticSetGroups(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	public SiteRequest addGroups(String...objects) {
+		for(String o : objects) {
+			addGroups(o);
+		}
+		return (SiteRequest)this;
+	}
+	public SiteRequest addGroups(String o) {
+		if(o != null)
+			this.groups.add(o);
+		return (SiteRequest)this;
+	}
+	@JsonIgnore
+	public void setGroups(JsonArray objects) {
+		groups.clear();
+		if(objects == null)
+			return;
+		for(int i = 0; i < objects.size(); i++) {
+			String o = objects.getString(i);
+			addGroups(o);
+		}
+	}
+	protected SiteRequest groupsInit() {
+		_groups(groups);
+		return (SiteRequest)this;
+	}
+
+	public static String staticSearchGroups(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrGroups(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqGroups(SiteRequest siteRequest_, String o) {
+		return SiteRequest.staticSearchGroups(siteRequest_, SiteRequest.staticSetGroups(siteRequest_, o)).toString();
+	}
+
+	////////////////
+	// publicRead //
+	////////////////
+
+
+	/**	 The entity publicRead
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected Boolean publicRead;
+
+	/**	<br> The entity publicRead
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.request.SiteRequest&fq=entiteVar_enUS_indexed_string:publicRead">Find the entity publicRead in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _publicRead(Wrap<Boolean> w);
+
+	public Boolean getPublicRead() {
+		return publicRead;
+	}
+
+	public void setPublicRead(Boolean publicRead) {
+		this.publicRead = publicRead;
+	}
+	@JsonIgnore
+	public void setPublicRead(String o) {
+		this.publicRead = SiteRequest.staticSetPublicRead(siteRequest_, o);
+	}
+	public static Boolean staticSetPublicRead(SiteRequest siteRequest_, String o) {
+		return Boolean.parseBoolean(o);
+	}
+	protected SiteRequest publicReadInit() {
+		Wrap<Boolean> publicReadWrap = new Wrap<Boolean>().var("publicRead");
+		if(publicRead == null) {
+			_publicRead(publicReadWrap);
+			Optional.ofNullable(publicReadWrap.getO()).ifPresent(o -> {
+				setPublicRead(o);
+			});
+		}
+		return (SiteRequest)this;
+	}
+
+	public static Boolean staticSearchPublicRead(SiteRequest siteRequest_, Boolean o) {
+		return o;
+	}
+
+	public static String staticSearchStrPublicRead(SiteRequest siteRequest_, Boolean o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqPublicRead(SiteRequest siteRequest_, String o) {
+		return SiteRequest.staticSearchPublicRead(siteRequest_, SiteRequest.staticSetPublicRead(siteRequest_, o)).toString();
+	}
+
 	//////////////////
 	// userResource //
 	//////////////////
@@ -1044,6 +1243,7 @@ public abstract class SiteRequestGen<DEV> extends Object {
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
+	@JsonDeserialize(using = JsonObjectDeserializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected JsonObject userResource;
 
@@ -1485,6 +1685,7 @@ public abstract class SiteRequestGen<DEV> extends Object {
 
 	public void initSiteRequest() {
 				configInit();
+				i18nInit();
 				siteRequest_Init();
 				webClientInit();
 				apiRequest_Init();
@@ -1502,6 +1703,8 @@ public abstract class SiteRequestGen<DEV> extends Object {
 				userFullNameInit();
 				userEmailInit();
 				scopesInit();
+				groupsInit();
+				publicReadInit();
 				userResourceInit();
 				siteUser_Init();
 				langInit();
@@ -1554,6 +1757,8 @@ public abstract class SiteRequestGen<DEV> extends Object {
 		switch(var) {
 			case "config":
 				return oSiteRequest.config;
+			case "i18n":
+				return oSiteRequest.i18n;
 			case "siteRequest_":
 				return oSiteRequest.siteRequest_;
 			case "webClient":
@@ -1588,6 +1793,10 @@ public abstract class SiteRequestGen<DEV> extends Object {
 				return oSiteRequest.userEmail;
 			case "scopes":
 				return oSiteRequest.scopes;
+			case "groups":
+				return oSiteRequest.groups;
+			case "publicRead":
+				return oSiteRequest.publicRead;
 			case "userResource":
 				return oSiteRequest.userResource;
 			case "siteUser_":
@@ -1640,47 +1849,53 @@ public abstract class SiteRequestGen<DEV> extends Object {
 	// staticSet //
 	///////////////
 
-	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String o) {
-		return staticSetSiteRequest(entityVar,  siteRequest_, o);
+	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String v, SiteRequest o) {
+		return staticSetSiteRequest(entityVar,  siteRequest_, v, o);
 	}
-	public static Object staticSetSiteRequest(String entityVar, SiteRequest siteRequest_, String o) {
+	public static Object staticSetSiteRequest(String entityVar, SiteRequest siteRequest_, String v, SiteRequest o) {
 		switch(entityVar) {
 		case "config":
-			return SiteRequest.staticSetConfig(siteRequest_, o);
+			return SiteRequest.staticSetConfig(siteRequest_, v);
+		case "i18n":
+			return SiteRequest.staticSetI18n(siteRequest_, v);
 		case "jsonObject":
-			return SiteRequest.staticSetJsonObject(siteRequest_, o);
+			return SiteRequest.staticSetJsonObject(siteRequest_, v);
 		case "userPrincipal":
-			return SiteRequest.staticSetUserPrincipal(siteRequest_, o);
+			return SiteRequest.staticSetUserPrincipal(siteRequest_, v);
 		case "userId":
-			return SiteRequest.staticSetUserId(siteRequest_, o);
+			return SiteRequest.staticSetUserId(siteRequest_, v);
 		case "userKey":
-			return SiteRequest.staticSetUserKey(siteRequest_, o);
+			return SiteRequest.staticSetUserKey(siteRequest_, v);
 		case "sessionId":
-			return SiteRequest.staticSetSessionId(siteRequest_, o);
+			return SiteRequest.staticSetSessionId(siteRequest_, v);
 		case "sessionIdBefore":
-			return SiteRequest.staticSetSessionIdBefore(siteRequest_, o);
+			return SiteRequest.staticSetSessionIdBefore(siteRequest_, v);
 		case "userName":
-			return SiteRequest.staticSetUserName(siteRequest_, o);
+			return SiteRequest.staticSetUserName(siteRequest_, v);
 		case "userLastName":
-			return SiteRequest.staticSetUserLastName(siteRequest_, o);
+			return SiteRequest.staticSetUserLastName(siteRequest_, v);
 		case "userFirstName":
-			return SiteRequest.staticSetUserFirstName(siteRequest_, o);
+			return SiteRequest.staticSetUserFirstName(siteRequest_, v);
 		case "userFullName":
-			return SiteRequest.staticSetUserFullName(siteRequest_, o);
+			return SiteRequest.staticSetUserFullName(siteRequest_, v);
 		case "userEmail":
-			return SiteRequest.staticSetUserEmail(siteRequest_, o);
+			return SiteRequest.staticSetUserEmail(siteRequest_, v);
 		case "scopes":
-			return SiteRequest.staticSetScopes(siteRequest_, o);
+			return SiteRequest.staticSetScopes(siteRequest_, v);
+		case "groups":
+			return SiteRequest.staticSetGroups(siteRequest_, v);
+		case "publicRead":
+			return SiteRequest.staticSetPublicRead(siteRequest_, v);
 		case "userResource":
-			return SiteRequest.staticSetUserResource(siteRequest_, o);
+			return SiteRequest.staticSetUserResource(siteRequest_, v);
 		case "lang":
-			return SiteRequest.staticSetLang(siteRequest_, o);
+			return SiteRequest.staticSetLang(siteRequest_, v);
 		case "requestPk":
-			return SiteRequest.staticSetRequestPk(siteRequest_, o);
+			return SiteRequest.staticSetRequestPk(siteRequest_, v);
 		case "requestUri":
-			return SiteRequest.staticSetRequestUri(siteRequest_, o);
+			return SiteRequest.staticSetRequestUri(siteRequest_, v);
 		case "requestMethod":
-			return SiteRequest.staticSetRequestMethod(siteRequest_, o);
+			return SiteRequest.staticSetRequestMethod(siteRequest_, v);
 			default:
 				return null;
 		}
@@ -1697,6 +1912,8 @@ public abstract class SiteRequestGen<DEV> extends Object {
 		switch(entityVar) {
 		case "config":
 			return SiteRequest.staticSearchConfig(siteRequest_, (JsonObject)o);
+		case "i18n":
+			return SiteRequest.staticSearchI18n(siteRequest_, (JsonObject)o);
 		case "jsonObject":
 			return SiteRequest.staticSearchJsonObject(siteRequest_, (JsonObject)o);
 		case "userPrincipal":
@@ -1721,6 +1938,10 @@ public abstract class SiteRequestGen<DEV> extends Object {
 			return SiteRequest.staticSearchUserEmail(siteRequest_, (String)o);
 		case "scopes":
 			return SiteRequest.staticSearchScopes(siteRequest_, (String)o);
+		case "groups":
+			return SiteRequest.staticSearchGroups(siteRequest_, (String)o);
+		case "publicRead":
+			return SiteRequest.staticSearchPublicRead(siteRequest_, (Boolean)o);
 		case "userResource":
 			return SiteRequest.staticSearchUserResource(siteRequest_, (JsonObject)o);
 		case "lang":
@@ -1747,6 +1968,8 @@ public abstract class SiteRequestGen<DEV> extends Object {
 		switch(entityVar) {
 		case "config":
 			return SiteRequest.staticSearchStrConfig(siteRequest_, (String)o);
+		case "i18n":
+			return SiteRequest.staticSearchStrI18n(siteRequest_, (String)o);
 		case "jsonObject":
 			return SiteRequest.staticSearchStrJsonObject(siteRequest_, (String)o);
 		case "userPrincipal":
@@ -1771,6 +1994,10 @@ public abstract class SiteRequestGen<DEV> extends Object {
 			return SiteRequest.staticSearchStrUserEmail(siteRequest_, (String)o);
 		case "scopes":
 			return SiteRequest.staticSearchStrScopes(siteRequest_, (String)o);
+		case "groups":
+			return SiteRequest.staticSearchStrGroups(siteRequest_, (String)o);
+		case "publicRead":
+			return SiteRequest.staticSearchStrPublicRead(siteRequest_, (Boolean)o);
 		case "userResource":
 			return SiteRequest.staticSearchStrUserResource(siteRequest_, (String)o);
 		case "lang":
@@ -1797,6 +2024,8 @@ public abstract class SiteRequestGen<DEV> extends Object {
 		switch(entityVar) {
 		case "config":
 			return SiteRequest.staticSearchFqConfig(siteRequest_, o);
+		case "i18n":
+			return SiteRequest.staticSearchFqI18n(siteRequest_, o);
 		case "jsonObject":
 			return SiteRequest.staticSearchFqJsonObject(siteRequest_, o);
 		case "userPrincipal":
@@ -1821,6 +2050,10 @@ public abstract class SiteRequestGen<DEV> extends Object {
 			return SiteRequest.staticSearchFqUserEmail(siteRequest_, o);
 		case "scopes":
 			return SiteRequest.staticSearchFqScopes(siteRequest_, o);
+		case "groups":
+			return SiteRequest.staticSearchFqGroups(siteRequest_, o);
+		case "publicRead":
+			return SiteRequest.staticSearchFqPublicRead(siteRequest_, o);
 		case "userResource":
 			return SiteRequest.staticSearchFqUserResource(siteRequest_, o);
 		case "lang":
@@ -1846,7 +2079,10 @@ public abstract class SiteRequestGen<DEV> extends Object {
 	}
 
 	public static final String CLASS_SIMPLE_NAME = "SiteRequest";
+	public static final String CLASS_CANONICAL_NAME = "com.coralberryfairy.site.request.SiteRequest";
+	public static final String CLASS_AUTH_RESOURCE = "";
 	public static final String VAR_config = "config";
+	public static final String VAR_i18n = "i18n";
 	public static final String VAR_siteRequest_ = "siteRequest_";
 	public static final String VAR_webClient = "webClient";
 	public static final String VAR_apiRequest_ = "apiRequest_";
@@ -1864,6 +2100,8 @@ public abstract class SiteRequestGen<DEV> extends Object {
 	public static final String VAR_userFullName = "userFullName";
 	public static final String VAR_userEmail = "userEmail";
 	public static final String VAR_scopes = "scopes";
+	public static final String VAR_groups = "groups";
+	public static final String VAR_publicRead = "publicRead";
 	public static final String VAR_userResource = "userResource";
 	public static final String VAR_siteUser_ = "siteUser_";
 	public static final String VAR_lang = "lang";
@@ -1875,6 +2113,7 @@ public abstract class SiteRequestGen<DEV> extends Object {
 	public static final String VAR_requestVars = "requestVars";
 
 	public static final String DISPLAY_NAME_config = "";
+	public static final String DISPLAY_NAME_i18n = "";
 	public static final String DISPLAY_NAME_siteRequest_ = "";
 	public static final String DISPLAY_NAME_webClient = "";
 	public static final String DISPLAY_NAME_apiRequest_ = "";
@@ -1892,6 +2131,8 @@ public abstract class SiteRequestGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_userFullName = "";
 	public static final String DISPLAY_NAME_userEmail = "";
 	public static final String DISPLAY_NAME_scopes = "";
+	public static final String DISPLAY_NAME_groups = "";
+	public static final String DISPLAY_NAME_publicRead = "";
 	public static final String DISPLAY_NAME_userResource = "";
 	public static final String DISPLAY_NAME_siteUser_ = "";
 	public static final String DISPLAY_NAME_lang = "";
@@ -1902,6 +2143,42 @@ public abstract class SiteRequestGen<DEV> extends Object {
 	public static final String DISPLAY_NAME_requestHeaders = "";
 	public static final String DISPLAY_NAME_requestVars = "";
 
+	public String idForClass() {
+		return null;
+	}
+
+	public String titleForClass() {
+		return null;
+	}
+
+	public String nameForClass() {
+		return null;
+	}
+
+	public String classNameAdjectiveSingularForClass() {
+		return null;
+	}
+
+	public String descriptionForClass() {
+		return null;
+	}
+
+	public String classStringFormatUrlEditPageForClass() {
+		return null;
+	}
+
+	public String classStringFormatUrlDisplayPageForClass() {
+		return null;
+	}
+
+	public String classStringFormatUrlUserPageForClass() {
+		return null;
+	}
+
+	public String classStringFormatUrlDownloadForClass() {
+		return null;
+	}
+
 	public static String displayNameForClass(String var) {
 		return SiteRequest.displayNameSiteRequest(var);
 	}
@@ -1909,6 +2186,8 @@ public abstract class SiteRequestGen<DEV> extends Object {
 		switch(var) {
 		case VAR_config:
 			return DISPLAY_NAME_config;
+		case VAR_i18n:
+			return DISPLAY_NAME_i18n;
 		case VAR_siteRequest_:
 			return DISPLAY_NAME_siteRequest_;
 		case VAR_webClient:
@@ -1943,6 +2222,10 @@ public abstract class SiteRequestGen<DEV> extends Object {
 			return DISPLAY_NAME_userEmail;
 		case VAR_scopes:
 			return DISPLAY_NAME_scopes;
+		case VAR_groups:
+			return DISPLAY_NAME_groups;
+		case VAR_publicRead:
+			return DISPLAY_NAME_publicRead;
 		case VAR_userResource:
 			return DISPLAY_NAME_userResource;
 		case VAR_siteUser_:
@@ -1963,6 +2246,191 @@ public abstract class SiteRequestGen<DEV> extends Object {
 			return DISPLAY_NAME_requestVars;
 		default:
 			return null;
+		}
+	}
+
+	public static String descriptionSiteRequest(String var) {
+		if(var == null)
+			return null;
+		switch(var) {
+		case VAR_config:
+			return "The site configuration variables";
+		case VAR_i18n:
+			return "The internationalization data for the site. ";
+		case VAR_siteRequest_:
+			return "A reference to this site request itself";
+		case VAR_webClient:
+			return "A Vert.x web client for making HTTP REST calls";
+		case VAR_apiRequest_:
+			return "An API request object for returning information through websockets about API changes";
+		case VAR_jsonObject:
+			return "The JSON object if passed into the request";
+		case VAR_serviceRequest:
+			return "The Vert.x service request";
+		case VAR_user:
+			return "The authenticated user object";
+		case VAR_userPrincipal:
+			return "The authenticated user principal";
+		case VAR_userId:
+			return "The unique ID of the authenticated user in the SSO application";
+		case VAR_userKey:
+			return "The primary key of the user in the database";
+		case VAR_sessionId:
+			return "The session ID of the user's session";
+		case VAR_sessionIdBefore:
+			return "The session ID of the user before the user logged in";
+		case VAR_userName:
+			return "The username of the user";
+		case VAR_userLastName:
+			return "The last name of the user";
+		case VAR_userFirstName:
+			return "The first name of the user";
+		case VAR_userFullName:
+			return "The full name of the user";
+		case VAR_userEmail:
+			return "The user email";
+		case VAR_scopes:
+			return "The user auth scopes for the current request within the SSO realm";
+		case VAR_groups:
+			return "The user groups for the current request within the SSO realm";
+		case VAR_publicRead:
+			return "Whether the search results are public read. ";
+		case VAR_userResource:
+			return "The authenticated user's auth resource data";
+		case VAR_siteUser_:
+			return "The site user object of the authenticated user";
+		case VAR_lang:
+			return "The request language. ";
+		case VAR_requestPk:
+			return "The primary key of object of the request";
+		case VAR_requestUri:
+			return "The relative URI of the incoming request";
+		case VAR_requestMethod:
+			return "The HTTP method of the incoming request";
+		case VAR_sqlConnection:
+			return "The current SQL connection if present during the request";
+		case VAR_requestHeaders:
+			return "The request headers";
+		case VAR_requestVars:
+			return "Extra variables sent in the request with the var query parameter";
+			default:
+				return null;
+		}
+	}
+
+	public static String classSimpleNameSiteRequest(String var) {
+		switch(var) {
+		case VAR_config:
+			return "JsonObject";
+		case VAR_i18n:
+			return "JsonObject";
+		case VAR_siteRequest_:
+			return "SiteRequest";
+		case VAR_webClient:
+			return "WebClient";
+		case VAR_apiRequest_:
+			return "ApiRequest";
+		case VAR_jsonObject:
+			return "JsonObject";
+		case VAR_serviceRequest:
+			return "ServiceRequest";
+		case VAR_user:
+			return "User";
+		case VAR_userPrincipal:
+			return "JsonObject";
+		case VAR_userId:
+			return "String";
+		case VAR_userKey:
+			return "Long";
+		case VAR_sessionId:
+			return "String";
+		case VAR_sessionIdBefore:
+			return "String";
+		case VAR_userName:
+			return "String";
+		case VAR_userLastName:
+			return "String";
+		case VAR_userFirstName:
+			return "String";
+		case VAR_userFullName:
+			return "String";
+		case VAR_userEmail:
+			return "String";
+		case VAR_scopes:
+			return "List";
+		case VAR_groups:
+			return "List";
+		case VAR_publicRead:
+			return "Boolean";
+		case VAR_userResource:
+			return "JsonObject";
+		case VAR_siteUser_:
+			return "SiteUser";
+		case VAR_lang:
+			return "String";
+		case VAR_requestPk:
+			return "Long";
+		case VAR_requestUri:
+			return "String";
+		case VAR_requestMethod:
+			return "String";
+		case VAR_sqlConnection:
+			return "SqlConnection";
+		case VAR_requestHeaders:
+			return "MultiMap";
+		case VAR_requestVars:
+			return "Map";
+			default:
+				return null;
+		}
+	}
+
+	public static Integer htmColumnSiteRequest(String var) {
+		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	public static Integer htmRowSiteRequest(String var) {
+		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	public static Integer htmCellSiteRequest(String var) {
+		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	public static Integer lengthMinSiteRequest(String var) {
+		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	public static Integer lengthMaxSiteRequest(String var) {
+		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	public static Integer maxSiteRequest(String var) {
+		switch(var) {
+			default:
+				return null;
+		}
+	}
+
+	public static Integer minSiteRequest(String var) {
+		switch(var) {
+			default:
+				return null;
 		}
 	}
 }

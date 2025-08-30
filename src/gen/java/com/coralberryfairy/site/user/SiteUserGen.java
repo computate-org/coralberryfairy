@@ -81,17 +81,17 @@ import org.computate.search.response.solr.SolrResponse;
  * <h2>ApiMethode: POST</h2>
  * <p>This class contains a comment <b>"ApiMethod: POST"</b>, which creates an API "POST". 
  * </p>
- * <h2>ApiMethode: PUTImport</h2>
- * <p>This class contains a comment <b>"ApiMethod: PUTImport"</b>, which creates an API "PUTImport". 
- * </p>
  * <h2>ApiMethode: SearchPage</h2>
  * <p>This class contains a comment <b>"ApiMethod: SearchPage"</b>, which creates an API "SearchPage". 
  * </p>
- * <h2>ApiTag.enUS: true</h2>
- * <p>This class contains a comment <b>"ApiTag: User"</b>, which groups all of the OpenAPIs for SiteUser objects under the tag "User". 
+ * <h2>ApiMethode: EditPage</h2>
+ * <p>This class contains a comment <b>"ApiMethod: EditPage"</b>, which creates an API "EditPage". 
  * </p>
- * <h2>ApiUri.enUS: /api/user</h2>
- * <p>This class contains a comment <b>"ApiUri: /api/user"</b>, which defines the base API URI for SiteUser objects as "/api/user" in the OpenAPI spec. 
+ * <h2>ApiTag.enUS: true</h2>
+ * <p>This class contains a comment <b>"ApiTag: site users"</b>, which groups all of the OpenAPIs for SiteUser objects under the tag "site users". 
+ * </p>
+ * <h2>ApiUri.enUS: /en-us/api/user</h2>
+ * <p>This class contains a comment <b>"ApiUri: /en-us/api/user"</b>, which defines the base API URI for SiteUser objects as "/en-us/api/user" in the OpenAPI spec. 
  * </p>
  * <h2>Color: null</h2>
  * <h2>Indexed: true</h2>
@@ -102,8 +102,8 @@ import org.computate.search.response.solr.SolrResponse;
  * <p>By adding a class comment "{@inheritDoc}", the SiteUser class will inherit the helpful inherited class comments from the super class SiteUserGen. 
  * </p>
  * <h2>Rows: null</h2>
- * <h2>Order: 3</h2>
- * <p>This class contains a comment <b>"Order: 3"</b>, which means this class will be sorted by the given number 3 ascending when code that relates to multiple classes at the same time is generated. 
+ * <h2>Order: 1</h2>
+ * <p>This class contains a comment <b>"Order: 1"</b>, which means this class will be sorted by the given number 1 ascending when code that relates to multiple classes at the same time is generated. 
  * </p>
  * <h2>SqlOrder: 1</h2>
  * <p>This class contains a comment <b>"SqlOrder: 1"</b>, which means this class will be sorted by the given number 1 ascending when SQL code to create and drop the tables is generated. 
@@ -117,9 +117,9 @@ import org.computate.search.response.solr.SolrResponse;
  * Java Vert.x backend API code, Handlebars HTML template frontend code, and JavaScript code will all generated and can be extended. 
  * This creates a new Java class com.coralberryfairy.site.user.SiteUserPage. 
  * </p>
- * <h2>SuperPage.enUS: BaseModelPage</h2>
- * <p>This class contains a comment <b>"SuperPage.enUS: BaseModelPage"</b>, which identifies the Java super class of the page code by it's class simple name "BaseModelPage". 
- * This means that the newly created class com.coralberryfairy.site.user.SiteUserPage extends com.coralberryfairy.site.model.BaseModelPage. 
+ * <h2>SuperPage.enUS: PageLayout</h2>
+ * <p>This class contains a comment <b>"SuperPage.enUS: PageLayout"</b>, which identifies the Java super class of the page code by it's class simple name "PageLayout". 
+ * This means that the newly created class com.coralberryfairy.site.user.SiteUserPage extends com.coralberryfairy.site.page.PageLayout. 
  * </p>
  * <h2>Promise: true</h2>
  * <p>
@@ -144,18 +144,6 @@ import org.computate.search.response.solr.SolrResponse;
  * <p>
  *   If a super class of this Java class with `Model: true`, then the child class will also inherit `Promise: true`. 
  * </p>
- * <h2>Role.enUS: SiteAdmin</h2>
- * <p>
- * This class contains a comment <b>"Role.enUS: SiteAdmin"</b>, which identifies the default role name "SiteAdmin" of the OAuth2/OpenID Connect user role required to access this SiteUser API. 
- * It's possible to reconfigure the roles required to access the SiteUser API by configuring an environment variable like this: 
- * </p>
- * <pre>AUTH_ROLE_REQUIRED_SiteUser: ["SiteAdmin"]</pre>
- * <h2>Role.enUS: SiteAdmin</h2>
- * <p>
- * This class contains a comment <b>"Role.enUS: SiteAdmin"</b>, which identifies the default role name "SiteAdmin" of the OAuth2/OpenID Connect user role required to access this SiteUser API. 
- * It's possible to reconfigure the roles required to access the SiteUser API by configuring an environment variable like this: 
- * </p>
- * <pre>AUTH_ROLE_REQUIRED_SiteUser: ["SiteAdmin"]</pre>
  * <h2>AName.enUS: a site user</h2>
  * <p>This class contains a comment <b>"AName.enUS: a site user"</b>, which identifies the language context to describe a SiteUser as "a site user". 
  * </p>
@@ -176,38 +164,45 @@ import org.computate.search.response.solr.SolrResponse;
 public abstract class SiteUserGen<DEV> extends BaseModel {
 	protected static final Logger LOG = LoggerFactory.getLogger(SiteUser.class);
 
-	public static final String SiteUser_Description_enUS = "A user record for each site user";
-	public static final String SiteUser_AName_enUS = "a site user";
-	public static final String SiteUser_This_enUS = "this ";
-	public static final String SiteUser_ThisName_enUS = "this site user";
-	public static final String SiteUser_A_enUS = "a ";
-	public static final String SiteUser_TheName_enUS = "the site user";
-	public static final String SiteUser_SingularName_enUS = "site user";
-	public static final String SiteUser_PluralName_enUS = "site users";
-	public static final String SiteUser_NameActual_enUS = "current site user";
-	public static final String SiteUser_AllName_enUS = "all site users";
-	public static final String SiteUser_SearchAllNameBy_enUS = "search site users by ";
-	public static final String SiteUser_Title_enUS = "site users";
-	public static final String SiteUser_ThePluralName_enUS = "the site users";
-	public static final String SiteUser_NoNameFound_enUS = "no site user found";
-	public static final String SiteUser_ApiUri_enUS = "/api/user";
-	public static final String SiteUser_ApiUriSearchPage_enUS = "/user";
-	public static final String SiteUser_OfName_enUS = "of site user";
-	public static final String SiteUser_ANameAdjective_enUS = "a site user";
-	public static final String SiteUser_NameAdjectiveSingular_enUS = "site user";
-	public static final String SiteUser_NameAdjectivePlural_enUS = "site users";
-	public static final String Search_enUS_Uri = "/api/user";
-	public static final String Search_enUS_ImageUri = "/png/api/user-999.png";
-	public static final String PATCH_enUS_Uri = "/api/user";
-	public static final String PATCH_enUS_ImageUri = "/png/api/user-999.png";
-	public static final String POST_enUS_Uri = "/api/user";
-	public static final String POST_enUS_ImageUri = "/png/api/user-999.png";
-	public static final String PUTImport_enUS_Uri = "/api/user-import";
-	public static final String PUTImport_enUS_ImageUri = "/png/api/user-import-999.png";
-	public static final String SearchPage_enUS_Uri = "/user";
-	public static final String SearchPage_enUS_ImageUri = "/png/user-999.png";
+	public static final String Description_enUS = "A user record for each site user";
+	public static final String AName_enUS = "a site user";
+	public static final String This_enUS = "this ";
+	public static final String ThisName_enUS = "this site user";
+	public static final String A_enUS = "a ";
+	public static final String TheName_enUS = "the site user";
+	public static final String SingularName_enUS = "site user";
+	public static final String PluralName_enUS = "site users";
+	public static final String NameActual_enUS = "current site user";
+	public static final String AllName_enUS = "all site users";
+	public static final String SearchAllNameBy_enUS = "search site users by ";
+	public static final String SearchAllName_enUS = "search site users";
+	public static final String Title_enUS = "site users";
+	public static final String ThePluralName_enUS = "the site users";
+	public static final String NoNameFound_enUS = "no site user found";
+	public static final String ApiUri_enUS = "/en-us/api/user";
+	public static final String ApiUriSearchPage_enUS = "/en-us/search/user";
+	public static final String ApiUriEditPage_enUS = "/en-us/edit/user/{userId}";
+	public static final String OfName_enUS = "of site user";
+	public static final String ANameAdjective_enUS = "a site user";
+	public static final String NameAdjectiveSingular_enUS = "site user";
+	public static final String NameAdjectivePlural_enUS = "site users";
+	public static final String Search_enUS_OpenApiUri = "/en-us/api/user";
+	public static final String Search_enUS_StringFormatUri = "/en-us/api/user";
+	public static final String Search_enUS_StringFormatUrl = "%s/en-us/api/user";
+	public static final String PATCH_enUS_OpenApiUri = "/en-us/api/user";
+	public static final String PATCH_enUS_StringFormatUri = "/en-us/api/user";
+	public static final String PATCH_enUS_StringFormatUrl = "%s/en-us/api/user";
+	public static final String POST_enUS_OpenApiUri = "/en-us/api/user";
+	public static final String POST_enUS_StringFormatUri = "/en-us/api/user";
+	public static final String POST_enUS_StringFormatUrl = "%s/en-us/api/user";
+	public static final String SearchPage_enUS_OpenApiUri = "/en-us/search/user";
+	public static final String SearchPage_enUS_StringFormatUri = "/en-us/search/user";
+	public static final String SearchPage_enUS_StringFormatUrl = "%s/en-us/search/user";
+	public static final String EditPage_enUS_OpenApiUri = "/en-us/edit/user/{userId}";
+	public static final String EditPage_enUS_StringFormatUri = "/en-us/edit/user/%s";
+	public static final String EditPage_enUS_StringFormatUrl = "%s/en-us/edit/user/%s";
 
-	public static final String SiteUser_Icon = "<i class=\"fa-duotone fa-solid fa-user-gear\"></i>";
+	public static final String Icon = "<i class=\"fa-regular fa-user-gear\"></i>";
 
 	//////////////
 	// userKeys //
@@ -219,7 +214,6 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	 */
 	@JsonProperty
 	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
-	@JsonSerialize(contentUsing = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
 	protected List<Long> userKeys = new ArrayList<Long>();
 
@@ -691,83 +685,307 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return seeArchived;
 	}
 
-	////////////////
-	// seeDeleted //
-	////////////////
+	///////////////////
+	// awesomeEffect //
+	///////////////////
 
 
-	/**	 The entity seeDeleted
+	/**	 The entity awesomeEffect
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
 	@JsonInclude(Include.NON_NULL)
-	protected Boolean seeDeleted;
+	protected Boolean awesomeEffect;
 
-	/**	<br> The entity seeDeleted
+	/**	<br> The entity awesomeEffect
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.user.SiteUser&fq=entiteVar_enUS_indexed_string:seeDeleted">Find the entity seeDeleted in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.user.SiteUser&fq=entiteVar_enUS_indexed_string:awesomeEffect">Find the entity awesomeEffect in Solr</a>
 	 * <br>
-	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _seeDeleted(Wrap<Boolean> c);
+	protected abstract void _awesomeEffect(Wrap<Boolean> w);
 
-	public Boolean getSeeDeleted() {
-		return seeDeleted;
+	public Boolean getAwesomeEffect() {
+		return awesomeEffect;
 	}
 
-	public void setSeeDeleted(Boolean seeDeleted) {
-		this.seeDeleted = seeDeleted;
+	public void setAwesomeEffect(Boolean awesomeEffect) {
+		this.awesomeEffect = awesomeEffect;
 	}
 	@JsonIgnore
-	public void setSeeDeleted(String o) {
-		this.seeDeleted = SiteUser.staticSetSeeDeleted(siteRequest_, o);
+	public void setAwesomeEffect(String o) {
+		this.awesomeEffect = SiteUser.staticSetAwesomeEffect(siteRequest_, o);
 	}
-	public static Boolean staticSetSeeDeleted(SiteRequest siteRequest_, String o) {
+	public static Boolean staticSetAwesomeEffect(SiteRequest siteRequest_, String o) {
 		return Boolean.parseBoolean(o);
 	}
-	protected SiteUser seeDeletedInit() {
-		Wrap<Boolean> seeDeletedWrap = new Wrap<Boolean>().var("seeDeleted");
-		if(seeDeleted == null) {
-			_seeDeleted(seeDeletedWrap);
-			Optional.ofNullable(seeDeletedWrap.getO()).ifPresent(o -> {
-				setSeeDeleted(o);
+	protected SiteUser awesomeEffectInit() {
+		Wrap<Boolean> awesomeEffectWrap = new Wrap<Boolean>().var("awesomeEffect");
+		if(awesomeEffect == null) {
+			_awesomeEffect(awesomeEffectWrap);
+			Optional.ofNullable(awesomeEffectWrap.getO()).ifPresent(o -> {
+				setAwesomeEffect(o);
 			});
 		}
 		return (SiteUser)this;
 	}
 
-	public static Boolean staticSearchSeeDeleted(SiteRequest siteRequest_, Boolean o) {
+	public static Boolean staticSearchAwesomeEffect(SiteRequest siteRequest_, Boolean o) {
 		return o;
 	}
 
-	public static String staticSearchStrSeeDeleted(SiteRequest siteRequest_, Boolean o) {
+	public static String staticSearchStrAwesomeEffect(SiteRequest siteRequest_, Boolean o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqSeeDeleted(SiteRequest siteRequest_, String o) {
-		return SiteUser.staticSearchSeeDeleted(siteRequest_, SiteUser.staticSetSeeDeleted(siteRequest_, o)).toString();
+	public static String staticSearchFqAwesomeEffect(SiteRequest siteRequest_, String o) {
+		return SiteUser.staticSearchAwesomeEffect(siteRequest_, SiteUser.staticSetAwesomeEffect(siteRequest_, o)).toString();
 	}
 
-	public Boolean sqlSeeDeleted() {
-		return seeDeleted;
+	public Boolean sqlAwesomeEffect() {
+		return awesomeEffect;
+	}
+
+	/////////////////
+	// displayName //
+	/////////////////
+
+
+	/**	 The entity displayName
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String displayName;
+
+	/**	<br> The entity displayName
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.user.SiteUser&fq=entiteVar_enUS_indexed_string:displayName">Find the entity displayName in Solr</a>
+	 * <br>
+	 * @param c is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _displayName(Wrap<String> c);
+
+	public String getDisplayName() {
+		return displayName;
+	}
+	public void setDisplayName(String o) {
+		this.displayName = SiteUser.staticSetDisplayName(siteRequest_, o);
+	}
+	public static String staticSetDisplayName(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	protected SiteUser displayNameInit() {
+		Wrap<String> displayNameWrap = new Wrap<String>().var("displayName");
+		if(displayName == null) {
+			_displayName(displayNameWrap);
+			Optional.ofNullable(displayNameWrap.getO()).ifPresent(o -> {
+				setDisplayName(o);
+			});
+		}
+		return (SiteUser)this;
+	}
+
+	public static String staticSearchDisplayName(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrDisplayName(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqDisplayName(SiteRequest siteRequest_, String o) {
+		return SiteUser.staticSearchDisplayName(siteRequest_, SiteUser.staticSetDisplayName(siteRequest_, o)).toString();
+	}
+
+	public String sqlDisplayName() {
+		return displayName;
+	}
+
+	//////////////////
+	// siteFontSize //
+	//////////////////
+
+
+	/**	 The entity siteFontSize
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String siteFontSize;
+
+	/**	<br> The entity siteFontSize
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.user.SiteUser&fq=entiteVar_enUS_indexed_string:siteFontSize">Find the entity siteFontSize in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _siteFontSize(Wrap<String> w);
+
+	public String getSiteFontSize() {
+		return siteFontSize;
+	}
+	public void setSiteFontSize(String o) {
+		this.siteFontSize = SiteUser.staticSetSiteFontSize(siteRequest_, o);
+	}
+	public static String staticSetSiteFontSize(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	protected SiteUser siteFontSizeInit() {
+		Wrap<String> siteFontSizeWrap = new Wrap<String>().var("siteFontSize");
+		if(siteFontSize == null) {
+			_siteFontSize(siteFontSizeWrap);
+			Optional.ofNullable(siteFontSizeWrap.getO()).ifPresent(o -> {
+				setSiteFontSize(o);
+			});
+		}
+		return (SiteUser)this;
+	}
+
+	public static String staticSearchSiteFontSize(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrSiteFontSize(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqSiteFontSize(SiteRequest siteRequest_, String o) {
+		return SiteUser.staticSearchSiteFontSize(siteRequest_, SiteUser.staticSetSiteFontSize(siteRequest_, o)).toString();
+	}
+
+	public String sqlSiteFontSize() {
+		return siteFontSize;
+	}
+
+	///////////////
+	// siteTheme //
+	///////////////
+
+
+	/**	 The entity siteTheme
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String siteTheme;
+
+	/**	<br> The entity siteTheme
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.user.SiteUser&fq=entiteVar_enUS_indexed_string:siteTheme">Find the entity siteTheme in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _siteTheme(Wrap<String> w);
+
+	public String getSiteTheme() {
+		return siteTheme;
+	}
+	public void setSiteTheme(String o) {
+		this.siteTheme = SiteUser.staticSetSiteTheme(siteRequest_, o);
+	}
+	public static String staticSetSiteTheme(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	protected SiteUser siteThemeInit() {
+		Wrap<String> siteThemeWrap = new Wrap<String>().var("siteTheme");
+		if(siteTheme == null) {
+			_siteTheme(siteThemeWrap);
+			Optional.ofNullable(siteThemeWrap.getO()).ifPresent(o -> {
+				setSiteTheme(o);
+			});
+		}
+		return (SiteUser)this;
+	}
+
+	public static String staticSearchSiteTheme(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrSiteTheme(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqSiteTheme(SiteRequest siteRequest_, String o) {
+		return SiteUser.staticSearchSiteTheme(siteRequest_, SiteUser.staticSetSiteTheme(siteRequest_, o)).toString();
+	}
+
+	public String sqlSiteTheme() {
+		return siteTheme;
+	}
+
+	////////////////////////
+	// webComponentsTheme //
+	////////////////////////
+
+
+	/**	 The entity webComponentsTheme
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String webComponentsTheme;
+
+	/**	<br> The entity webComponentsTheme
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.user.SiteUser&fq=entiteVar_enUS_indexed_string:webComponentsTheme">Find the entity webComponentsTheme in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _webComponentsTheme(Wrap<String> w);
+
+	public String getWebComponentsTheme() {
+		return webComponentsTheme;
+	}
+	public void setWebComponentsTheme(String o) {
+		this.webComponentsTheme = SiteUser.staticSetWebComponentsTheme(siteRequest_, o);
+	}
+	public static String staticSetWebComponentsTheme(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	protected SiteUser webComponentsThemeInit() {
+		Wrap<String> webComponentsThemeWrap = new Wrap<String>().var("webComponentsTheme");
+		if(webComponentsTheme == null) {
+			_webComponentsTheme(webComponentsThemeWrap);
+			Optional.ofNullable(webComponentsThemeWrap.getO()).ifPresent(o -> {
+				setWebComponentsTheme(o);
+			});
+		}
+		return (SiteUser)this;
+	}
+
+	public static String staticSearchWebComponentsTheme(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrWebComponentsTheme(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqWebComponentsTheme(SiteRequest siteRequest_, String o) {
+		return SiteUser.staticSearchWebComponentsTheme(siteRequest_, SiteUser.staticSetWebComponentsTheme(siteRequest_, o)).toString();
+	}
+
+	public String sqlWebComponentsTheme() {
+		return webComponentsTheme;
 	}
 
 	//////////////
 	// initDeep //
 	//////////////
 
-	public Future<Void> promiseDeepSiteUser(SiteRequest siteRequest_) {
+	public Future<SiteUserGen<DEV>> promiseDeepSiteUser(SiteRequest siteRequest_) {
 		setSiteRequest_(siteRequest_);
 		return promiseDeepSiteUser();
 	}
 
-	public Future<Void> promiseDeepSiteUser() {
-		Promise<Void> promise = Promise.promise();
+	public Future<SiteUserGen<DEV>> promiseDeepSiteUser() {
+		Promise<SiteUserGen<DEV>> promise = Promise.promise();
 		Promise<Void> promise2 = Promise.promise();
 		promiseSiteUser(promise2);
 		promise2.future().onSuccess(a -> {
 			super.promiseDeepBaseModel(siteRequest_).onSuccess(b -> {
-				promise.complete();
+				promise.complete(this);
 			}).onFailure(ex -> {
 				promise.fail(ex);
 			});
@@ -789,7 +1007,11 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				userLastNameInit();
 				userFullNameInit();
 				seeArchivedInit();
-				seeDeletedInit();
+				awesomeEffectInit();
+				displayNameInit();
+				siteFontSizeInit();
+				siteThemeInit();
+				webComponentsThemeInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -803,7 +1025,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		return promise.future();
 	}
 
-	@Override public Future<Void> promiseDeepForClass(SiteRequest siteRequest_) {
+	@Override public Future<? extends SiteUserGen<DEV>> promiseDeepForClass(SiteRequest siteRequest_) {
 		return promiseDeepSiteUser(siteRequest_);
 	}
 
@@ -859,8 +1081,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return oSiteUser.userFullName;
 			case "seeArchived":
 				return oSiteUser.seeArchived;
-			case "seeDeleted":
-				return oSiteUser.seeDeleted;
+			case "awesomeEffect":
+				return oSiteUser.awesomeEffect;
+			case "displayName":
+				return oSiteUser.displayName;
+			case "siteFontSize":
+				return oSiteUser.siteFontSize;
+			case "siteTheme":
+				return oSiteUser.siteTheme;
+			case "webComponentsTheme":
+				return oSiteUser.webComponentsTheme;
 			default:
 				return super.obtainBaseModel(var);
 		}
@@ -895,31 +1125,39 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	// staticSet //
 	///////////////
 
-	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String o) {
-		return staticSetSiteUser(entityVar,  siteRequest_, o);
+	public static Object staticSetForClass(String entityVar, SiteRequest siteRequest_, String v, SiteUser o) {
+		return staticSetSiteUser(entityVar,  siteRequest_, v, o);
 	}
-	public static Object staticSetSiteUser(String entityVar, SiteRequest siteRequest_, String o) {
+	public static Object staticSetSiteUser(String entityVar, SiteRequest siteRequest_, String v, SiteUser o) {
 		switch(entityVar) {
 		case "userKeys":
-			return SiteUser.staticSetUserKeys(siteRequest_, o);
+			return SiteUser.staticSetUserKeys(siteRequest_, v);
 		case "userId":
-			return SiteUser.staticSetUserId(siteRequest_, o);
+			return SiteUser.staticSetUserId(siteRequest_, v);
 		case "userName":
-			return SiteUser.staticSetUserName(siteRequest_, o);
+			return SiteUser.staticSetUserName(siteRequest_, v);
 		case "userEmail":
-			return SiteUser.staticSetUserEmail(siteRequest_, o);
+			return SiteUser.staticSetUserEmail(siteRequest_, v);
 		case "userFirstName":
-			return SiteUser.staticSetUserFirstName(siteRequest_, o);
+			return SiteUser.staticSetUserFirstName(siteRequest_, v);
 		case "userLastName":
-			return SiteUser.staticSetUserLastName(siteRequest_, o);
+			return SiteUser.staticSetUserLastName(siteRequest_, v);
 		case "userFullName":
-			return SiteUser.staticSetUserFullName(siteRequest_, o);
+			return SiteUser.staticSetUserFullName(siteRequest_, v);
 		case "seeArchived":
-			return SiteUser.staticSetSeeArchived(siteRequest_, o);
-		case "seeDeleted":
-			return SiteUser.staticSetSeeDeleted(siteRequest_, o);
+			return SiteUser.staticSetSeeArchived(siteRequest_, v);
+		case "awesomeEffect":
+			return SiteUser.staticSetAwesomeEffect(siteRequest_, v);
+		case "displayName":
+			return SiteUser.staticSetDisplayName(siteRequest_, v);
+		case "siteFontSize":
+			return SiteUser.staticSetSiteFontSize(siteRequest_, v);
+		case "siteTheme":
+			return SiteUser.staticSetSiteTheme(siteRequest_, v);
+		case "webComponentsTheme":
+			return SiteUser.staticSetWebComponentsTheme(siteRequest_, v);
 			default:
-				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, o);
+				return BaseModel.staticSetBaseModel(entityVar,  siteRequest_, v, o);
 		}
 	}
 
@@ -948,8 +1186,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSearchUserFullName(siteRequest_, (String)o);
 		case "seeArchived":
 			return SiteUser.staticSearchSeeArchived(siteRequest_, (Boolean)o);
-		case "seeDeleted":
-			return SiteUser.staticSearchSeeDeleted(siteRequest_, (Boolean)o);
+		case "awesomeEffect":
+			return SiteUser.staticSearchAwesomeEffect(siteRequest_, (Boolean)o);
+		case "displayName":
+			return SiteUser.staticSearchDisplayName(siteRequest_, (String)o);
+		case "siteFontSize":
+			return SiteUser.staticSearchSiteFontSize(siteRequest_, (String)o);
+		case "siteTheme":
+			return SiteUser.staticSearchSiteTheme(siteRequest_, (String)o);
+		case "webComponentsTheme":
+			return SiteUser.staticSearchWebComponentsTheme(siteRequest_, (String)o);
 			default:
 				return BaseModel.staticSearchBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -980,8 +1226,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSearchStrUserFullName(siteRequest_, (String)o);
 		case "seeArchived":
 			return SiteUser.staticSearchStrSeeArchived(siteRequest_, (Boolean)o);
-		case "seeDeleted":
-			return SiteUser.staticSearchStrSeeDeleted(siteRequest_, (Boolean)o);
+		case "awesomeEffect":
+			return SiteUser.staticSearchStrAwesomeEffect(siteRequest_, (Boolean)o);
+		case "displayName":
+			return SiteUser.staticSearchStrDisplayName(siteRequest_, (String)o);
+		case "siteFontSize":
+			return SiteUser.staticSearchStrSiteFontSize(siteRequest_, (String)o);
+		case "siteTheme":
+			return SiteUser.staticSearchStrSiteTheme(siteRequest_, (String)o);
+		case "webComponentsTheme":
+			return SiteUser.staticSearchStrWebComponentsTheme(siteRequest_, (String)o);
 			default:
 				return BaseModel.staticSearchStrBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1012,8 +1266,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return SiteUser.staticSearchFqUserFullName(siteRequest_, o);
 		case "seeArchived":
 			return SiteUser.staticSearchFqSeeArchived(siteRequest_, o);
-		case "seeDeleted":
-			return SiteUser.staticSearchFqSeeDeleted(siteRequest_, o);
+		case "awesomeEffect":
+			return SiteUser.staticSearchFqAwesomeEffect(siteRequest_, o);
+		case "displayName":
+			return SiteUser.staticSearchFqDisplayName(siteRequest_, o);
+		case "siteFontSize":
+			return SiteUser.staticSearchFqSiteFontSize(siteRequest_, o);
+		case "siteTheme":
+			return SiteUser.staticSearchFqSiteTheme(siteRequest_, o);
+		case "webComponentsTheme":
+			return SiteUser.staticSearchFqWebComponentsTheme(siteRequest_, o);
 			default:
 				return BaseModel.staticSearchFqBaseModel(entityVar,  siteRequest_, o);
 		}
@@ -1084,13 +1346,37 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				}
 				saves.add("seeArchived");
 				return val;
-			} else if("seedeleted".equals(varLower)) {
+			} else if("awesomeeffect".equals(varLower)) {
 				if(val instanceof Boolean) {
-					setSeeDeleted((Boolean)val);
+					setAwesomeEffect((Boolean)val);
 				} else {
-					setSeeDeleted(val == null ? null : val.toString());
+					setAwesomeEffect(val == null ? null : val.toString());
 				}
-				saves.add("seeDeleted");
+				saves.add("awesomeEffect");
+				return val;
+			} else if("displayname".equals(varLower)) {
+				if(val instanceof String) {
+					setDisplayName((String)val);
+				}
+				saves.add("displayName");
+				return val;
+			} else if("sitefontsize".equals(varLower)) {
+				if(val instanceof String) {
+					setSiteFontSize((String)val);
+				}
+				saves.add("siteFontSize");
+				return val;
+			} else if("sitetheme".equals(varLower)) {
+				if(val instanceof String) {
+					setSiteTheme((String)val);
+				}
+				saves.add("siteTheme");
+				return val;
+			} else if("webcomponentstheme".equals(varLower)) {
+				if(val instanceof String) {
+					setWebComponentsTheme((String)val);
+				}
+				saves.add("webComponentsTheme");
 				return val;
 		} else {
 			return super.persistBaseModel(var, val);
@@ -1111,8 +1397,11 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 			if(saves.contains("userKeys")) {
 				List<Long> userKeys = (List<Long>)doc.get("userKeys_docvalues_longs");
-				if(userKeys != null)
-					oSiteUser.userKeys.addAll(userKeys);
+				if(userKeys != null) {
+					userKeys.stream().forEach( v -> {
+						oSiteUser.userKeys.add(v);
+					});
+				}
 			}
 
 			if(saves.contains("userId")) {
@@ -1157,10 +1446,34 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 					oSiteUser.setSeeArchived(seeArchived);
 			}
 
-			if(saves.contains("seeDeleted")) {
-				Boolean seeDeleted = (Boolean)doc.get("seeDeleted_docvalues_boolean");
-				if(seeDeleted != null)
-					oSiteUser.setSeeDeleted(seeDeleted);
+			if(saves.contains("awesomeEffect")) {
+				Boolean awesomeEffect = (Boolean)doc.get("awesomeEffect_docvalues_boolean");
+				if(awesomeEffect != null)
+					oSiteUser.setAwesomeEffect(awesomeEffect);
+			}
+
+			if(saves.contains("displayName")) {
+				String displayName = (String)doc.get("displayName_docvalues_string");
+				if(displayName != null)
+					oSiteUser.setDisplayName(displayName);
+			}
+
+			if(saves.contains("siteFontSize")) {
+				String siteFontSize = (String)doc.get("siteFontSize_docvalues_string");
+				if(siteFontSize != null)
+					oSiteUser.setSiteFontSize(siteFontSize);
+			}
+
+			if(saves.contains("siteTheme")) {
+				String siteTheme = (String)doc.get("siteTheme_docvalues_string");
+				if(siteTheme != null)
+					oSiteUser.setSiteTheme(siteTheme);
+			}
+
+			if(saves.contains("webComponentsTheme")) {
+				String webComponentsTheme = (String)doc.get("webComponentsTheme_docvalues_string");
+				if(webComponentsTheme != null)
+					oSiteUser.setWebComponentsTheme(webComponentsTheme);
 			}
 		}
 
@@ -1172,7 +1485,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			JsonArray l = new JsonArray();
 			doc.put("userKeys_docvalues_longs", l);
 			for(Long o : userKeys) {
-				l.add(o);
+				l.add(SiteUser.staticSearchUserKeys(siteRequest_, o));
 			}
 		}
 		if(userId != null) {
@@ -1196,8 +1509,20 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		if(seeArchived != null) {
 			doc.put("seeArchived_docvalues_boolean", seeArchived);
 		}
-		if(seeDeleted != null) {
-			doc.put("seeDeleted_docvalues_boolean", seeDeleted);
+		if(awesomeEffect != null) {
+			doc.put("awesomeEffect_docvalues_boolean", awesomeEffect);
+		}
+		if(displayName != null) {
+			doc.put("displayName_docvalues_string", displayName);
+		}
+		if(siteFontSize != null) {
+			doc.put("siteFontSize_docvalues_string", siteFontSize);
+		}
+		if(siteTheme != null) {
+			doc.put("siteTheme_docvalues_string", siteTheme);
+		}
+		if(webComponentsTheme != null) {
+			doc.put("webComponentsTheme_docvalues_string", webComponentsTheme);
 		}
 		super.indexBaseModel(doc);
 
@@ -1221,8 +1546,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return "userFullName_docvalues_string";
 			case "seeArchived":
 				return "seeArchived_docvalues_boolean";
-			case "seeDeleted":
-				return "seeDeleted_docvalues_boolean";
+			case "awesomeEffect":
+				return "awesomeEffect_docvalues_boolean";
+			case "displayName":
+				return "displayName_docvalues_string";
+			case "siteFontSize":
+				return "siteFontSize_docvalues_string";
+			case "siteTheme":
+				return "siteTheme_docvalues_string";
+			case "webComponentsTheme":
+				return "webComponentsTheme_docvalues_string";
 			default:
 				return BaseModel.varStoredBaseModel(entityVar);
 		}
@@ -1246,8 +1579,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return "userFullName_docvalues_string";
 			case "seeArchived":
 				return "seeArchived_docvalues_boolean";
-			case "seeDeleted":
-				return "seeDeleted_docvalues_boolean";
+			case "awesomeEffect":
+				return "awesomeEffect_docvalues_boolean";
+			case "displayName":
+				return "displayName_docvalues_string";
+			case "siteFontSize":
+				return "siteFontSize_docvalues_string";
+			case "siteTheme":
+				return "siteTheme_docvalues_string";
+			case "webComponentsTheme":
+				return "webComponentsTheme_docvalues_string";
 			default:
 				return BaseModel.varIndexedBaseModel(entityVar);
 		}
@@ -1271,8 +1612,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				return "userFullName";
 			case "seeArchived_docvalues_boolean":
 				return "seeArchived";
-			case "seeDeleted_docvalues_boolean":
-				return "seeDeleted";
+			case "awesomeEffect_docvalues_boolean":
+				return "awesomeEffect";
+			case "displayName_docvalues_string":
+				return "displayName";
+			case "siteFontSize_docvalues_string":
+				return "siteFontSize";
+			case "siteTheme_docvalues_string":
+				return "siteTheme";
+			case "webComponentsTheme_docvalues_string":
+				return "webComponentsTheme";
 			default:
 				return BaseModel.searchVarBaseModel(searchVar);
 		}
@@ -1313,7 +1662,11 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		oSiteUser.setUserLastName(Optional.ofNullable(doc.get("userLastName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oSiteUser.setUserFullName(Optional.ofNullable(doc.get("userFullName_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oSiteUser.setSeeArchived(Optional.ofNullable(doc.get("seeArchived_docvalues_boolean")).map(v -> v.toString()).orElse(null));
-		oSiteUser.setSeeDeleted(Optional.ofNullable(doc.get("seeDeleted_docvalues_boolean")).map(v -> v.toString()).orElse(null));
+		oSiteUser.setAwesomeEffect(Optional.ofNullable(doc.get("awesomeEffect_docvalues_boolean")).map(v -> v.toString()).orElse(null));
+		oSiteUser.setDisplayName(Optional.ofNullable(doc.get("displayName_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oSiteUser.setSiteFontSize(Optional.ofNullable(doc.get("siteFontSize_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oSiteUser.setSiteTheme(Optional.ofNullable(doc.get("siteTheme_docvalues_string")).map(v -> v.toString()).orElse(null));
+		oSiteUser.setWebComponentsTheme(Optional.ofNullable(doc.get("webComponentsTheme_docvalues_string")).map(v -> v.toString()).orElse(null));
 
 		super.storeBaseModel(doc);
 	}
@@ -1343,8 +1696,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 				apiRequest.addVars("userFullName");
 			if(!Objects.equals(seeArchived, original.getSeeArchived()))
 				apiRequest.addVars("seeArchived");
-			if(!Objects.equals(seeDeleted, original.getSeeDeleted()))
-				apiRequest.addVars("seeDeleted");
+			if(!Objects.equals(awesomeEffect, original.getAwesomeEffect()))
+				apiRequest.addVars("awesomeEffect");
+			if(!Objects.equals(displayName, original.getDisplayName()))
+				apiRequest.addVars("displayName");
+			if(!Objects.equals(siteFontSize, original.getSiteFontSize()))
+				apiRequest.addVars("siteFontSize");
+			if(!Objects.equals(siteTheme, original.getSiteTheme()))
+				apiRequest.addVars("siteTheme");
+			if(!Objects.equals(webComponentsTheme, original.getWebComponentsTheme()))
+				apiRequest.addVars("webComponentsTheme");
 			super.apiRequestBaseModel();
 		}
 	}
@@ -1364,11 +1725,17 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		sb.append(Optional.ofNullable(userLastName).map(v -> "userLastName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(userFullName).map(v -> "userFullName: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(seeArchived).map(v -> "seeArchived: " + v + "\n").orElse(""));
-		sb.append(Optional.ofNullable(seeDeleted).map(v -> "seeDeleted: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(awesomeEffect).map(v -> "awesomeEffect: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(displayName).map(v -> "displayName: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(siteFontSize).map(v -> "siteFontSize: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(siteTheme).map(v -> "siteTheme: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(webComponentsTheme).map(v -> "webComponentsTheme: \"" + v + "\"\n" ).orElse(""));
 		return sb.toString();
 	}
 
 	public static final String CLASS_SIMPLE_NAME = "SiteUser";
+	public static final String CLASS_CANONICAL_NAME = "com.coralberryfairy.site.user.SiteUser";
+	public static final String CLASS_AUTH_RESOURCE = "SITEUSER";
 	public static final String CLASS_API_ADDRESS_SiteUser = "coralberryfairy-enUS-SiteUser";
 	public static String getClassApiAddress() {
 		return CLASS_API_ADDRESS_SiteUser;
@@ -1381,7 +1748,11 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String VAR_userLastName = "userLastName";
 	public static final String VAR_userFullName = "userFullName";
 	public static final String VAR_seeArchived = "seeArchived";
-	public static final String VAR_seeDeleted = "seeDeleted";
+	public static final String VAR_awesomeEffect = "awesomeEffect";
+	public static final String VAR_displayName = "displayName";
+	public static final String VAR_siteFontSize = "siteFontSize";
+	public static final String VAR_siteTheme = "siteTheme";
+	public static final String VAR_webComponentsTheme = "webComponentsTheme";
 
 	public static List<String> varsQForClass() {
 		return SiteUser.varsQSiteUser(new ArrayList<String>());
@@ -1415,7 +1786,56 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String DISPLAY_NAME_userLastName = "";
 	public static final String DISPLAY_NAME_userFullName = "";
 	public static final String DISPLAY_NAME_seeArchived = "see archived";
-	public static final String DISPLAY_NAME_seeDeleted = "see deleted";
+	public static final String DISPLAY_NAME_awesomeEffect = "awesome effect (requires refresh)";
+	public static final String DISPLAY_NAME_displayName = "";
+	public static final String DISPLAY_NAME_siteFontSize = "font size";
+	public static final String DISPLAY_NAME_siteTheme = "site theme";
+	public static final String DISPLAY_NAME_webComponentsTheme = "web components theme";
+
+	@Override
+	public String idForClass() {
+		return userId;
+	}
+
+	@Override
+	public String titleForClass() {
+		return objectTitle;
+	}
+
+	@Override
+	public String nameForClass() {
+		return displayName;
+	}
+
+	@Override
+	public String classNameAdjectiveSingularForClass() {
+		return SiteUser.NameAdjectiveSingular_enUS;
+	}
+
+	@Override
+	public String descriptionForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlEditPageForClass() {
+		return "%s/en-us/edit/user/%s";
+	}
+
+	@Override
+	public String classStringFormatUrlDisplayPageForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlUserPageForClass() {
+		return null;
+	}
+
+	@Override
+	public String classStringFormatUrlDownloadForClass() {
+		return null;
+	}
 
 	public static String displayNameForClass(String var) {
 		return SiteUser.displayNameSiteUser(var);
@@ -1438,14 +1858,24 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return DISPLAY_NAME_userFullName;
 		case VAR_seeArchived:
 			return DISPLAY_NAME_seeArchived;
-		case VAR_seeDeleted:
-			return DISPLAY_NAME_seeDeleted;
+		case VAR_awesomeEffect:
+			return DISPLAY_NAME_awesomeEffect;
+		case VAR_displayName:
+			return DISPLAY_NAME_displayName;
+		case VAR_siteFontSize:
+			return DISPLAY_NAME_siteFontSize;
+		case VAR_siteTheme:
+			return DISPLAY_NAME_siteTheme;
+		case VAR_webComponentsTheme:
+			return DISPLAY_NAME_webComponentsTheme;
 		default:
 			return BaseModel.displayNameBaseModel(var);
 		}
 	}
 
 	public static String descriptionSiteUser(String var) {
+		if(var == null)
+			return null;
 		switch(var) {
 		case VAR_userKeys:
 			return "User keys that relate to this user";
@@ -1463,8 +1893,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return "The user's full name";
 		case VAR_seeArchived:
 			return "A user field allowing a user to see archived records";
-		case VAR_seeDeleted:
-			return "A user field allowing a user to see deleted records";
+		case VAR_awesomeEffect:
+			return "an awesome effect for the entire site";
+		case VAR_displayName:
+			return "The display name for this user";
+		case VAR_siteFontSize:
+			return "The default font size for the site (small, medium, large). ";
+		case VAR_siteTheme:
+			return "The site theme, either light or dark. ";
+		case VAR_webComponentsTheme:
+			return "The web components theme for the site. ";
 			default:
 				return BaseModel.descriptionBaseModel(var);
 		}
@@ -1488,8 +1926,16 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 			return "String";
 		case VAR_seeArchived:
 			return "Boolean";
-		case VAR_seeDeleted:
+		case VAR_awesomeEffect:
 			return "Boolean";
+		case VAR_displayName:
+			return "String";
+		case VAR_siteFontSize:
+			return "String";
+		case VAR_siteTheme:
+			return "String";
+		case VAR_webComponentsTheme:
+			return "String";
 			default:
 				return BaseModel.classSimpleNameBaseModel(var);
 		}
@@ -1510,7 +1956,13 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		switch(var) {
 		case VAR_seeArchived:
 			return 4;
-		case VAR_seeDeleted:
+		case VAR_awesomeEffect:
+			return 4;
+		case VAR_siteFontSize:
+			return 4;
+		case VAR_siteTheme:
+			return 4;
+		case VAR_webComponentsTheme:
 			return 4;
 			default:
 				return BaseModel.htmRowBaseModel(var);
@@ -1521,8 +1973,14 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 		switch(var) {
 		case VAR_seeArchived:
 			return 1;
-		case VAR_seeDeleted:
+		case VAR_awesomeEffect:
 			return 2;
+		case VAR_siteFontSize:
+			return 1;
+		case VAR_siteTheme:
+			return 2;
+		case VAR_webComponentsTheme:
+			return 3;
 			default:
 				return BaseModel.htmCellBaseModel(var);
 		}
