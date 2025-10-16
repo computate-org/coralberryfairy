@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: coralberryfairy
+  name: coralberryfairy
+  labels:
+    app.kubernetes.io/instance: coralberryfairy
+    app.kubernetes.io/name: coralberryfairy
+spec:
+  ports:
+  - name: http
+    port: 10240
+    protocol: TCP
+    targetPort: 10240
+  - name: cluster
+    port: 10241
+    protocol: TCP
+    targetPort: 10241
+  selector:
+    app: coralberryfairy
+    app.kubernetes.io/instance: coralberryfairy
+    app.kubernetes.io/name: coralberryfairy
+    deployment: coralberryfairy
+  type: ClusterIP
