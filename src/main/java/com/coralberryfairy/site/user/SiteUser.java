@@ -148,7 +148,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateSiteUse
 	 *   l: large
 	 */
 	protected void _siteFontSize(Wrap<String> w) {
-		w.o("m");
+		w.o("l");
 	}
 
 	/**

@@ -2446,14 +2446,18 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 			page.persistForClass(Doll.VAR_pageId, Doll.staticSetPageId(siteRequest2, (String)result.get(Doll.VAR_pageId)));
 			page.persistForClass(Doll.VAR_resourceUri, Doll.staticSetResourceUri(siteRequest2, (String)result.get(Doll.VAR_resourceUri)));
 			page.persistForClass(Doll.VAR_templateUri, Doll.staticSetTemplateUri(siteRequest2, (String)result.get(Doll.VAR_templateUri)));
+			page.persistForClass(Doll.VAR_pageImageUri, Doll.staticSetPageImageUri(siteRequest2, (String)result.get(Doll.VAR_pageImageUri)));
+			page.persistForClass(Doll.VAR_objectTitle, Doll.staticSetObjectTitle(siteRequest2, (String)result.get(Doll.VAR_objectTitle)));
+			page.persistForClass(Doll.VAR_displayPage, Doll.staticSetDisplayPage(siteRequest2, (String)result.get(Doll.VAR_displayPage)));
+			page.persistForClass(Doll.VAR_pageImageAlt, Doll.staticSetPageImageAlt(siteRequest2, (String)result.get(Doll.VAR_pageImageAlt)));
 			page.persistForClass(Doll.VAR_emailTemplate, Doll.staticSetEmailTemplate(siteRequest2, (String)result.get(Doll.VAR_emailTemplate)));
 			page.persistForClass(Doll.VAR_storeUrl, Doll.staticSetStoreUrl(siteRequest2, (String)result.get(Doll.VAR_storeUrl)));
 			page.persistForClass(Doll.VAR_instagramUrl, Doll.staticSetInstagramUrl(siteRequest2, (String)result.get(Doll.VAR_instagramUrl)));
-			page.persistForClass(Doll.VAR_objectTitle, Doll.staticSetObjectTitle(siteRequest2, (String)result.get(Doll.VAR_objectTitle)));
-			page.persistForClass(Doll.VAR_title, Doll.staticSetTitle(siteRequest2, (String)result.get(Doll.VAR_title)));
-			page.persistForClass(Doll.VAR_displayPage, Doll.staticSetDisplayPage(siteRequest2, (String)result.get(Doll.VAR_displayPage)));
-			page.persistForClass(Doll.VAR_productNum, Doll.staticSetProductNum(siteRequest2, (String)result.get(Doll.VAR_productNum)));
+			page.persistForClass(Doll.VAR_hashtags, Doll.staticSetHashtags(siteRequest2, (String)result.get(Doll.VAR_hashtags)));
+			page.persistForClass(Doll.VAR_hashtagsList, Doll.staticSetHashtagsList(siteRequest2, (String)result.get(Doll.VAR_hashtagsList)));
 			page.persistForClass(Doll.VAR_solrId, Doll.staticSetSolrId(siteRequest2, (String)result.get(Doll.VAR_solrId)));
+			page.persistForClass(Doll.VAR_title, Doll.staticSetTitle(siteRequest2, (String)result.get(Doll.VAR_title)));
+			page.persistForClass(Doll.VAR_productNum, Doll.staticSetProductNum(siteRequest2, (String)result.get(Doll.VAR_productNum)));
 
 			page.promiseDeepForClass((SiteRequest)siteRequest).onSuccess(a -> {
 				try {

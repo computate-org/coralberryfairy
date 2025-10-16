@@ -1,10 +1,22 @@
 package com.coralberryfairy.site.model.doll;
 
+import java.io.File;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.computate.search.wrap.Wrap;
 import org.computate.vertx.config.ComputateConfigKeys;
 
+import com.coralberryfairy.site.config.ConfigKeys;
 import com.coralberryfairy.site.model.BaseModel;
 import com.coralberryfairy.site.result.BaseResult;
 
@@ -51,7 +63,7 @@ public class Doll extends DollGen<BaseResult> {
    * {@inheritDoc}
    * DocValues: true
    * Persist: true
-   * DisplayName: Name
+   * DisplayName: name
    * Description: A descriptive name for the doll
    * HtmRow: 3
 	 * HtmRowTitleOpen: Doll information
@@ -129,6 +141,62 @@ public class Doll extends DollGen<BaseResult> {
 	protected void _templateUri(Wrap<String> w) {
 	}
 
+  /**
+   * {@inheritDoc}
+   * DocValues: true
+   * Persist: true
+   * HtmRow: 4
+   * HtmCell: 1
+   * Facet: true
+   * DisplayName: imageUri
+   * Description: The page image URI
+   */
+  protected void _pageImageUri(Wrap<String> w) {
+  }
+  
+  /**
+   * DocValues: true
+   * Description: The image width
+   */
+  protected void _pageImageWidth(Wrap<Integer> w) {
+    if(pageImageUri != null) {
+      Path path = Paths.get(siteRequest_.getConfig().getString(ConfigKeys.STATIC_PATH), pageImageUri);
+      File file = path.toFile();
+      if(file.exists()) {
+        try {
+          BufferedImage img = ImageIO.read(file);
+          w.o(img.getWidth());
+          setPageImageHeight(img.getHeight());
+          setPageImageType(Files.probeContentType(path));
+        } catch (Exception ex) {
+          ExceptionUtils.rethrow(ex);
+        }
+      }
+    }
+  }
+
+  /**
+   * DocValues: true
+   * Description: The image height
+   */
+  protected void _pageImageHeight(Wrap<Integer> c) {
+  }
+
+  /**
+   * DocValues: true
+   * Description: The image height
+   */
+  protected void _pageImageType(Wrap<String> c) {
+  }
+
+  /**
+   * Persist: true
+   * DocValues: true
+   * Description: The image accessibility text. 
+   */
+  protected void _pageImageAlt(Wrap<String> c) {
+  }
+
 	/**
 	 * {@inheritDoc}
 	 * DocValues: true
@@ -160,6 +228,31 @@ public class Doll extends DollGen<BaseResult> {
 	 * Description: The Instagram URL for this page. 
 	 */
 	protected void _instagramUrl(Wrap<String> w) {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * Facet: true
+	 * DisplayName: Space-separated Instagram hashtags
+	 * Description: The Instagram hashtags for this doll as space-separated hashtags
+	 */
+	protected void _hashtags(Wrap<String> w) {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * DocValues: true
+	 * Persist: true
+	 * Facet: true
+	 * DisplayName: List of Instagram hashtag names
+	 * Description: List of the Instagram hashtag names for this doll
+	 */
+	protected void _hashtagsList(List<String> l) {
+		if (hashtags != null) {
+      l.addAll(Arrays.stream(hashtags.split(" ")).map(s -> s.replace("#", "")).collect(Collectors.toList()));
+		}
 	}
 
 	/**

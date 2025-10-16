@@ -208,7 +208,7 @@ public class PageLayout extends PageLayoutGen<Object> {
 	 * Description: The user's default font size. 
 	 */
 	protected void _userFontSize(Wrap<String> w) {
-		w.o(Optional.ofNullable(siteRequest_.getSiteUser_()).map(user -> user.getSiteFontSize()).orElse("m"));
+		w.o(Optional.ofNullable(siteRequest_.getSiteUser_()).map(user -> user.getSiteFontSize()).orElse("l"));
 	}
 
 	/**
