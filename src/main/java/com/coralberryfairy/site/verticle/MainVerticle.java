@@ -1370,12 +1370,12 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 			}
 			router.route("/static/*").handler(staticHandler);
 
-			router.getWithRegex("\\/download(?<uri>.*)").handler(oauth2AuthHandler).handler(handler -> {
+			router.getWithRegex("\\/en-us/download(?<uri>.*)").handler(oauth2AuthHandler).handler(handler -> {
 				String originalUri = handler.pathParam("uri");
 				SiteUserEnUSApiServiceImpl apiSiteUser = new SiteUserEnUSApiServiceImpl();
 				initializeApiService(apiSiteUser);
 				ServiceRequest serviceRequest = apiSiteUser.generateServiceRequest(handler);
-				apiSiteUser.user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.CLASS_API_ADDRESS_ComputateSiteUser, "postSiteUserFuture", "patchSiteUserFuture", false).onSuccess(siteRequest -> {
+				apiSiteUser.user(serviceRequest, SiteRequest.class, SiteUser.class, SiteUser.CLASS_API_ADDRESS_SiteUser, "postSiteUserFuture", "patchSiteUserFuture", false).onSuccess(siteRequest -> {
 					try {
 
 						String uri = handler.pathParam("uri");
@@ -1465,9 +1465,21 @@ public class MainVerticle extends MainVerticleGen<AbstractVerticle> {
 				});
 			});
 
+			router.get("/hackathons").handler(ctx -> {
+				ctx.response().putHeader("location", "/en-us/view/article/hackathons");
+				ctx.response().setStatusCode(302);
+				ctx.end();
+			});
+
+			router.get("/websites").handler(ctx -> {
+				ctx.response().putHeader("location", "/en-us/view/article/websites");
+				ctx.response().setStatusCode(302);
+				ctx.end();
+			});
+
 			SiteUserEnUSApiServiceImpl apiSiteUser = new SiteUserEnUSApiServiceImpl();
 			initializeApiService(apiSiteUser);
-			SiteRoutes.routes(router, oauth2AuthHandler, config(), webClient, jinjava, apiSiteUser);
+			SiteRoutes.routes(vertx, router, oauth2AuthHandler, config(), webClient, jinjava, apiSiteUser);
 
 			LOG.info("The UI was configured properly.");
 			promise.complete();

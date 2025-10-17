@@ -557,7 +557,7 @@ public class WorkerVerticle extends WorkerVerticleGen<AbstractVerticle> {
 			DollEnUSApiServiceImpl apiDoll = new DollEnUSApiServiceImpl();
 			initializeApiService(apiDoll);
 
-			apiSitePage.importTimer(Paths.get(templatePath, "/view/article"), vertx, siteRequest, SitePage.CLASS_CANONICAL_NAME, SitePage.CLASS_SIMPLE_NAME, SitePage.CLASS_API_ADDRESS_SitePage, SitePage.CLASS_AUTH_RESOURCE, "pageId", "userPage", "download").onSuccess(q1 -> {
+			apiSitePage.importTimer(Paths.get(templatePath, "/en-us/view/article"), vertx, siteRequest, SitePage.CLASS_CANONICAL_NAME, SitePage.CLASS_SIMPLE_NAME, SitePage.CLASS_API_ADDRESS_SitePage, SitePage.CLASS_AUTH_RESOURCE, "pageId", "userPage", "download").onSuccess(q1 -> {
 				apiDoll.importTimer(Paths.get(templatePath, "/view/doll"), vertx, siteRequest, Doll.CLASS_CANONICAL_NAME, Doll.CLASS_SIMPLE_NAME, Doll.CLASS_API_ADDRESS_Doll, Doll.CLASS_AUTH_RESOURCE, "pageId", "userPage", "download").onSuccess(q2 -> {
 					LOG.info("data import complete");
 					promise.complete();

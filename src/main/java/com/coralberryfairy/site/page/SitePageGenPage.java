@@ -6,6 +6,7 @@ import java.lang.String;
 import java.lang.Integer;
 import org.computate.vertx.search.list.SearchList;
 import io.vertx.core.json.JsonArray;
+import java.util.List;
 import com.coralberryfairy.site.page.PageLayout;
 import com.coralberryfairy.site.request.SiteRequest;
 import com.coralberryfairy.site.user.SiteUser;
@@ -28,7 +29,6 @@ import java.net.URLDecoder;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.StringUtils;
 import java.util.Map;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
@@ -511,12 +511,12 @@ public class SitePageGenPage extends SitePageGenPageGen<PageLayout> {
 
   @Override
   protected void _pageUri(Wrap<String> c) {
-    c.o("/search/article");
+    c.o("/en-us/search/article");
   }
 
   @Override
   protected void _apiUri(Wrap<String> c) {
-    c.o("/api/article");
+    c.o("/en-us/api/article");
   }
 
   @Override
@@ -531,15 +531,15 @@ public class SitePageGenPage extends SitePageGenPageGen<PageLayout> {
 
   @Override
   protected void _pageImageUri(Wrap<String> c) {
-      c.o("/png/search/article-999.png");
+      c.o("/png/en-us/search/article-999.png");
   }
 
   @Override
   protected void _classIcon(Wrap<String> c) {
-      c.o("<i class=\"{{ FONTAWESOME_STYLE }} fa-newspaper\"></i>");
+      c.o("<i class=\"fa-light fa-newspaper\"></i>");
   }
 
   protected void _pageUriSitePage(Wrap<String> c) {
-      c.o("/search/article");
+      c.o("/en-us/search/article");
   }
 }

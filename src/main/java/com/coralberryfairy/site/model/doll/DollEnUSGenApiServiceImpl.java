@@ -534,7 +534,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 						apiRequest.setNumPATCH(apiRequest.getNumPATCH() + 1);
 						if(apiRequest.getNumFound() == 1L && Optional.ofNullable(siteRequest.getJsonObject()).map(json -> json.size() > 0).orElse(false)) {
 							o.apiRequestDoll();
-							if(apiRequest.getVars().size() > 0)
+							if(apiRequest.getVars().size() > 0 && Optional.ofNullable(siteRequest.getRequestVars().get("refresh")).map(refresh -> !refresh.equals("false")).orElse(false))
 								eventBus.publish("websocketDoll", JsonObject.mapFrom(apiRequest).toString());
 						}
 					}
@@ -1387,7 +1387,8 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		});
 	}
 
-	public void searchpageDollPageInit(DollPage page, SearchList<Doll> listDoll) {
+	public void searchpageDollPageInit(JsonObject ctx, DollPage page, SearchList<Doll> listDoll, Promise<Void> promise) {
+		promise.complete();
 	}
 
 	public String templateSearchPageDoll(ServiceRequest serviceRequest) {
@@ -1414,9 +1415,15 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 				try {
 					JsonObject ctx = ConfigKeys.getPageContext(config);
 					ctx.mergeIn(JsonObject.mapFrom(page));
-					String renderedTemplate = jinjava.render(template, ctx.getMap());
-					Buffer buffer = Buffer.buffer(renderedTemplate);
-					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+					Promise<Void> promise1 = Promise.promise();
+					searchpageDollPageInit(ctx, page, listDoll, promise1);
+					promise1.future().onSuccess(b -> {
+						String renderedTemplate = jinjava.render(template, ctx.getMap());
+						Buffer buffer = Buffer.buffer(renderedTemplate);
+						promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+					}).onFailure(ex -> {
+						promise.fail(ex);
+					});
 				} catch(Exception ex) {
 					LOG.error(String.format("response200SearchPageDoll failed. "), ex);
 					promise.fail(ex);
@@ -1484,6 +1491,7 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "DELETE"));
 			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PATCH"));
 			form.add("permission", String.format("%s#%s", Doll.CLASS_AUTH_RESOURCE, "PUT"));
+			form.add("permission", String.format("%s-%s#%s", Doll.CLASS_AUTH_RESOURCE, pageId, "GET"));
 			if(pageId != null)
 				form.add("permission", String.format("%s#%s", pageId, "GET"));
 			webClient.post(
@@ -1546,7 +1554,8 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		});
 	}
 
-	public void editpageDollPageInit(DollPage page, SearchList<Doll> listDoll) {
+	public void editpageDollPageInit(JsonObject ctx, DollPage page, SearchList<Doll> listDoll, Promise<Void> promise) {
+		promise.complete();
 	}
 
 	public String templateEditPageDoll(ServiceRequest serviceRequest) {
@@ -1573,9 +1582,15 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 				try {
 					JsonObject ctx = ConfigKeys.getPageContext(config);
 					ctx.mergeIn(JsonObject.mapFrom(page));
-					String renderedTemplate = jinjava.render(template, ctx.getMap());
-					Buffer buffer = Buffer.buffer(renderedTemplate);
-					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+					Promise<Void> promise1 = Promise.promise();
+					editpageDollPageInit(ctx, page, listDoll, promise1);
+					promise1.future().onSuccess(b -> {
+						String renderedTemplate = jinjava.render(template, ctx.getMap());
+						Buffer buffer = Buffer.buffer(renderedTemplate);
+						promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+					}).onFailure(ex -> {
+						promise.fail(ex);
+					});
 				} catch(Exception ex) {
 					LOG.error(String.format("response200EditPageDoll failed. "), ex);
 					promise.fail(ex);
@@ -1668,11 +1683,12 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 		});
 	}
 
-	public void displaypageDollPageInit(DollPage page, SearchList<Doll> listDoll) {
+	public void displaypageDollPageInit(JsonObject ctx, DollPage page, SearchList<Doll> listDoll, Promise<Void> promise) {
+		promise.complete();
 	}
 
 	public String templateDisplayPageDoll(ServiceRequest serviceRequest) {
-		return String.format("%s.htm", serviceRequest.getExtra().getString("uri").substring(1));
+		return String.format("%s.htm", StringUtils.substringBefore(serviceRequest.getExtra().getString("uri").substring(1), "?"));
 	}
 	public Future<ServiceResponse> response200DisplayPageDoll(SearchList<Doll> listDoll) {
 		Promise<ServiceResponse> promise = Promise.promise();
@@ -1695,9 +1711,15 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 				try {
 					JsonObject ctx = ConfigKeys.getPageContext(config);
 					ctx.mergeIn(JsonObject.mapFrom(page));
-					String renderedTemplate = jinjava.render(template, ctx.getMap());
-					Buffer buffer = Buffer.buffer(renderedTemplate);
-					promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+					Promise<Void> promise1 = Promise.promise();
+					displaypageDollPageInit(ctx, page, listDoll, promise1);
+					promise1.future().onSuccess(b -> {
+						String renderedTemplate = jinjava.render(template, ctx.getMap());
+						Buffer buffer = Buffer.buffer(renderedTemplate);
+						promise.complete(new ServiceResponse(200, "OK", buffer, requestHeaders));
+					}).onFailure(ex -> {
+						promise.fail(ex);
+					});
 				} catch(Exception ex) {
 					LOG.error(String.format("response200DisplayPageDoll failed. "), ex);
 					promise.fail(ex);
@@ -2450,8 +2472,11 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 			page.persistForClass(Doll.VAR_objectTitle, Doll.staticSetObjectTitle(siteRequest2, (String)result.get(Doll.VAR_objectTitle)));
 			page.persistForClass(Doll.VAR_displayPage, Doll.staticSetDisplayPage(siteRequest2, (String)result.get(Doll.VAR_displayPage)));
 			page.persistForClass(Doll.VAR_pageImageAlt, Doll.staticSetPageImageAlt(siteRequest2, (String)result.get(Doll.VAR_pageImageAlt)));
+			page.persistForClass(Doll.VAR_editPage, Doll.staticSetEditPage(siteRequest2, (String)result.get(Doll.VAR_editPage)));
 			page.persistForClass(Doll.VAR_emailTemplate, Doll.staticSetEmailTemplate(siteRequest2, (String)result.get(Doll.VAR_emailTemplate)));
+			page.persistForClass(Doll.VAR_userPage, Doll.staticSetUserPage(siteRequest2, (String)result.get(Doll.VAR_userPage)));
 			page.persistForClass(Doll.VAR_storeUrl, Doll.staticSetStoreUrl(siteRequest2, (String)result.get(Doll.VAR_storeUrl)));
+			page.persistForClass(Doll.VAR_download, Doll.staticSetDownload(siteRequest2, (String)result.get(Doll.VAR_download)));
 			page.persistForClass(Doll.VAR_instagramUrl, Doll.staticSetInstagramUrl(siteRequest2, (String)result.get(Doll.VAR_instagramUrl)));
 			page.persistForClass(Doll.VAR_hashtags, Doll.staticSetHashtags(siteRequest2, (String)result.get(Doll.VAR_hashtags)));
 			page.persistForClass(Doll.VAR_hashtagsList, Doll.staticSetHashtagsList(siteRequest2, (String)result.get(Doll.VAR_hashtagsList)));
@@ -2459,9 +2484,10 @@ public class DollEnUSGenApiServiceImpl extends BaseApiServiceImpl implements Dol
 			page.persistForClass(Doll.VAR_title, Doll.staticSetTitle(siteRequest2, (String)result.get(Doll.VAR_title)));
 			page.persistForClass(Doll.VAR_productNum, Doll.staticSetProductNum(siteRequest2, (String)result.get(Doll.VAR_productNum)));
 
-			page.promiseDeepForClass((SiteRequest)siteRequest).onSuccess(a -> {
+			page.promiseDeepForClass((SiteRequest)siteRequest).onSuccess(o -> {
 				try {
-					JsonObject data = JsonObject.mapFrom(result);
+					JsonObject data = JsonObject.mapFrom(o);
+					ctx.put("result", data.getMap());
 					promise.complete(data);
 				} catch(Exception ex) {
 					LOG.error(String.format(importModelFail, classSimpleName), ex);

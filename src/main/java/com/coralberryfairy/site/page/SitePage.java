@@ -38,16 +38,16 @@ import io.vertx.core.json.JsonObject;
  * Order: 4
  * Description: Read the latest articles to learn more
  * AName: an article
- * Icon: <i class="{{ FONTAWESOME_STYLE }} fa-newspaper"></i>
+ * Icon: <i class="fa-light fa-newspaper"></i>
  * Sort.desc: courseNum
  * Sort.desc: lessonNum
  * Rows: 100
  * 
  * PublicRead: true
- * SearchPageUri: /search/article
- * EditPageUri: /edit/article/{pageId}
- * DisplayPageUri: /view/article/{pageId}
- * ApiUri: /api/article
+ * SearchPageUri: /en-us/search/article
+ * EditPageUri: /en-us/edit/article/{pageId}
+ * DisplayPageUri: /en-us/view/article/{pageId}
+ * ApiUri: /en-us/api/article
  * ApiMethod:
  *   Search:
  *   GET:
@@ -153,7 +153,7 @@ public class SitePage extends SitePageGen<BaseResult> {
    * DocValues: true
    * Persist: true
    * Facet: true
-   * DisplayName: Course Number
+   * DisplayName: course number
    * Description: The course number for this page. 
    */
   protected void _courseNum(Wrap<Integer> w) {
@@ -164,7 +164,7 @@ public class SitePage extends SitePageGen<BaseResult> {
    * DocValues: true
    * Persist: true
    * Facet: true
-   * DisplayName: Lesson Number
+   * DisplayName: lesson number
    * Description: The lesson number for this page. 
    */
   protected void _lessonNum(Wrap<Integer> w) {
@@ -416,6 +416,29 @@ public class SitePage extends SitePageGen<BaseResult> {
         array.add(obj2);
     });
     w.o(array);
+  }
+
+  /**
+   * {@inheritDoc}
+   * DocValues: true
+   * Persist: true
+   * DisplayName: labels string
+   * Description: The labels String for this article comma-separated. 
+   */
+  protected void _labelsString(Wrap<String> w) {
+  }
+
+  /**
+   * {@inheritDoc}
+   * DocValues: true
+   * Persist: true
+   * DisplayName: labels
+   * Description: The labels for this article. 
+   */
+  protected void _labels(List<String> l) {
+    if(labelsString != null) {
+      l.addAll(Arrays.asList(StringUtils.split(labelsString, ",")).stream().map(id -> id.trim()).collect(Collectors.toList()));
+    }
   }
 
   /**

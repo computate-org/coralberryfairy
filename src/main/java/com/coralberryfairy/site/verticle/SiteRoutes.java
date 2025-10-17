@@ -43,7 +43,7 @@ import io.vertx.kafka.client.consumer.KafkaConsumer;
 public class SiteRoutes {
   protected static final Logger LOG = LoggerFactory.getLogger(SiteRoutes.class);
   
-  public static void routes(Router router, ComputateOAuth2AuthHandlerImpl oauth2AuthHandler, JsonObject config, WebClient webClient, Jinjava jinjava, SiteUserEnUSApiServiceImpl apiSiteUser) {
+  public static void routes(Vertx vertx, Router router, ComputateOAuth2AuthHandlerImpl oauth2AuthHandler, JsonObject config, WebClient webClient, Jinjava jinjava, SiteUserEnUSApiServiceImpl apiSiteUser) {
 
 		router.get("/").handler(eventHandler -> {
 			ServiceRequest serviceRequest = apiSiteUser.generateServiceRequest(eventHandler);

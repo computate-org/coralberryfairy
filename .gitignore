@@ -1,3 +1,5 @@
+computate-smart-website-builder
+computate-smart-cloud-deployer
 target/**
 computate-smart-website-builder
 computate-smart-cloud-deployer
@@ -5,9 +7,9 @@ computate-smart-cloud-deployer
 .vscode
 *.code-workspace
 bin/generate.sh
-bin/generatenow.sh
+bin/generateonce.sh
 bin/index.sh
-bin/indexnow.sh
+bin/indexonce.sh
 bin/watch.sh
 bin/watchnow.sh
 *.code-workspace

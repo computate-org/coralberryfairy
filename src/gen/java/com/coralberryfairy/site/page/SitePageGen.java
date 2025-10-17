@@ -100,8 +100,8 @@ import io.vertx.core.json.JsonObject;
  * <h2>ApiTag.enUS: true</h2>
  * <p>This class contains a comment <b>"ApiTag: articles"</b>, which groups all of the OpenAPIs for SitePage objects under the tag "articles". 
  * </p>
- * <h2>ApiUri.enUS: /api/article</h2>
- * <p>This class contains a comment <b>"ApiUri: /api/article"</b>, which defines the base API URI for SitePage objects as "/api/article" in the OpenAPI spec. 
+ * <h2>ApiUri.enUS: /en-us/api/article</h2>
+ * <p>This class contains a comment <b>"ApiUri: /en-us/api/article"</b>, which defines the base API URI for SitePage objects as "/en-us/api/article" in the OpenAPI spec. 
  * </p>
  * <h2>Color: null</h2>
  * <h2>Indexed: true</h2>
@@ -189,39 +189,39 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 	public static final String Title_enUS = "articles";
 	public static final String ThePluralName_enUS = "the articles";
 	public static final String NoNameFound_enUS = "no article found";
-	public static final String ApiUri_enUS = "/api/article";
-	public static final String ApiUriSearchPage_enUS = "/search/article";
-	public static final String ApiUriEditPage_enUS = "/edit/article/{pageId}";
+	public static final String ApiUri_enUS = "/en-us/api/article";
+	public static final String ApiUriSearchPage_enUS = "/en-us/search/article";
+	public static final String ApiUriEditPage_enUS = "/en-us/edit/article/{pageId}";
 	public static final String OfName_enUS = "of article";
 	public static final String ANameAdjective_enUS = "an article";
 	public static final String NameAdjectiveSingular_enUS = "article";
 	public static final String NameAdjectivePlural_enUS = "articles";
-	public static final String Search_enUS_OpenApiUri = "/api/article";
-	public static final String Search_enUS_StringFormatUri = "/api/article";
-	public static final String Search_enUS_StringFormatUrl = "%s/api/article";
-	public static final String GET_enUS_OpenApiUri = "/api/article/{pageId}";
-	public static final String GET_enUS_StringFormatUri = "/api/article/%s";
-	public static final String GET_enUS_StringFormatUrl = "%s/api/article/%s";
-	public static final String PATCH_enUS_OpenApiUri = "/api/article";
-	public static final String PATCH_enUS_StringFormatUri = "/api/article";
-	public static final String PATCH_enUS_StringFormatUrl = "%s/api/article";
-	public static final String POST_enUS_OpenApiUri = "/api/article";
-	public static final String POST_enUS_StringFormatUri = "/api/article";
-	public static final String POST_enUS_StringFormatUrl = "%s/api/article";
-	public static final String PUTImport_enUS_OpenApiUri = "/api/article-import";
-	public static final String PUTImport_enUS_StringFormatUri = "/api/article-import";
-	public static final String PUTImport_enUS_StringFormatUrl = "%s/api/article-import";
-	public static final String SearchPage_enUS_OpenApiUri = "/search/article";
-	public static final String SearchPage_enUS_StringFormatUri = "/search/article";
-	public static final String SearchPage_enUS_StringFormatUrl = "%s/search/article";
-	public static final String EditPage_enUS_OpenApiUri = "/edit/article/{pageId}";
-	public static final String EditPage_enUS_StringFormatUri = "/edit/article/%s";
-	public static final String EditPage_enUS_StringFormatUrl = "%s/edit/article/%s";
-	public static final String DisplayPage_enUS_OpenApiUri = "/view/article/{pageId}";
-	public static final String DisplayPage_enUS_StringFormatUri = "/view/article/%s";
-	public static final String DisplayPage_enUS_StringFormatUrl = "%s/view/article/%s";
+	public static final String Search_enUS_OpenApiUri = "/en-us/api/article";
+	public static final String Search_enUS_StringFormatUri = "/en-us/api/article";
+	public static final String Search_enUS_StringFormatUrl = "%s/en-us/api/article";
+	public static final String GET_enUS_OpenApiUri = "/en-us/api/article/{pageId}";
+	public static final String GET_enUS_StringFormatUri = "/en-us/api/article/%s";
+	public static final String GET_enUS_StringFormatUrl = "%s/en-us/api/article/%s";
+	public static final String PATCH_enUS_OpenApiUri = "/en-us/api/article";
+	public static final String PATCH_enUS_StringFormatUri = "/en-us/api/article";
+	public static final String PATCH_enUS_StringFormatUrl = "%s/en-us/api/article";
+	public static final String POST_enUS_OpenApiUri = "/en-us/api/article";
+	public static final String POST_enUS_StringFormatUri = "/en-us/api/article";
+	public static final String POST_enUS_StringFormatUrl = "%s/en-us/api/article";
+	public static final String PUTImport_enUS_OpenApiUri = "/en-us/api/article-import";
+	public static final String PUTImport_enUS_StringFormatUri = "/en-us/api/article-import";
+	public static final String PUTImport_enUS_StringFormatUrl = "%s/en-us/api/article-import";
+	public static final String SearchPage_enUS_OpenApiUri = "/en-us/search/article";
+	public static final String SearchPage_enUS_StringFormatUri = "/en-us/search/article";
+	public static final String SearchPage_enUS_StringFormatUrl = "%s/en-us/search/article";
+	public static final String EditPage_enUS_OpenApiUri = "/en-us/edit/article/{pageId}";
+	public static final String EditPage_enUS_StringFormatUri = "/en-us/edit/article/%s";
+	public static final String EditPage_enUS_StringFormatUrl = "%s/en-us/edit/article/%s";
+	public static final String DisplayPage_enUS_OpenApiUri = "/en-us/view/article/{pageId}";
+	public static final String DisplayPage_enUS_StringFormatUri = "/en-us/view/article/%s";
+	public static final String DisplayPage_enUS_StringFormatUrl = "%s/en-us/view/article/%s";
 
-	public static final String Icon = "<i class=\"{{ FONTAWESOME_STYLE }} fa-newspaper\"></i>";
+	public static final String Icon = "<i class=\"fa-light fa-newspaper\"></i>";
 	public static final Integer Rows = 100;
 
 	/////////////
@@ -1941,6 +1941,141 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 		return SitePage.staticSearchNextArticles(siteRequest_, SitePage.staticSetNextArticles(siteRequest_, o)).toString();
 	}
 
+	//////////////////
+	// labelsString //
+	//////////////////
+
+
+	/**	 The entity labelsString
+	 *	 is defined as null before being initialized. 
+	 */
+	@JsonProperty
+	@JsonInclude(Include.NON_NULL)
+	protected String labelsString;
+
+	/**	<br> The entity labelsString
+	 *  is defined as null before being initialized. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.page.SitePage&fq=entiteVar_enUS_indexed_string:labelsString">Find the entity labelsString in Solr</a>
+	 * <br>
+	 * @param w is for wrapping a value to assign to this entity during initialization. 
+	 **/
+	protected abstract void _labelsString(Wrap<String> w);
+
+	public String getLabelsString() {
+		return labelsString;
+	}
+	public void setLabelsString(String o) {
+		this.labelsString = SitePage.staticSetLabelsString(siteRequest_, o);
+	}
+	public static String staticSetLabelsString(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	protected SitePage labelsStringInit() {
+		Wrap<String> labelsStringWrap = new Wrap<String>().var("labelsString");
+		if(labelsString == null) {
+			_labelsString(labelsStringWrap);
+			Optional.ofNullable(labelsStringWrap.getO()).ifPresent(o -> {
+				setLabelsString(o);
+			});
+		}
+		return (SitePage)this;
+	}
+
+	public static String staticSearchLabelsString(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrLabelsString(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqLabelsString(SiteRequest siteRequest_, String o) {
+		return SitePage.staticSearchLabelsString(siteRequest_, SitePage.staticSetLabelsString(siteRequest_, o)).toString();
+	}
+
+	public String sqlLabelsString() {
+		return labelsString;
+	}
+
+	////////////
+	// labels //
+	////////////
+
+
+	/**	 The entity labels
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+	@JsonInclude(Include.NON_NULL)
+	protected List<String> labels = new ArrayList<String>();
+
+	/**	<br> The entity labels
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.page.SitePage&fq=entiteVar_enUS_indexed_string:labels">Find the entity labels in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
+	 **/
+	protected abstract void _labels(List<String> l);
+
+	public List<String> getLabels() {
+		return labels;
+	}
+
+	public void setLabels(List<String> labels) {
+		this.labels = labels;
+	}
+	@JsonIgnore
+	public void setLabels(String o) {
+		String l = SitePage.staticSetLabels(siteRequest_, o);
+		if(l != null)
+			addLabels(l);
+	}
+	public static String staticSetLabels(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	public SitePage addLabels(String...objects) {
+		for(String o : objects) {
+			addLabels(o);
+		}
+		return (SitePage)this;
+	}
+	public SitePage addLabels(String o) {
+		if(o != null)
+			this.labels.add(o);
+		return (SitePage)this;
+	}
+	@JsonIgnore
+	public void setLabels(JsonArray objects) {
+		labels.clear();
+		if(objects == null)
+			return;
+		for(int i = 0; i < objects.size(); i++) {
+			String o = objects.getString(i);
+			addLabels(o);
+		}
+	}
+	protected SitePage labelsInit() {
+		_labels(labels);
+		return (SitePage)this;
+	}
+
+	public static String staticSearchLabels(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrLabels(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqLabels(SiteRequest siteRequest_, String o) {
+		return SitePage.staticSearchLabels(siteRequest_, SitePage.staticSetLabels(siteRequest_, o)).toString();
+	}
+
+	public String[] sqlLabels() {
+		return labels.stream().map(v -> (String)v).toArray(String[]::new);
+	}
+
 	///////////////////////
 	// relatedArticleIds //
 	///////////////////////
@@ -2199,6 +2334,8 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 			Promise<Void> promise2 = Promise.promise();
 			try {
 				nextArticlesInit();
+				labelsStringInit();
+				labelsInit();
 				relatedArticleIdsInit();
 				promise2.complete();
 			} catch(Exception ex) {
@@ -2338,6 +2475,10 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 				return oSitePage.nextArticleSearch;
 			case "nextArticles":
 				return oSitePage.nextArticles;
+			case "labelsString":
+				return oSitePage.labelsString;
+			case "labels":
+				return oSitePage.labels;
 			case "relatedArticleIds":
 				return oSitePage.relatedArticleIds;
 			case "relatedArticleSearch":
@@ -2441,6 +2582,10 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 			return SitePage.staticSetNextArticleIds(siteRequest_, v);
 		case "nextArticles":
 			return SitePage.staticSetNextArticles(siteRequest_, v);
+		case "labelsString":
+			return SitePage.staticSetLabelsString(siteRequest_, v);
+		case "labels":
+			return SitePage.staticSetLabels(siteRequest_, v);
 		case "relatedArticleIds":
 			return SitePage.staticSetRelatedArticleIds(siteRequest_, v);
 		case "relatedArticles":
@@ -2517,6 +2662,10 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 			return SitePage.staticSearchNextArticleIds(siteRequest_, (String)o);
 		case "nextArticles":
 			return SitePage.staticSearchNextArticles(siteRequest_, (JsonArray)o);
+		case "labelsString":
+			return SitePage.staticSearchLabelsString(siteRequest_, (String)o);
+		case "labels":
+			return SitePage.staticSearchLabels(siteRequest_, (String)o);
 		case "relatedArticleIds":
 			return SitePage.staticSearchRelatedArticleIds(siteRequest_, (String)o);
 		case "relatedArticles":
@@ -2593,6 +2742,10 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 			return SitePage.staticSearchStrNextArticleIds(siteRequest_, (String)o);
 		case "nextArticles":
 			return SitePage.staticSearchStrNextArticles(siteRequest_, (String)o);
+		case "labelsString":
+			return SitePage.staticSearchStrLabelsString(siteRequest_, (String)o);
+		case "labels":
+			return SitePage.staticSearchStrLabels(siteRequest_, (String)o);
 		case "relatedArticleIds":
 			return SitePage.staticSearchStrRelatedArticleIds(siteRequest_, (String)o);
 		case "relatedArticles":
@@ -2669,6 +2822,10 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 			return SitePage.staticSearchFqNextArticleIds(siteRequest_, o);
 		case "nextArticles":
 			return SitePage.staticSearchFqNextArticles(siteRequest_, o);
+		case "labelsString":
+			return SitePage.staticSearchFqLabelsString(siteRequest_, o);
+		case "labels":
+			return SitePage.staticSearchFqLabels(siteRequest_, o);
 		case "relatedArticleIds":
 			return SitePage.staticSearchFqRelatedArticleIds(siteRequest_, o);
 		case "relatedArticles":
@@ -2780,6 +2937,24 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 					setNextArticleIds((String)val);
 				}
 				saves.add("nextArticleIds");
+				return val;
+			} else if("labelsstring".equals(varLower)) {
+				if(val instanceof String) {
+					setLabelsString((String)val);
+				}
+				saves.add("labelsString");
+				return val;
+			} else if("labels".equals(varLower)) {
+				if(val instanceof List<?>) {
+					((List<String>)val).stream().forEach(v -> addLabels(v));
+				} else if(val instanceof String[]) {
+					Arrays.asList((String[])val).stream().forEach(v -> addLabels((String)v));
+				} else if(val instanceof JsonArray) {
+					((JsonArray)val).stream().forEach(v -> addLabels(staticSetLabels(siteRequest_, v.toString())));
+				}
+				if(!saves.contains("labels")) {
+					saves.add("labels");
+				}
 				return val;
 			} else if("relatedarticleids".equals(varLower)) {
 				if(val instanceof String) {
@@ -2912,6 +3087,21 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 					oSitePage.setNextArticles(nextArticles);
 			}
 
+			if(saves.contains("labelsString")) {
+				String labelsString = (String)doc.get("labelsString_docvalues_string");
+				if(labelsString != null)
+					oSitePage.setLabelsString(labelsString);
+			}
+
+			if(saves.contains("labels")) {
+				List<String> labels = (List<String>)doc.get("labels_docvalues_strings");
+				if(labels != null) {
+					labels.stream().forEach( v -> {
+						oSitePage.labels.add(SitePage.staticSetLabels(siteRequest_, v));
+					});
+				}
+			}
+
 			if(saves.contains("relatedArticleIds")) {
 				String relatedArticleIds = (String)doc.get("relatedArticleIds_docvalues_string");
 				if(relatedArticleIds != null)
@@ -2983,6 +3173,16 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 		if(nextArticles != null) {
 			doc.put("nextArticles_stored_string", nextArticles.toString());
 		}
+		if(labelsString != null) {
+			doc.put("labelsString_docvalues_string", labelsString);
+		}
+		if(labels != null) {
+			JsonArray l = new JsonArray();
+			doc.put("labels_docvalues_strings", l);
+			for(String o : labels) {
+				l.add(SitePage.staticSearchLabels(siteRequest_, o));
+			}
+		}
 		if(relatedArticleIds != null) {
 			doc.put("relatedArticleIds_docvalues_string", relatedArticleIds);
 		}
@@ -3031,6 +3231,10 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 				return "nextArticleIds_docvalues_string";
 			case "nextArticles":
 				return "nextArticles_stored_string";
+			case "labelsString":
+				return "labelsString_docvalues_string";
+			case "labels":
+				return "labels_docvalues_strings";
 			case "relatedArticleIds":
 				return "relatedArticleIds_docvalues_string";
 			case "relatedArticles":
@@ -3074,6 +3278,10 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 				return "prerequisiteArticleIds_docvalues_string";
 			case "nextArticleIds":
 				return "nextArticleIds_docvalues_string";
+			case "labelsString":
+				return "labelsString_docvalues_string";
+			case "labels":
+				return "labels_docvalues_strings";
 			case "relatedArticleIds":
 				return "relatedArticleIds_docvalues_string";
 			default:
@@ -3115,6 +3323,10 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 				return "prerequisiteArticleIds";
 			case "nextArticleIds_docvalues_string":
 				return "nextArticleIds";
+			case "labelsString_docvalues_string":
+				return "labelsString";
+			case "labels_docvalues_strings":
+				return "labels";
 			case "relatedArticleIds_docvalues_string":
 				return "relatedArticleIds";
 			default:
@@ -3165,6 +3377,10 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 		oSitePage.setPrerequisiteArticles(Optional.ofNullable(doc.get("prerequisiteArticles_stored_string")).map(v -> v.toString()).orElse(null));
 		oSitePage.setNextArticleIds(Optional.ofNullable(doc.get("nextArticleIds_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oSitePage.setNextArticles(Optional.ofNullable(doc.get("nextArticles_stored_string")).map(v -> v.toString()).orElse(null));
+		oSitePage.setLabelsString(Optional.ofNullable(doc.get("labelsString_docvalues_string")).map(v -> v.toString()).orElse(null));
+		Optional.ofNullable((List<?>)doc.get("labels_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+			oSitePage.addLabels(SitePage.staticSetLabels(siteRequest, v.toString()));
+		});
 		oSitePage.setRelatedArticleIds(Optional.ofNullable(doc.get("relatedArticleIds_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oSitePage.setRelatedArticles(Optional.ofNullable(doc.get("relatedArticles_stored_string")).map(v -> v.toString()).orElse(null));
 
@@ -3216,6 +3432,10 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 				apiRequest.addVars("nextArticleIds");
 			if(!Objects.equals(nextArticles, original.getNextArticles()))
 				apiRequest.addVars("nextArticles");
+			if(!Objects.equals(labelsString, original.getLabelsString()))
+				apiRequest.addVars("labelsString");
+			if(!Objects.equals(labels, original.getLabels()))
+				apiRequest.addVars("labels");
 			if(!Objects.equals(relatedArticleIds, original.getRelatedArticleIds()))
 				apiRequest.addVars("relatedArticleIds");
 			if(!Objects.equals(relatedArticles, original.getRelatedArticles()))
@@ -3249,6 +3469,8 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 		sb.append(Optional.ofNullable(prerequisiteArticles).map(v -> "prerequisiteArticles: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(nextArticleIds).map(v -> "nextArticleIds: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(nextArticles).map(v -> "nextArticles: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(labelsString).map(v -> "labelsString: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(labels).map(v -> "labels: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(relatedArticleIds).map(v -> "relatedArticleIds: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(relatedArticles).map(v -> "relatedArticles: " + v + "\n").orElse(""));
 		return sb.toString();
@@ -3292,6 +3514,8 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 	public static final String VAR_nextArticleIds = "nextArticleIds";
 	public static final String VAR_nextArticleSearch = "nextArticleSearch";
 	public static final String VAR_nextArticles = "nextArticles";
+	public static final String VAR_labelsString = "labelsString";
+	public static final String VAR_labels = "labels";
 	public static final String VAR_relatedArticleIds = "relatedArticleIds";
 	public static final String VAR_relatedArticleSearch = "relatedArticleSearch";
 	public static final String VAR_relatedArticles = "relatedArticles";
@@ -3339,8 +3563,8 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 	public static final String DISPLAY_NAME_staticBaseUrl = "";
 	public static final String DISPLAY_NAME_staticPath = "";
 	public static final String DISPLAY_NAME_siteBaseUrl = "";
-	public static final String DISPLAY_NAME_courseNum = "Course Number";
-	public static final String DISPLAY_NAME_lessonNum = "Lesson Number";
+	public static final String DISPLAY_NAME_courseNum = "course number";
+	public static final String DISPLAY_NAME_lessonNum = "lesson number";
 	public static final String DISPLAY_NAME_name = "title";
 	public static final String DISPLAY_NAME_description = "description";
 	public static final String DISPLAY_NAME_authorName = "author name";
@@ -3359,6 +3583,8 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 	public static final String DISPLAY_NAME_nextArticleIds = "next article IDs";
 	public static final String DISPLAY_NAME_nextArticleSearch = "";
 	public static final String DISPLAY_NAME_nextArticles = "next articles";
+	public static final String DISPLAY_NAME_labelsString = "labels string";
+	public static final String DISPLAY_NAME_labels = "labels";
 	public static final String DISPLAY_NAME_relatedArticleIds = "related article IDs";
 	public static final String DISPLAY_NAME_relatedArticleSearch = "";
 	public static final String DISPLAY_NAME_relatedArticles = "related articles";
@@ -3390,12 +3616,12 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 
 	@Override
 	public String classStringFormatUrlEditPageForClass() {
-		return "%s/edit/article/%s";
+		return "%s/en-us/edit/article/%s";
 	}
 
 	@Override
 	public String classStringFormatUrlDisplayPageForClass() {
-		return "%s/view/article/%s";
+		return "%s/en-us/view/article/%s";
 	}
 
 	@Override
@@ -3475,6 +3701,10 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 			return DISPLAY_NAME_nextArticleSearch;
 		case VAR_nextArticles:
 			return DISPLAY_NAME_nextArticles;
+		case VAR_labelsString:
+			return DISPLAY_NAME_labelsString;
+		case VAR_labels:
+			return DISPLAY_NAME_labels;
 		case VAR_relatedArticleIds:
 			return DISPLAY_NAME_relatedArticleIds;
 		case VAR_relatedArticleSearch:
@@ -3526,6 +3756,10 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 			return "The next article IDs comma-separated. ";
 		case VAR_nextArticles:
 			return "A JSON array of next articles. ";
+		case VAR_labelsString:
+			return "The labels String for this article comma-separated. ";
+		case VAR_labels:
+			return "The labels for this article. ";
 		case VAR_relatedArticleIds:
 			return "The related article IDs comma-separated. ";
 		case VAR_relatedArticles:
@@ -3599,6 +3833,10 @@ public abstract class SitePageGen<DEV> extends BaseResult {
 			return "SearchList";
 		case VAR_nextArticles:
 			return "JsonArray";
+		case VAR_labelsString:
+			return "String";
+		case VAR_labels:
+			return "List";
 		case VAR_relatedArticleIds:
 			return "String";
 		case VAR_relatedArticleSearch:

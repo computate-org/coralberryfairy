@@ -22,7 +22,7 @@
 			<name>Users</name>
 			<subscribe>https://computate.topicbox.com/groups/computate</subscribe>
 			<unsubscribe>https://computate.topicbox.com/groups/computate</unsubscribe>
-			<post>mailto:coralberryfairy@computate.topicbox.com</post>
+			<post>mailto:coralberryfairy@group.computate.org</post>
 			<archive>https://computate.topicbox.com/groups/computate</archive>
 		</mailingList>
 	</mailingLists>
@@ -51,20 +51,6 @@
 		<url>http://github.com/computate-org/coralberryfairy/tree/master</url>
 	</scm>
 
-	<repositories>
-		<repository>
-			<id>redhat-ga</id>
-			<name>Red Hat GA</name>
-			<url>https://maven.repository.redhat.com/ga/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
@@ -89,7 +75,7 @@
 		<vertx-base.version>4.5.8</vertx-base.version>
 		<vertx.version>${vertx-base.version}</vertx.version>
 
-		<jinjava.version>2.7.2</jinjava.version>
+		<jinjava.version>2.8.1</jinjava.version>
 		<commons-text.version>1.10.0</commons-text.version>
 		<log4j.version>2.22.0</log4j.version>
 		<slf4j.version>2.0.9</slf4j.version>
