@@ -7,6 +7,12 @@ find \
   ~/.local/src/coralberryfairy/bin/ \
   ~/.local/src/coralberryfairy/src/main/java/com/coralberryfairy/site/config/ \
   ~/.local/src/coralberryfairy/src/main/java/com/coralberryfairy/site/model/BaseModel.java \
+  ~/.local/src/coralberryfairy/src/main/java/com/coralberryfairy/site/page/SitePageGenPage.java \
+  ~/.local/src/coralberryfairy/src/main/java/com/coralberryfairy/site/page/SitePageEnUSGenApiServiceImpl.java \
+  ~/.local/src/coralberryfairy/src/main/java/com/coralberryfairy/site/page/SitePageEnUSGenApiService.java \
+  ~/.local/src/coralberryfairy/src/main/java/com/coralberryfairy/site/model/doll/DollGenPage.java \
+  ~/.local/src/coralberryfairy/src/main/java/com/coralberryfairy/site/model/doll/DollEnUSGenApiServiceImpl.java \
+  ~/.local/src/coralberryfairy/src/main/java/com/coralberryfairy/site/model/doll/DollEnUSGenApiService.java \
   ~/.local/src/coralberryfairy/src/main/java/com/coralberryfairy/site/page/ \
   ~/.local/src/coralberryfairy/src/main/java/com/coralberryfairy/site/request/ \
   ~/.local/src/coralberryfairy/src/main/java/com/coralberryfairy/site/result/ \
@@ -18,5 +24,19 @@ find \
   ~/.local/src/coralberryfairy-static/webawesome/css/ \
   ~/.local/src/coralberryfairy-static/webawesome/fiware/ \
   ~/.local/src/coralberryfairy-static/webawesome/js/ \
-  -type f -exec wc -l {} +
+    ~/.local/src/coralberryfairy-static/webawesome/templates/en-us/edit/article/SitePageGenEditPage.htm \
+      ~/.local/src/coralberryfairy-static/webawesome/templates/en-us/search/article/SitePageGenSearchPage.htm \
+      ~/.local/src/coralberryfairy-static/webawesome/templates/en-us/search/article/SitePageLocation.htm \
+      ~/.local/src/coralberryfairy-static/webawesome/templates/en-us/search/article/SitePagePaginationButtons.htm \
+      ~/.local/src/coralberryfairy-static/webawesome/templates/en-us/search/article/SitePageSearchButtons.htm \
+      ~/.local/src/coralberryfairy-static/webawesome/templates/en-us/search/article/SitePageSearchForm.htm \
+      ~/.local/src/coralberryfairy-static/webawesome/templates/en-us/search/article/SitePageSidebar.htm \
+      ~/.local/src/coralberryfairy-static/webawesome/templates/edit/doll/DollGenEditPage.htm \
+      ~/.local/src/coralberryfairy-static/webawesome/templates/search/doll/DollGenSearchPage.htm \
+      ~/.local/src/coralberryfairy-static/webawesome/templates/search/doll/DollLocation.htm \
+      ~/.local/src/coralberryfairy-static/webawesome/templates/search/doll/DollPaginationButtons.htm \
+      ~/.local/src/coralberryfairy-static/webawesome/templates/search/doll/DollSearchButtons.htm \
+      ~/.local/src/coralberryfairy-static/webawesome/templates/search/doll/DollSearchForm.htm \
+      ~/.local/src/coralberryfairy-static/webawesome/templates/search/doll/DollSidebar.htm \
+    -type f -exec wc -l {} +
 echo AI generated
