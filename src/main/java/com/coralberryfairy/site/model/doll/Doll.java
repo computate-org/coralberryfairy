@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.computate.search.wrap.Wrap;
 import org.computate.vertx.config.ComputateConfigKeys;
@@ -66,7 +67,7 @@ public class Doll extends DollGen<BaseResult> {
    * DisplayName: name
    * Description: A descriptive name for the doll
    * HtmRow: 3
-	 * HtmRowTitleOpen: Doll information
+   * HtmRowTitleOpen: Doll information
    * HtmCell: 1
    * HtmColumn: 1
    * Facet: true
@@ -103,43 +104,43 @@ public class Doll extends DollGen<BaseResult> {
   protected void _price(Wrap<BigDecimal> w) {
   }
 
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * HtmRowTitleOpen: Useful URLs
-	 * HtmRow: 99
-	 * HtmCell: 1
-	 * Facet: true
-	 * DisplayName: Page ID
-	 * Description: The ID for this page. 
-	 * VarId: true
-	 */
-	protected void _pageId(Wrap<String> w) {
-		w.o(toId(name));
-	}
+  /**
+   * {@inheritDoc}
+   * DocValues: true
+   * Persist: true
+   * HtmRowTitleOpen: Useful URLs
+   * HtmRow: 99
+   * HtmCell: 1
+   * Facet: true
+   * DisplayName: Page ID
+   * Description: The ID for this page. 
+   * VarId: true
+   */
+  protected void _pageId(Wrap<String> w) {
+    w.o(toId(name));
+  }
 
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * Facet: true
-	 * DisplayName: resource URI
-	 * Description: The resource relative URI for this page. 
-	 */
-	protected void _resourceUri(Wrap<String> w) {
-	}
+  /**
+   * {@inheritDoc}
+   * DocValues: true
+   * Persist: true
+   * Facet: true
+   * DisplayName: resource URI
+   * Description: The resource relative URI for this page. 
+   */
+  protected void _resourceUri(Wrap<String> w) {
+  }
 
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * Facet: true
-	 * DisplayName: template URI
-	 * Description: The template relative URI for this page. 
-	 */
-	protected void _templateUri(Wrap<String> w) {
-	}
+  /**
+   * {@inheritDoc}
+   * DocValues: true
+   * Persist: true
+   * Facet: true
+   * DisplayName: template URI
+   * Description: The template relative URI for this page. 
+   */
+  protected void _templateUri(Wrap<String> w) {
+  }
 
   /**
    * {@inheritDoc}
@@ -197,89 +198,93 @@ public class Doll extends DollGen<BaseResult> {
   protected void _pageImageAlt(Wrap<String> c) {
   }
 
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * Facet: true
-	 * DisplayName: email template
-	 * Description: The HTML email template for this product. 
-	 */
-	protected void _emailTemplate(Wrap<String> w) {
-	}
+  /**
+   * {@inheritDoc}
+   * DocValues: true
+   * Persist: true
+   * Facet: true
+   * DisplayName: email template
+   * Description: The HTML email template for this product. 
+   */
+  protected void _emailTemplate(Wrap<String> w) {
+  }
 
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * Facet: true
-	 * DisplayName: store URL
-	 * Description: The store URL for this page. 
-	 */
-	protected void _storeUrl(Wrap<String> w) {
-	}
+  /**
+   * {@inheritDoc}
+   * DocValues: true
+   * Persist: true
+   * Facet: true
+   * DisplayName: Instagram URL
+   * Description: The Instagram URL for this page. 
+   */
+  protected void _instagramUrl(Wrap<String> w) {
+  }
 
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * Facet: true
-	 * DisplayName: Instagram URL
-	 * Description: The Instagram URL for this page. 
-	 */
-	protected void _instagramUrl(Wrap<String> w) {
-	}
+  /**
+   * {@inheritDoc}
+   * DocValues: true
+   * Persist: true
+   * Facet: true
+   * DisplayName: Space-separated Instagram hashtags
+   * Description: The Instagram hashtags for this doll as space-separated hashtags
+   */
+  protected void _hashtags(Wrap<String> w) {
+  }
 
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * Facet: true
-	 * DisplayName: Space-separated Instagram hashtags
-	 * Description: The Instagram hashtags for this doll as space-separated hashtags
-	 */
-	protected void _hashtags(Wrap<String> w) {
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * Facet: true
-	 * DisplayName: List of Instagram hashtag names
-	 * Description: List of the Instagram hashtag names for this doll
-	 */
-	protected void _hashtagsList(List<String> l) {
-		if (hashtags != null) {
+  /**
+   * {@inheritDoc}
+   * DocValues: true
+   * Persist: true
+   * Facet: true
+   * DisplayName: List of Instagram hashtag names
+   * Description: List of the Instagram hashtag names for this doll
+   */
+  protected void _hashtagsList(List<String> l) {
+    if (hashtags != null) {
       l.addAll(Arrays.stream(hashtags.split(" ")).map(s -> s.replace("#", "")).collect(Collectors.toList()));
-		}
-	}
+    }
+  }
 
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * DisplayName: title
-	 * Description: The title of this page. 
-	 * UrlVar: pageUrlId
-	 */
-	protected void _title(Wrap<String> w) {
-		w.o(name);
-	}
+  /**
+   * {@inheritDoc}
+   * DocValues: true
+   * Persist: true
+   * DisplayName: title
+   * Description: The title of this page. 
+   * UrlVar: pageUrlId
+   */
+  protected void _title(Wrap<String> w) {
+    w.o(name);
+  }
 
-	/**
-	 * {@inheritDoc}
-	 * DocValues: true
-	 * Persist: true
-	 * Facet: true
-	 * DisplayName: Product Number
-	 * Description: The product number for this page. 
-	 */
-	protected void _productNum(Wrap<Integer> w) {
-	}
+  @Override
+  public String idForClass() {
+    return pageId;
+  }
 
-	@Override
-	public String idForClass() {
-		return pageId;
-	}
+  /**
+   * {@inheritDoc}
+   * DocValues: true
+   * Persist: true
+   * DisplayName: labels string
+   * Description: The labels String for this article comma-separated. 
+   */
+  protected void _labelsString(Wrap<String> w) {
+  }
+
+  /**
+   * {@inheritDoc}
+   * DocValues: true
+   * Persist: true
+   * DisplayName: labels
+   * Description: The labels for this article. 
+   * HtmRow: 5
+   * HtmCell: 2
+   * Facet: true
+   */
+  protected void _labels(List<String> l) {
+    if(labelsString != null) {
+      l.addAll(Arrays.asList(StringUtils.split(labelsString, ",")).stream().map(id -> id.trim()).collect(Collectors.toList()));
+    }
+  }
 }

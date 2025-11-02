@@ -930,62 +930,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 		return emailTemplate;
 	}
 
-	//////////////
-	// storeUrl //
-	//////////////
-
-
-	/**	 The entity storeUrl
-	 *	 is defined as null before being initialized. 
-	 */
-	@JsonProperty
-	@JsonInclude(Include.NON_NULL)
-	protected String storeUrl;
-
-	/**	<br> The entity storeUrl
-	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.doll.Doll&fq=entiteVar_enUS_indexed_string:storeUrl">Find the entity storeUrl in Solr</a>
-	 * <br>
-	 * @param w is for wrapping a value to assign to this entity during initialization. 
-	 **/
-	protected abstract void _storeUrl(Wrap<String> w);
-
-	public String getStoreUrl() {
-		return storeUrl;
-	}
-	public void setStoreUrl(String o) {
-		this.storeUrl = Doll.staticSetStoreUrl(siteRequest_, o);
-	}
-	public static String staticSetStoreUrl(SiteRequest siteRequest_, String o) {
-		return o;
-	}
-	protected Doll storeUrlInit() {
-		Wrap<String> storeUrlWrap = new Wrap<String>().var("storeUrl");
-		if(storeUrl == null) {
-			_storeUrl(storeUrlWrap);
-			Optional.ofNullable(storeUrlWrap.getO()).ifPresent(o -> {
-				setStoreUrl(o);
-			});
-		}
-		return (Doll)this;
-	}
-
-	public static String staticSearchStoreUrl(SiteRequest siteRequest_, String o) {
-		return o;
-	}
-
-	public static String staticSearchStrStoreUrl(SiteRequest siteRequest_, String o) {
-		return o == null ? null : o.toString();
-	}
-
-	public static String staticSearchFqStoreUrl(SiteRequest siteRequest_, String o) {
-		return Doll.staticSearchStoreUrl(siteRequest_, Doll.staticSetStoreUrl(siteRequest_, o)).toString();
-	}
-
-	public String sqlStoreUrl() {
-		return storeUrl;
-	}
-
 	//////////////////
 	// instagramUrl //
 	//////////////////
@@ -1233,68 +1177,139 @@ public abstract class DollGen<DEV> extends BaseResult {
 		return title;
 	}
 
-	////////////////
-	// productNum //
-	////////////////
+	//////////////////
+	// labelsString //
+	//////////////////
 
 
-	/**	 The entity productNum
+	/**	 The entity labelsString
 	 *	 is defined as null before being initialized. 
 	 */
 	@JsonProperty
-	@JsonSerialize(using = ToStringSerializer.class)
 	@JsonInclude(Include.NON_NULL)
-	protected Integer productNum;
+	protected String labelsString;
 
-	/**	<br> The entity productNum
+	/**	<br> The entity labelsString
 	 *  is defined as null before being initialized. 
-	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.doll.Doll&fq=entiteVar_enUS_indexed_string:productNum">Find the entity productNum in Solr</a>
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.doll.Doll&fq=entiteVar_enUS_indexed_string:labelsString">Find the entity labelsString in Solr</a>
 	 * <br>
 	 * @param w is for wrapping a value to assign to this entity during initialization. 
 	 **/
-	protected abstract void _productNum(Wrap<Integer> w);
+	protected abstract void _labelsString(Wrap<String> w);
 
-	public Integer getProductNum() {
-		return productNum;
+	public String getLabelsString() {
+		return labelsString;
 	}
-
-	public void setProductNum(Integer productNum) {
-		this.productNum = productNum;
+	public void setLabelsString(String o) {
+		this.labelsString = Doll.staticSetLabelsString(siteRequest_, o);
 	}
-	@JsonIgnore
-	public void setProductNum(String o) {
-		this.productNum = Doll.staticSetProductNum(siteRequest_, o);
+	public static String staticSetLabelsString(SiteRequest siteRequest_, String o) {
+		return o;
 	}
-	public static Integer staticSetProductNum(SiteRequest siteRequest_, String o) {
-		if(NumberUtils.isParsable(o))
-			return Integer.parseInt(o);
-		return null;
-	}
-	protected Doll productNumInit() {
-		Wrap<Integer> productNumWrap = new Wrap<Integer>().var("productNum");
-		if(productNum == null) {
-			_productNum(productNumWrap);
-			Optional.ofNullable(productNumWrap.getO()).ifPresent(o -> {
-				setProductNum(o);
+	protected Doll labelsStringInit() {
+		Wrap<String> labelsStringWrap = new Wrap<String>().var("labelsString");
+		if(labelsString == null) {
+			_labelsString(labelsStringWrap);
+			Optional.ofNullable(labelsStringWrap.getO()).ifPresent(o -> {
+				setLabelsString(o);
 			});
 		}
 		return (Doll)this;
 	}
 
-	public static Integer staticSearchProductNum(SiteRequest siteRequest_, Integer o) {
+	public static String staticSearchLabelsString(SiteRequest siteRequest_, String o) {
 		return o;
 	}
 
-	public static String staticSearchStrProductNum(SiteRequest siteRequest_, Integer o) {
+	public static String staticSearchStrLabelsString(SiteRequest siteRequest_, String o) {
 		return o == null ? null : o.toString();
 	}
 
-	public static String staticSearchFqProductNum(SiteRequest siteRequest_, String o) {
-		return Doll.staticSearchProductNum(siteRequest_, Doll.staticSetProductNum(siteRequest_, o)).toString();
+	public static String staticSearchFqLabelsString(SiteRequest siteRequest_, String o) {
+		return Doll.staticSearchLabelsString(siteRequest_, Doll.staticSetLabelsString(siteRequest_, o)).toString();
 	}
 
-	public Integer sqlProductNum() {
-		return productNum;
+	public String sqlLabelsString() {
+		return labelsString;
+	}
+
+	////////////
+	// labels //
+	////////////
+
+
+	/**	 The entity labels
+	 *	 It is constructed before being initialized with the constructor by default. 
+	 */
+	@JsonProperty
+	@JsonFormat(shape = JsonFormat.Shape.ARRAY)
+	@JsonInclude(Include.NON_NULL)
+	protected List<String> labels = new ArrayList<String>();
+
+	/**	<br> The entity labels
+	 *  It is constructed before being initialized with the constructor by default. 
+	 * <br><a href="https://solr.apps-crc.testing/solr/#/computate/query?q=*:*&fq=partEstEntite_indexed_boolean:true&fq=classeNomCanonique_enUS_indexed_string:com.coralberryfairy.site.model.doll.Doll&fq=entiteVar_enUS_indexed_string:labels">Find the entity labels in Solr</a>
+	 * <br>
+	 * @param l is the entity already constructed. 
+	 **/
+	protected abstract void _labels(List<String> l);
+
+	public List<String> getLabels() {
+		return labels;
+	}
+
+	public void setLabels(List<String> labels) {
+		this.labels = labels;
+	}
+	@JsonIgnore
+	public void setLabels(String o) {
+		String l = Doll.staticSetLabels(siteRequest_, o);
+		if(l != null)
+			addLabels(l);
+	}
+	public static String staticSetLabels(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+	public Doll addLabels(String...objects) {
+		for(String o : objects) {
+			addLabels(o);
+		}
+		return (Doll)this;
+	}
+	public Doll addLabels(String o) {
+		if(o != null)
+			this.labels.add(o);
+		return (Doll)this;
+	}
+	@JsonIgnore
+	public void setLabels(JsonArray objects) {
+		labels.clear();
+		if(objects == null)
+			return;
+		for(int i = 0; i < objects.size(); i++) {
+			String o = objects.getString(i);
+			addLabels(o);
+		}
+	}
+	protected Doll labelsInit() {
+		_labels(labels);
+		return (Doll)this;
+	}
+
+	public static String staticSearchLabels(SiteRequest siteRequest_, String o) {
+		return o;
+	}
+
+	public static String staticSearchStrLabels(SiteRequest siteRequest_, String o) {
+		return o == null ? null : o.toString();
+	}
+
+	public static String staticSearchFqLabels(SiteRequest siteRequest_, String o) {
+		return Doll.staticSearchLabels(siteRequest_, Doll.staticSetLabels(siteRequest_, o)).toString();
+	}
+
+	public String[] sqlLabels() {
+		return labels.stream().map(v -> (String)v).toArray(String[]::new);
 	}
 
 	//////////////
@@ -1338,12 +1353,12 @@ public abstract class DollGen<DEV> extends BaseResult {
 				pageImageTypeInit();
 				pageImageAltInit();
 				emailTemplateInit();
-				storeUrlInit();
 				instagramUrlInit();
 				hashtagsInit();
 				hashtagsListInit();
 				titleInit();
-				productNumInit();
+				labelsStringInit();
+				labelsInit();
 				promise2.complete();
 			} catch(Exception ex) {
 				promise2.fail(ex);
@@ -1421,8 +1436,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 				return oDoll.pageImageAlt;
 			case "emailTemplate":
 				return oDoll.emailTemplate;
-			case "storeUrl":
-				return oDoll.storeUrl;
 			case "instagramUrl":
 				return oDoll.instagramUrl;
 			case "hashtags":
@@ -1431,8 +1444,10 @@ public abstract class DollGen<DEV> extends BaseResult {
 				return oDoll.hashtagsList;
 			case "title":
 				return oDoll.title;
-			case "productNum":
-				return oDoll.productNum;
+			case "labelsString":
+				return oDoll.labelsString;
+			case "labels":
+				return oDoll.labels;
 			default:
 				return super.obtainBaseResult(var);
 		}
@@ -1496,8 +1511,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return Doll.staticSetPageImageAlt(siteRequest_, v);
 		case "emailTemplate":
 			return Doll.staticSetEmailTemplate(siteRequest_, v);
-		case "storeUrl":
-			return Doll.staticSetStoreUrl(siteRequest_, v);
 		case "instagramUrl":
 			return Doll.staticSetInstagramUrl(siteRequest_, v);
 		case "hashtags":
@@ -1506,8 +1519,10 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return Doll.staticSetHashtagsList(siteRequest_, v);
 		case "title":
 			return Doll.staticSetTitle(siteRequest_, v);
-		case "productNum":
-			return Doll.staticSetProductNum(siteRequest_, v);
+		case "labelsString":
+			return Doll.staticSetLabelsString(siteRequest_, v);
+		case "labels":
+			return Doll.staticSetLabels(siteRequest_, v);
 			default:
 				return BaseResult.staticSetBaseResult(entityVar,  siteRequest_, v, o);
 		}
@@ -1546,8 +1561,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return Doll.staticSearchPageImageAlt(siteRequest_, (String)o);
 		case "emailTemplate":
 			return Doll.staticSearchEmailTemplate(siteRequest_, (String)o);
-		case "storeUrl":
-			return Doll.staticSearchStoreUrl(siteRequest_, (String)o);
 		case "instagramUrl":
 			return Doll.staticSearchInstagramUrl(siteRequest_, (String)o);
 		case "hashtags":
@@ -1556,8 +1569,10 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return Doll.staticSearchHashtagsList(siteRequest_, (String)o);
 		case "title":
 			return Doll.staticSearchTitle(siteRequest_, (String)o);
-		case "productNum":
-			return Doll.staticSearchProductNum(siteRequest_, (Integer)o);
+		case "labelsString":
+			return Doll.staticSearchLabelsString(siteRequest_, (String)o);
+		case "labels":
+			return Doll.staticSearchLabels(siteRequest_, (String)o);
 			default:
 				return BaseResult.staticSearchBaseResult(entityVar,  siteRequest_, o);
 		}
@@ -1596,8 +1611,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return Doll.staticSearchStrPageImageAlt(siteRequest_, (String)o);
 		case "emailTemplate":
 			return Doll.staticSearchStrEmailTemplate(siteRequest_, (String)o);
-		case "storeUrl":
-			return Doll.staticSearchStrStoreUrl(siteRequest_, (String)o);
 		case "instagramUrl":
 			return Doll.staticSearchStrInstagramUrl(siteRequest_, (String)o);
 		case "hashtags":
@@ -1606,8 +1619,10 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return Doll.staticSearchStrHashtagsList(siteRequest_, (String)o);
 		case "title":
 			return Doll.staticSearchStrTitle(siteRequest_, (String)o);
-		case "productNum":
-			return Doll.staticSearchStrProductNum(siteRequest_, (Integer)o);
+		case "labelsString":
+			return Doll.staticSearchStrLabelsString(siteRequest_, (String)o);
+		case "labels":
+			return Doll.staticSearchStrLabels(siteRequest_, (String)o);
 			default:
 				return BaseResult.staticSearchStrBaseResult(entityVar,  siteRequest_, o);
 		}
@@ -1646,8 +1661,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return Doll.staticSearchFqPageImageAlt(siteRequest_, o);
 		case "emailTemplate":
 			return Doll.staticSearchFqEmailTemplate(siteRequest_, o);
-		case "storeUrl":
-			return Doll.staticSearchFqStoreUrl(siteRequest_, o);
 		case "instagramUrl":
 			return Doll.staticSearchFqInstagramUrl(siteRequest_, o);
 		case "hashtags":
@@ -1656,8 +1669,10 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return Doll.staticSearchFqHashtagsList(siteRequest_, o);
 		case "title":
 			return Doll.staticSearchFqTitle(siteRequest_, o);
-		case "productNum":
-			return Doll.staticSearchFqProductNum(siteRequest_, o);
+		case "labelsString":
+			return Doll.staticSearchFqLabelsString(siteRequest_, o);
+		case "labels":
+			return Doll.staticSearchFqLabels(siteRequest_, o);
 			default:
 				return BaseResult.staticSearchFqBaseResult(entityVar,  siteRequest_, o);
 		}
@@ -1740,12 +1755,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 				}
 				saves.add("emailTemplate");
 				return val;
-			} else if("storeurl".equals(varLower)) {
-				if(val instanceof String) {
-					setStoreUrl((String)val);
-				}
-				saves.add("storeUrl");
-				return val;
 			} else if("instagramurl".equals(varLower)) {
 				if(val instanceof String) {
 					setInstagramUrl((String)val);
@@ -1776,13 +1785,23 @@ public abstract class DollGen<DEV> extends BaseResult {
 				}
 				saves.add("title");
 				return val;
-			} else if("productnum".equals(varLower)) {
-				if(val instanceof Integer) {
-					setProductNum((Integer)val);
-				} else {
-					setProductNum(val == null ? null : val.toString());
+			} else if("labelsstring".equals(varLower)) {
+				if(val instanceof String) {
+					setLabelsString((String)val);
 				}
-				saves.add("productNum");
+				saves.add("labelsString");
+				return val;
+			} else if("labels".equals(varLower)) {
+				if(val instanceof List<?>) {
+					((List<String>)val).stream().forEach(v -> addLabels(v));
+				} else if(val instanceof String[]) {
+					Arrays.asList((String[])val).stream().forEach(v -> addLabels((String)v));
+				} else if(val instanceof JsonArray) {
+					((JsonArray)val).stream().forEach(v -> addLabels(staticSetLabels(siteRequest_, v.toString())));
+				}
+				if(!saves.contains("labels")) {
+					saves.add("labels");
+				}
 				return val;
 		} else {
 			return super.persistBaseResult(var, val);
@@ -1873,12 +1892,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 					oDoll.setEmailTemplate(emailTemplate);
 			}
 
-			if(saves.contains("storeUrl")) {
-				String storeUrl = (String)doc.get("storeUrl_docvalues_string");
-				if(storeUrl != null)
-					oDoll.setStoreUrl(storeUrl);
-			}
-
 			if(saves.contains("instagramUrl")) {
 				String instagramUrl = (String)doc.get("instagramUrl_docvalues_string");
 				if(instagramUrl != null)
@@ -1906,10 +1919,19 @@ public abstract class DollGen<DEV> extends BaseResult {
 					oDoll.setTitle(title);
 			}
 
-			if(saves.contains("productNum")) {
-				Integer productNum = (Integer)doc.get("productNum_docvalues_int");
-				if(productNum != null)
-					oDoll.setProductNum(productNum);
+			if(saves.contains("labelsString")) {
+				String labelsString = (String)doc.get("labelsString_docvalues_string");
+				if(labelsString != null)
+					oDoll.setLabelsString(labelsString);
+			}
+
+			if(saves.contains("labels")) {
+				List<String> labels = (List<String>)doc.get("labels_docvalues_strings");
+				if(labels != null) {
+					labels.stream().forEach( v -> {
+						oDoll.labels.add(Doll.staticSetLabels(siteRequest_, v));
+					});
+				}
 			}
 		}
 
@@ -1953,9 +1975,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 		if(emailTemplate != null) {
 			doc.put("emailTemplate_docvalues_string", emailTemplate);
 		}
-		if(storeUrl != null) {
-			doc.put("storeUrl_docvalues_string", storeUrl);
-		}
 		if(instagramUrl != null) {
 			doc.put("instagramUrl_docvalues_string", instagramUrl);
 		}
@@ -1972,8 +1991,15 @@ public abstract class DollGen<DEV> extends BaseResult {
 		if(title != null) {
 			doc.put("title_docvalues_string", title);
 		}
-		if(productNum != null) {
-			doc.put("productNum_docvalues_int", productNum);
+		if(labelsString != null) {
+			doc.put("labelsString_docvalues_string", labelsString);
+		}
+		if(labels != null) {
+			JsonArray l = new JsonArray();
+			doc.put("labels_docvalues_strings", l);
+			for(String o : labels) {
+				l.add(Doll.staticSearchLabels(siteRequest_, o));
+			}
 		}
 		super.indexBaseResult(doc);
 
@@ -2005,8 +2031,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 				return "pageImageAlt_docvalues_string";
 			case "emailTemplate":
 				return "emailTemplate_docvalues_string";
-			case "storeUrl":
-				return "storeUrl_docvalues_string";
 			case "instagramUrl":
 				return "instagramUrl_docvalues_string";
 			case "hashtags":
@@ -2015,8 +2039,10 @@ public abstract class DollGen<DEV> extends BaseResult {
 				return "hashtagsList_docvalues_strings";
 			case "title":
 				return "title_docvalues_string";
-			case "productNum":
-				return "productNum_docvalues_int";
+			case "labelsString":
+				return "labelsString_docvalues_string";
+			case "labels":
+				return "labels_docvalues_strings";
 			default:
 				return BaseResult.varStoredBaseResult(entityVar);
 		}
@@ -2048,8 +2074,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 				return "pageImageAlt_docvalues_string";
 			case "emailTemplate":
 				return "emailTemplate_docvalues_string";
-			case "storeUrl":
-				return "storeUrl_docvalues_string";
 			case "instagramUrl":
 				return "instagramUrl_docvalues_string";
 			case "hashtags":
@@ -2058,8 +2082,10 @@ public abstract class DollGen<DEV> extends BaseResult {
 				return "hashtagsList_docvalues_strings";
 			case "title":
 				return "title_docvalues_string";
-			case "productNum":
-				return "productNum_docvalues_int";
+			case "labelsString":
+				return "labelsString_docvalues_string";
+			case "labels":
+				return "labels_docvalues_strings";
 			default:
 				return BaseResult.varIndexedBaseResult(entityVar);
 		}
@@ -2091,8 +2117,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 				return "pageImageAlt";
 			case "emailTemplate_docvalues_string":
 				return "emailTemplate";
-			case "storeUrl_docvalues_string":
-				return "storeUrl";
 			case "instagramUrl_docvalues_string":
 				return "instagramUrl";
 			case "hashtags_docvalues_string":
@@ -2101,8 +2125,10 @@ public abstract class DollGen<DEV> extends BaseResult {
 				return "hashtagsList";
 			case "title_docvalues_string":
 				return "title";
-			case "productNum_docvalues_int":
-				return "productNum";
+			case "labelsString_docvalues_string":
+				return "labelsString";
+			case "labels_docvalues_strings":
+				return "labels";
 			default:
 				return BaseResult.searchVarBaseResult(searchVar);
 		}
@@ -2145,14 +2171,16 @@ public abstract class DollGen<DEV> extends BaseResult {
 		oDoll.setPageImageType(Optional.ofNullable(doc.get("pageImageType_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oDoll.setPageImageAlt(Optional.ofNullable(doc.get("pageImageAlt_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oDoll.setEmailTemplate(Optional.ofNullable(doc.get("emailTemplate_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oDoll.setStoreUrl(Optional.ofNullable(doc.get("storeUrl_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oDoll.setInstagramUrl(Optional.ofNullable(doc.get("instagramUrl_docvalues_string")).map(v -> v.toString()).orElse(null));
 		oDoll.setHashtags(Optional.ofNullable(doc.get("hashtags_docvalues_string")).map(v -> v.toString()).orElse(null));
 		Optional.ofNullable((List<?>)doc.get("hashtagsList_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
 			oDoll.addHashtagsList(Doll.staticSetHashtagsList(siteRequest, v.toString()));
 		});
 		oDoll.setTitle(Optional.ofNullable(doc.get("title_docvalues_string")).map(v -> v.toString()).orElse(null));
-		oDoll.setProductNum(Optional.ofNullable(doc.get("productNum_docvalues_int")).map(v -> v.toString()).orElse(null));
+		oDoll.setLabelsString(Optional.ofNullable(doc.get("labelsString_docvalues_string")).map(v -> v.toString()).orElse(null));
+		Optional.ofNullable((List<?>)doc.get("labels_docvalues_strings")).orElse(Arrays.asList()).stream().filter(v -> v != null).forEach(v -> {
+			oDoll.addLabels(Doll.staticSetLabels(siteRequest, v.toString()));
+		});
 
 		super.storeBaseResult(doc);
 	}
@@ -2190,8 +2218,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 				apiRequest.addVars("pageImageAlt");
 			if(!Objects.equals(emailTemplate, original.getEmailTemplate()))
 				apiRequest.addVars("emailTemplate");
-			if(!Objects.equals(storeUrl, original.getStoreUrl()))
-				apiRequest.addVars("storeUrl");
 			if(!Objects.equals(instagramUrl, original.getInstagramUrl()))
 				apiRequest.addVars("instagramUrl");
 			if(!Objects.equals(hashtags, original.getHashtags()))
@@ -2200,8 +2226,10 @@ public abstract class DollGen<DEV> extends BaseResult {
 				apiRequest.addVars("hashtagsList");
 			if(!Objects.equals(title, original.getTitle()))
 				apiRequest.addVars("title");
-			if(!Objects.equals(productNum, original.getProductNum()))
-				apiRequest.addVars("productNum");
+			if(!Objects.equals(labelsString, original.getLabelsString()))
+				apiRequest.addVars("labelsString");
+			if(!Objects.equals(labels, original.getLabels()))
+				apiRequest.addVars("labels");
 			super.apiRequestBaseResult();
 		}
 	}
@@ -2225,12 +2253,12 @@ public abstract class DollGen<DEV> extends BaseResult {
 		sb.append(Optional.ofNullable(pageImageType).map(v -> "pageImageType: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(pageImageAlt).map(v -> "pageImageAlt: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(emailTemplate).map(v -> "emailTemplate: \"" + v + "\"\n" ).orElse(""));
-		sb.append(Optional.ofNullable(storeUrl).map(v -> "storeUrl: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(instagramUrl).map(v -> "instagramUrl: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(hashtags).map(v -> "hashtags: \"" + v + "\"\n" ).orElse(""));
 		sb.append(Optional.ofNullable(hashtagsList).map(v -> "hashtagsList: " + v + "\n").orElse(""));
 		sb.append(Optional.ofNullable(title).map(v -> "title: \"" + v + "\"\n" ).orElse(""));
-		sb.append(Optional.ofNullable(productNum).map(v -> "productNum: " + v + "\n").orElse(""));
+		sb.append(Optional.ofNullable(labelsString).map(v -> "labelsString: \"" + v + "\"\n" ).orElse(""));
+		sb.append(Optional.ofNullable(labels).map(v -> "labels: " + v + "\n").orElse(""));
 		return sb.toString();
 	}
 
@@ -2253,12 +2281,12 @@ public abstract class DollGen<DEV> extends BaseResult {
 	public static final String VAR_pageImageType = "pageImageType";
 	public static final String VAR_pageImageAlt = "pageImageAlt";
 	public static final String VAR_emailTemplate = "emailTemplate";
-	public static final String VAR_storeUrl = "storeUrl";
 	public static final String VAR_instagramUrl = "instagramUrl";
 	public static final String VAR_hashtags = "hashtags";
 	public static final String VAR_hashtagsList = "hashtagsList";
 	public static final String VAR_title = "title";
-	public static final String VAR_productNum = "productNum";
+	public static final String VAR_labelsString = "labelsString";
+	public static final String VAR_labels = "labels";
 
 	public static List<String> varsQForClass() {
 		return Doll.varsQDoll(new ArrayList<String>());
@@ -2280,11 +2308,10 @@ public abstract class DollGen<DEV> extends BaseResult {
 		vars.add(VAR_templateUri);
 		vars.add(VAR_pageImageUri);
 		vars.add(VAR_emailTemplate);
-		vars.add(VAR_storeUrl);
 		vars.add(VAR_instagramUrl);
 		vars.add(VAR_hashtags);
 		vars.add(VAR_hashtagsList);
-		vars.add(VAR_productNum);
+		vars.add(VAR_labels);
 		BaseResult.varsFqBaseResult(vars);
 		return vars;
 	}
@@ -2294,7 +2321,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 	}
 	public static List<String> varsRangeDoll(List<String> vars) {
 		vars.add(VAR_price);
-		vars.add(VAR_productNum);
 		BaseResult.varsRangeBaseResult(vars);
 		return vars;
 	}
@@ -2311,12 +2337,12 @@ public abstract class DollGen<DEV> extends BaseResult {
 	public static final String DISPLAY_NAME_pageImageType = "";
 	public static final String DISPLAY_NAME_pageImageAlt = "";
 	public static final String DISPLAY_NAME_emailTemplate = "email template";
-	public static final String DISPLAY_NAME_storeUrl = "store URL";
 	public static final String DISPLAY_NAME_instagramUrl = "Instagram URL";
 	public static final String DISPLAY_NAME_hashtags = "Space-separated Instagram hashtags";
 	public static final String DISPLAY_NAME_hashtagsList = "List of Instagram hashtag names";
 	public static final String DISPLAY_NAME_title = "title";
-	public static final String DISPLAY_NAME_productNum = "Product Number";
+	public static final String DISPLAY_NAME_labelsString = "labels string";
+	public static final String DISPLAY_NAME_labels = "labels";
 
 	@Override
 	public String idForClass() {
@@ -2392,8 +2418,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return DISPLAY_NAME_pageImageAlt;
 		case VAR_emailTemplate:
 			return DISPLAY_NAME_emailTemplate;
-		case VAR_storeUrl:
-			return DISPLAY_NAME_storeUrl;
 		case VAR_instagramUrl:
 			return DISPLAY_NAME_instagramUrl;
 		case VAR_hashtags:
@@ -2402,8 +2426,10 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return DISPLAY_NAME_hashtagsList;
 		case VAR_title:
 			return DISPLAY_NAME_title;
-		case VAR_productNum:
-			return DISPLAY_NAME_productNum;
+		case VAR_labelsString:
+			return DISPLAY_NAME_labelsString;
+		case VAR_labels:
+			return DISPLAY_NAME_labels;
 		default:
 			return BaseResult.displayNameBaseResult(var);
 		}
@@ -2437,8 +2463,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return "The image accessibility text. ";
 		case VAR_emailTemplate:
 			return "The HTML email template for this product. ";
-		case VAR_storeUrl:
-			return "The store URL for this page. ";
 		case VAR_instagramUrl:
 			return "The Instagram URL for this page. ";
 		case VAR_hashtags:
@@ -2447,8 +2471,10 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return "List of the Instagram hashtag names for this doll";
 		case VAR_title:
 			return "The title of this page. ";
-		case VAR_productNum:
-			return "The product number for this page. ";
+		case VAR_labelsString:
+			return "The labels String for this article comma-separated. ";
+		case VAR_labels:
+			return "The labels for this article. ";
 			default:
 				return BaseResult.descriptionBaseResult(var);
 		}
@@ -2480,8 +2506,6 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return "String";
 		case VAR_emailTemplate:
 			return "String";
-		case VAR_storeUrl:
-			return "String";
 		case VAR_instagramUrl:
 			return "String";
 		case VAR_hashtags:
@@ -2490,8 +2514,10 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return "List";
 		case VAR_title:
 			return "String";
-		case VAR_productNum:
-			return "Integer";
+		case VAR_labelsString:
+			return "String";
+		case VAR_labels:
+			return "List";
 			default:
 				return BaseResult.classSimpleNameBaseResult(var);
 		}
@@ -2520,6 +2546,8 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return 99;
 		case VAR_pageImageUri:
 			return 4;
+		case VAR_labels:
+			return 5;
 			default:
 				return BaseResult.htmRowBaseResult(var);
 		}
@@ -2537,6 +2565,8 @@ public abstract class DollGen<DEV> extends BaseResult {
 			return 1;
 		case VAR_pageImageUri:
 			return 1;
+		case VAR_labels:
+			return 2;
 			default:
 				return BaseResult.htmCellBaseResult(var);
 		}
