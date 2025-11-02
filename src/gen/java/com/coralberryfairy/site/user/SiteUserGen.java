@@ -90,8 +90,8 @@ import org.computate.search.response.solr.SolrResponse;
  * <h2>ApiTag.enUS: true</h2>
  * <p>This class contains a comment <b>"ApiTag: site users"</b>, which groups all of the OpenAPIs for SiteUser objects under the tag "site users". 
  * </p>
- * <h2>ApiUri.enUS: /api/user</h2>
- * <p>This class contains a comment <b>"ApiUri: /api/user"</b>, which defines the base API URI for SiteUser objects as "/api/user" in the OpenAPI spec. 
+ * <h2>ApiUri.enUS: /en-us/api/user</h2>
+ * <p>This class contains a comment <b>"ApiUri: /en-us/api/user"</b>, which defines the base API URI for SiteUser objects as "/en-us/api/user" in the OpenAPI spec. 
  * </p>
  * <h2>Color: null</h2>
  * <h2>Indexed: true</h2>
@@ -179,30 +179,30 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 	public static final String Title_enUS = "site users";
 	public static final String ThePluralName_enUS = "the site users";
 	public static final String NoNameFound_enUS = "no site user found";
-	public static final String ApiUri_enUS = "/api/user";
-	public static final String ApiUriSearchPage_enUS = "/search/user";
-	public static final String ApiUriEditPage_enUS = "/edit/user/{userId}";
+	public static final String ApiUri_enUS = "/en-us/api/user";
+	public static final String ApiUriSearchPage_enUS = "/en-us/search/user";
+	public static final String ApiUriEditPage_enUS = "/en-us/edit/user/{userId}";
 	public static final String OfName_enUS = "of site user";
 	public static final String ANameAdjective_enUS = "a site user";
 	public static final String NameAdjectiveSingular_enUS = "site user";
 	public static final String NameAdjectivePlural_enUS = "site users";
-	public static final String Search_enUS_OpenApiUri = "/api/user";
-	public static final String Search_enUS_StringFormatUri = "/api/user";
-	public static final String Search_enUS_StringFormatUrl = "%s/api/user";
-	public static final String PATCH_enUS_OpenApiUri = "/api/user";
-	public static final String PATCH_enUS_StringFormatUri = "/api/user";
-	public static final String PATCH_enUS_StringFormatUrl = "%s/api/user";
-	public static final String POST_enUS_OpenApiUri = "/api/user";
-	public static final String POST_enUS_StringFormatUri = "/api/user";
-	public static final String POST_enUS_StringFormatUrl = "%s/api/user";
-	public static final String SearchPage_enUS_OpenApiUri = "/search/user";
-	public static final String SearchPage_enUS_StringFormatUri = "/search/user";
-	public static final String SearchPage_enUS_StringFormatUrl = "%s/search/user";
-	public static final String EditPage_enUS_OpenApiUri = "/edit/user/{userId}";
-	public static final String EditPage_enUS_StringFormatUri = "/edit/user/%s";
-	public static final String EditPage_enUS_StringFormatUrl = "%s/edit/user/%s";
+	public static final String Search_enUS_OpenApiUri = "/en-us/api/user";
+	public static final String Search_enUS_StringFormatUri = "/en-us/api/user";
+	public static final String Search_enUS_StringFormatUrl = "%s/en-us/api/user";
+	public static final String PATCH_enUS_OpenApiUri = "/en-us/api/user";
+	public static final String PATCH_enUS_StringFormatUri = "/en-us/api/user";
+	public static final String PATCH_enUS_StringFormatUrl = "%s/en-us/api/user";
+	public static final String POST_enUS_OpenApiUri = "/en-us/api/user";
+	public static final String POST_enUS_StringFormatUri = "/en-us/api/user";
+	public static final String POST_enUS_StringFormatUrl = "%s/en-us/api/user";
+	public static final String SearchPage_enUS_OpenApiUri = "/en-us/search/user";
+	public static final String SearchPage_enUS_StringFormatUri = "/en-us/search/user";
+	public static final String SearchPage_enUS_StringFormatUrl = "%s/en-us/search/user";
+	public static final String EditPage_enUS_OpenApiUri = "/en-us/edit/user/{userId}";
+	public static final String EditPage_enUS_StringFormatUri = "/en-us/edit/user/%s";
+	public static final String EditPage_enUS_StringFormatUrl = "%s/en-us/edit/user/%s";
 
-	public static final String Icon = "<i class=\"fa-light fa-user-gear\"></i>";
+	public static final String Icon = "<i class=\"fa-thin fa-user-gear\"></i>";
 
 	//////////////
 	// userKeys //
@@ -1913,7 +1913,7 @@ public abstract class SiteUserGen<DEV> extends BaseModel {
 
 	@Override
 	public String classStringFormatUrlEditPageForClass() {
-		return "%s/edit/user/%s";
+		return "%s/en-us/edit/user/%s";
 	}
 
 	@Override

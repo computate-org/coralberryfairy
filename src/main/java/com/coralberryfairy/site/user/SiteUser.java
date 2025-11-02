@@ -13,15 +13,15 @@ import com.coralberryfairy.site.request.SiteRequest;
  * Order: 1
  * Description: A user record for each site user
  * AName: a site user
- * Icon: <i class="fa-light fa-user-gear"></i>
+ * Icon: <i class="fa-thin fa-user-gear"></i>
  * 
  * Keyword: classSimpleNameSiteUser
  * Filter: userId
  * AuthUser: true
  * 
- * SearchPageUri: /search/user
- * EditPageUri: /edit/user/{userId}
- * ApiUri: /api/user
+ * SearchPageUri: /en-us/search/user
+ * EditPageUri: /en-us/edit/user/{userId}
+ * ApiUri: /en-us/api/user
  * ApiMethod:
  *   Search:
  *   PATCH:
@@ -168,7 +168,7 @@ public class SiteUser extends SiteUserGen<BaseModel> implements ComputateSiteUse
 	 *   dark: Dark
 	 */
 	protected void _siteTheme(Wrap<String> w) {
-		w.o("dark");
+		w.o("light");
 	}
 
 	/**

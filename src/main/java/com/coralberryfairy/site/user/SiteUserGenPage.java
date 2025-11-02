@@ -515,12 +515,12 @@ public class SiteUserGenPage extends SiteUserGenPageGen<PageLayout> {
 
   @Override
   protected void _pageUri(Wrap<String> c) {
-    c.o("/search/user");
+    c.o("/en-us/search/user");
   }
 
   @Override
   protected void _apiUri(Wrap<String> c) {
-    c.o("/api/user");
+    c.o("/en-us/api/user");
   }
 
   @Override
@@ -535,15 +535,15 @@ public class SiteUserGenPage extends SiteUserGenPageGen<PageLayout> {
 
   @Override
   protected void _pageImageUri(Wrap<String> c) {
-      c.o("/png/search/user-999.png");
+      c.o("/png/en-us/search/user-999.png");
   }
 
   @Override
   protected void _classIcon(Wrap<String> c) {
-      c.o("<i class=\"fa-light fa-user-gear\"></i>");
+      c.o("<i class=\"fa-thin fa-user-gear\"></i>");
   }
 
   protected void _pageUriSiteUser(Wrap<String> c) {
-      c.o("/search/user");
+      c.o("/en-us/search/user");
   }
 }
